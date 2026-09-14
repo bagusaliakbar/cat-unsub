@@ -7,7 +7,7 @@ CAT UNSUB adalah sebuah sistem ujian berbasis komputer (Computer Assisted Test) 
 ## 🚀 Teknologi yang Digunakan (Tech Stack)
 
 Aplikasi ini dibangun menggunakan teknologi web modern:
-- **Framework Utama:** [Laravel 11](https://laravel.com/) (PHP)
+- **Framework Utama:** [Laravel 13](https://laravel.com/) (PHP)
 - **Frontend & Reaktivitas:** [Livewire 3](https://livewire.laravel.com/) (Mendukung navigasi SPA/Single Page Application yang cepat)
 - **Styling:** [Tailwind CSS 3](https://tailwindcss.com/) (Menghasilkan UI yang modern dan responsif)
 - **Interaktivitas Tambahan:** [Alpine.js](https://alpinejs.dev/)
