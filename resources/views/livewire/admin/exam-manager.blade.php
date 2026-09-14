@@ -392,12 +392,18 @@
                         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <!-- Filters -->
                             <div class="flex flex-col sm:flex-row gap-3 flex-1">
-                                <!-- Category Filter -->
                                 <select wire:model.live="filter_category" class="bg-white border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-48 p-2.5 shadow-sm">
                                     <option value="">Semua Kategori</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
+                                </select>
+                                
+                                <!-- Type Filter -->
+                                <select wire:model.live="filter_type" class="bg-white border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-40 p-2.5 shadow-sm">
+                                    <option value="">Semua Jenis</option>
+                                    <option value="multiple_choice">Pilihan Ganda</option>
+                                    <option value="essay">Essay</option>
                                 </select>
                                 
                                 <!-- Search -->
@@ -409,14 +415,20 @@
                                 </div>
                             </div>
                             
-                            <!-- Stats (Terpilih & Total Bobot) -->
-                            <div class="flex flex-col items-end">
-                                <div class="text-sm font-medium text-gray-700 bg-white px-5 py-2.5 rounded-lg shadow-sm border {{ $total_points > 100 ? 'border-red-400 bg-red-50' : 'border-gray-200' }} whitespace-nowrap flex items-center space-x-4 transition-colors">
-                                    <div>
-                                        Terpilih: <span class="font-bold text-blue-600 text-base">{{ count($selected_questions) }}</span> soal
-                                    </div>
-                                    <div class="border-l border-gray-300 pl-4">
-                                        Total Bobot: <span class="font-bold text-base {{ $total_points > 100 ? 'text-red-600' : 'text-emerald-600' }}">{{ $total_points }}</span>
+                            <!-- Stats (Terpilih & Total Bobot) & Reset -->
+                            <div class="flex flex-col items-end gap-2">
+                                <div class="flex items-center gap-2">
+                                    <button wire:click="resetSelectedQuestions" type="button" class="text-xs font-bold bg-white text-red-600 hover:bg-red-50 border border-red-200 px-3 py-2 rounded-lg shadow-sm transition-colors flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        Reset
+                                    </button>
+                                    <div class="text-sm font-medium text-gray-700 bg-white px-5 py-2 rounded-lg shadow-sm border {{ $total_points > 100 ? 'border-red-400 bg-red-50' : 'border-gray-200' }} whitespace-nowrap flex items-center space-x-4 transition-colors">
+                                        <div>
+                                            Terpilih: <span class="font-bold text-blue-600 text-base">{{ count($selected_questions) }}</span> soal
+                                        </div>
+                                        <div class="border-l border-gray-300 pl-4">
+                                            Total Bobot: <span class="font-bold text-base {{ $total_points > 100 ? 'text-red-600' : 'text-emerald-600' }}">{{ $total_points }}</span>
+                                        </div>
                                     </div>
                                 </div>
                                 @if($total_points > 100)

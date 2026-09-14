@@ -43,9 +43,14 @@ class ExamExecution extends Component
             return redirect()->route('participant.exam.result', ['examId' => $this->exam->id]);
         }
 
-        // Calculate end time
+        // Calculate end time based on duration
         $startedAt = \Carbon\Carbon::parse($this->session->started_at);
         $endTime = $startedAt->copy()->addMinutes($this->exam->duration_minutes);
+
+        // Jika ujian memiliki batas waktu akhir (end_time) spesifik, potong waktu pengerjaan
+        if ($this->exam->end_time && $endTime->greaterThan($this->exam->end_time)) {
+            $endTime = \Carbon\Carbon::parse($this->exam->end_time);
+        }
         
         // Auto submit if time already passed
         if (now()->greaterThanOrEqualTo($endTime)) {
@@ -102,6 +107,11 @@ class ExamExecution extends Component
         if (!$this->session->is_paused) {
             $startedAt = \Carbon\Carbon::parse($this->session->started_at);
             $endTime = $startedAt->copy()->addMinutes($this->exam->duration_minutes);
+            
+            if ($this->exam->end_time && $endTime->greaterThan($this->exam->end_time)) {
+                $endTime = \Carbon\Carbon::parse($this->exam->end_time);
+            }
+            
             $this->endTimeFormatted = $endTime->toIso8601String();
         }
     }

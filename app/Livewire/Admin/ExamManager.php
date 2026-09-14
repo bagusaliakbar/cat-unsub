@@ -155,8 +155,8 @@ class ExamManager extends Component
         $this->description = $exam->description;
         $this->duration_minutes = $exam->duration_minutes;
         $this->passing_grade = $exam->passing_grade;
-        $this->start_time = $exam->start_time;
-        $this->end_time = $exam->end_time;
+        $this->start_time = $exam->start_time ? $exam->start_time->format('Y-m-d\TH:i') : null;
+        $this->end_time = $exam->end_time ? $exam->end_time->format('Y-m-d\TH:i') : null;
         $this->token = $exam->token;
         $this->randomize_questions = (bool) $exam->randomize_questions;
         $this->randomize_options = $exam->randomize_options;
@@ -180,6 +180,11 @@ class ExamManager extends Component
         $this->selected_questions = $exam->questions->pluck('id')->map(fn($id) => (string)$id)->toArray();
         $this->isQuestionModalOpen = true;
         \Log::info("isQuestionModalOpen set to true, selected questions: " . count($this->selected_questions));
+    }
+
+    public function resetSelectedQuestions()
+    {
+        $this->selected_questions = [];
     }
 
     public function closeQuestionModal()

@@ -117,7 +117,7 @@
                         </div>
 
                         <!-- Exams List -->
-                        <div class="p-8">
+                        <div class="p-8" wire:poll.10s>
                             <div class="flex items-center justify-between mb-6">
                                 <h3 class="text-xl font-bold text-gray-900 flex items-center">
                                     <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
@@ -166,6 +166,10 @@
                                                 ->first();
                                             $isCompleted = $session && in_array($session->status, ['completed', 'finished']);
                                             $isStarted = $session && $session->status === 'started';
+                                            
+                                            $now = now();
+                                            $isUpcoming = $exam->start_time && $now->lessThan(\Carbon\Carbon::parse($exam->start_time));
+                                            $isExpired = $exam->end_time && $now->greaterThan(\Carbon\Carbon::parse($exam->end_time));
                                         @endphp
                                         
                                         @if($isCompleted)
@@ -181,15 +185,31 @@
                                                 </button>
                                             @endif
                                         @elseif($isStarted)
-                                            <button wire:click="startExam({{ $exam->id }})" type="button" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-xl font-bold shadow-md hover:shadow-lg focus:ring-4 focus:ring-amber-300 transition-all transform hover:-translate-y-0.5 flex items-center justify-center shrink-0">
-                                                Lanjutkan
-                                                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                            </button>
+                                            @if($isExpired)
+                                                <button type="button" class="w-full sm:w-auto bg-gray-400 text-white px-6 py-3 rounded-xl font-bold shadow-md cursor-not-allowed flex items-center justify-center shrink-0" disabled>
+                                                    Waktu Habis
+                                                </button>
+                                            @else
+                                                <button wire:click="startExam({{ $exam->id }})" type="button" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-xl font-bold shadow-md hover:shadow-lg focus:ring-4 focus:ring-amber-300 transition-all transform hover:-translate-y-0.5 flex items-center justify-center shrink-0">
+                                                    Lanjutkan
+                                                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                                </button>
+                                            @endif
                                         @else
-                                            <button wire:click="showRules({{ $exam->id }})" type="button" class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-bold shadow-md hover:shadow-lg focus:ring-4 focus:ring-green-300 transition-all transform hover:-translate-y-0.5 flex items-center justify-center shrink-0">
-                                                Mulai Kerjakan
-                                                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                            </button>
+                                            @if($isUpcoming)
+                                                <button type="button" class="w-full sm:w-auto bg-gray-400 text-white px-6 py-3 rounded-xl font-bold shadow-md cursor-not-allowed flex items-center justify-center shrink-0" disabled>
+                                                    Belum Dimulai
+                                                </button>
+                                            @elseif($isExpired)
+                                                <button type="button" class="w-full sm:w-auto bg-gray-400 text-white px-6 py-3 rounded-xl font-bold shadow-md cursor-not-allowed flex items-center justify-center shrink-0" disabled>
+                                                    Waktu Habis
+                                                </button>
+                                            @else
+                                                <button wire:click="showRules({{ $exam->id }})" type="button" class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-bold shadow-md hover:shadow-lg focus:ring-4 focus:ring-green-300 transition-all transform hover:-translate-y-0.5 flex items-center justify-center shrink-0">
+                                                    Mulai Kerjakan
+                                                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                                </button>
+                                            @endif
                                         @endif
                                     </div>
                                 @endforeach

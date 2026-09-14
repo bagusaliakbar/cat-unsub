@@ -63,8 +63,8 @@ class Entry extends Component
             return;
         }
 
-        $this->isValidated = true;
         Auth::login($this->participant);
+        return redirect()->route('home');
     }
 
     public function showRules($examId)
@@ -92,8 +92,6 @@ class Entry extends Component
                     }
                 }
 
-                Auth::login($this->participant);
-
                 // Buat sesi ujian jika belum ada
                 \App\Models\ExamSession::firstOrCreate(
                     [
@@ -113,9 +111,11 @@ class Entry extends Component
 
     public function cancel()
     {
-        $this->isValidated = false;
-        $this->participant = null;
-        $this->assignedExams = [];
+        Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        
+        return redirect()->route('home');
     }
 
     public function retakeSimulation($examId)
