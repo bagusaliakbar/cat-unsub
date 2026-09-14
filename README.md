@@ -46,40 +46,40 @@ Aplikasi ini dibangun menggunakan teknologi web modern:
 flowchart TD
     %% Administrator Flow
     subgraph Admin ["Panel Administrator"]
-        A1[Buat Bank Soal] --> A2[Input Data Peserta]
-        A2 --> A3[Buat Gelombang/Wave]
-        A3 --> A4[Buat Ujian & Atur Waktu]
-        A4 --> A5[Pilih Soal dari Bank]
-        A5 --> A6[Assign Peserta ke Ujian]
-        A6 --> A7[Aktifkan Ujian]
+        A1["Buat Bank Soal"] --> A2["Input Data Peserta"]
+        A2 --> A3["Buat Gelombang/Wave"]
+        A3 --> A4["Buat Ujian & Atur Waktu"]
+        A4 --> A5["Pilih Soal dari Bank"]
+        A5 --> A6["Assign Peserta ke Ujian"]
+        A6 --> A7["Aktifkan Ujian"]
     end
 
     %% Participant Flow
     subgraph Peserta ["Panel Peserta"]
-        P1[Buka Halaman Utama] --> P2[Validasi NIK]
-        P2 --> P3{Apakah Ada Ujian Aktif?}
-        P3 -- Ya --> P4[Tampil Daftar Ujian]
-        P3 -- Tidak --> Px[Pesan: Tidak ada ujian]
+        P1["Buka Halaman Utama"] --> P2["Validasi NIK"]
+        P2 --> P3{"Apakah Ada Ujian Aktif?"}
+        P3 -- Ya --> P4["Tampil Daftar Ujian"]
+        P3 -- Tidak --> Px["Pesan: Tidak ada ujian"]
         
-        P4 --> P5{Waktu Sesuai?}
-        P5 -- Belum Dimulai --> P6[Tunggu Waktu (Live Refresh)]
-        P5 -- Waktu Habis --> P7[Tombol Terkunci (Waktu Habis)]
-        P5 -- Valid --> P8[Mulai Kerjakan]
+        P4 --> P5{"Waktu Sesuai?"}
+        P5 -- Belum Dimulai --> P6["Tunggu Waktu (Live Refresh)"]
+        P5 -- Waktu Habis --> P7["Tombol Terkunci (Waktu Habis)"]
+        P5 -- Valid --> P8["Mulai Kerjakan"]
         
-        P8 --> P9{Ada Token?}
-        P9 -- Ya --> P10[Input & Validasi Token]
-        P10 --> P11[Masuk Layar Eksekusi Ujian]
+        P8 --> P9{"Ada Token?"}
+        P9 -- Ya --> P10["Input & Validasi Token"]
+        P10 --> P11["Masuk Layar Eksekusi Ujian"]
         P9 -- Tidak --> P11
         
-        P11 --> P12[Proses Pengerjaan (Timer Berjalan)]
-        P12 --> P13[Submit Selesai / Auto-submit Waktu Habis]
-        P13 --> P14[Lihat Hasil (Skor & Status Kelulusan)]
+        P11 --> P12["Proses Pengerjaan (Timer Berjalan)"]
+        P12 --> P13["Submit Selesai / Auto-submit Waktu Habis"]
+        P13 --> P14["Lihat Hasil (Skor & Status Kelulusan)"]
     end
 
     %% Connection
     A7 -.-|Tampil di Dashboard| P3
-    P12 -.->|Admin Memantau Progress| M1[Live Monitoring Admin]
-    P13 -.->|Rekapitulasi| M2[Cetak Laporan & Berita Acara]
+    P12 -.->|Admin Memantau Progress| M1["Live Monitoring Admin"]
+    P13 -.->|Rekapitulasi| M2["Cetak Laporan & Berita Acara"]
 ```
 
 ### 1. Persiapan oleh Administrator
