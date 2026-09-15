@@ -19,13 +19,26 @@
                     Terima kasih telah mengikuti ujian <strong>{{ $exam->title }}</strong>. Berikut adalah hasil pencapaian Anda.
                 </p>
 
-                <div class="bg-blue-50/50 border border-blue-100 rounded-3xl p-8 max-w-md mx-auto mb-10 shadow-sm">
-                    <h3 class="text-sm font-bold text-blue-800 uppercase tracking-widest mb-2">Total Skor Anda</h3>
-                    <div class="text-6xl font-black text-blue-600">
-                        {{ round($session->score) }}
+                    <div class="bg-blue-50/50 border border-blue-100 rounded-3xl p-8 max-w-md mx-auto mb-10 shadow-sm">
+                        <h3 class="text-sm font-bold text-blue-800 uppercase tracking-widest mb-2">Total Skor Anda</h3>
+                        <div class="text-6xl font-black text-blue-600">
+                            {{ round($session->score) }}
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
+                        <a href="{{ route('home') }}" class="px-8 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-all shadow-sm">
+                            Kembali ke Beranda
+                        </a>
+                        
+                        @if($exam->is_simulation)
+                            <button wire:click="retakeSimulation" wire:confirm="Anda akan mengulang ujian simulasi ini dari awal. Nilai sebelumnya akan dihapus. Lanjutkan?" class="px-8 py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg flex items-center">
+                                Mulai Ulang
+                                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            </button>
+                        @endif
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 </div>
