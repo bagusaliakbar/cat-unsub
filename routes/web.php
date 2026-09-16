@@ -56,6 +56,13 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             ->get();
         return view('print.exam-report', compact('exam', 'report', 'sessions'));
     })->name('exams.report.print');
+    
+    Route::get('/exams/{examId}/incident-report', function ($examId) {
+        $exam = \App\Models\Exam::findOrFail($examId);
+        $report = \App\Models\ExamReport::where('exam_id', $examId)->first();
+        return view('print.incident-report', compact('exam', 'report'));
+    })->name('exams.incident-report');
+
     Route::get('/exams/{examId}/attendance', function ($examId) {
         $exam = \App\Models\Exam::with(['participants' => function($q) {
             $q->orderBy('name');
