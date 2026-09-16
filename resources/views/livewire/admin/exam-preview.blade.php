@@ -39,7 +39,7 @@
                 <title>PREVIEW - {{ config('app.name', 'Laravel') }}</title>
 
                 <!-- Favicon -->
-                <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+                <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
                 <div class="flex space-x-3 items-center">
                     <span class="bg-gray-100 text-gray-600 text-xs font-bold px-3 py-1 rounded-full">{{ $currentQuestion->points }} Poin</span>
