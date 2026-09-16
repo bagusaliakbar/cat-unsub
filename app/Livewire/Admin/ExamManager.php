@@ -206,6 +206,16 @@ class ExamManager extends Component
         $this->closeQuestionModal();
     }
 
+    public function toggleQuestion($id)
+    {
+        $id = (string) $id;
+        if (in_array($id, $this->selected_questions)) {
+            $this->selected_questions = array_values(array_diff($this->selected_questions, [$id]));
+        } else {
+            $this->selected_questions[] = $id;
+        }
+    }
+
     // --- Participant Management for Exam ---
 
     public function manageParticipants($id)
@@ -215,6 +225,16 @@ class ExamManager extends Component
         $this->assigning_exam_title = $exam->title;
         $this->selected_participants = $exam->participants->pluck('id')->map(fn($id) => (string)$id)->toArray();
         $this->isAssignModalOpen = true;
+    }
+
+    public function toggleParticipant($id)
+    {
+        $id = (string) $id;
+        if (in_array($id, $this->selected_participants)) {
+            $this->selected_participants = array_values(array_diff($this->selected_participants, [$id]));
+        } else {
+            $this->selected_participants[] = $id;
+        }
     }
 
     public function closeAssignModal()
