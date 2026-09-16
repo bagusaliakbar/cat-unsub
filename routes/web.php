@@ -66,8 +66,13 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     })->name('exams.attendance');
     Route::get('/questions', \App\Livewire\Admin\QuestionManager::class)->name('questions');
     Route::get('/participants', \App\Livewire\Admin\ParticipantManager::class)->name('participants');
+    Route::get('/participants/{participantId}/print', function ($participantId) {
+        $participant = \App\Models\User::findOrFail($participantId);
+        return view('print.participant-card', compact('participant'));
+    })->name('participants.print');
     Route::get('/waves', \App\Livewire\Admin\WaveManager::class)->name('waves');
     Route::get('/activity-log', \App\Livewire\Admin\ActivityLog::class)->name('activity-log');
+    Route::get('/backup-restore', \App\Livewire\Admin\BackupManager::class)->name('backup');
     Route::get('/monitor', \App\Livewire\Admin\MonitorIndex::class)->name('monitor');
 });
 

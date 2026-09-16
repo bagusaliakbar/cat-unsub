@@ -74,6 +74,14 @@
                     <option value="hard">Sulit</option>
                 </select>
             </div>
+            <div class="w-full md:w-48">
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Filter Jenis</label>
+                <select wire:model.live="filter_type" class="w-full rounded-lg border-gray-200 text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                    <option value="">Semua Jenis</option>
+                    <option value="multiple_choice">Pilihan Ganda</option>
+                    <option value="essay">Essay</option>
+                </select>
+            </div>
         </div>
         
         <div class="flex items-center space-x-1 bg-gray-100 p-1 rounded-lg">

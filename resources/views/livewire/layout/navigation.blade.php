@@ -83,6 +83,12 @@ new class extends Component
                         Log Aktifitas
                     </div>
                 </a>
+                <a href="{{ route('admin.backup') }}" wire:navigate class="block px-4 py-3 rounded-xl text-base font-medium {{ request()->routeIs('admin.backup*') ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-300 hover:bg-gray-700 hover:text-white transition-all' }}">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                        Backup & Restore
+                    </div>
+                </a>
             @else
                 <a href="{{ route('participant.dashboard') }}" wire:navigate class="block px-4 py-3 rounded-xl text-base font-medium {{ request()->routeIs('participant.dashboard*') ? 'bg-gray-800 text-white shadow-sm' : 'text-gray-300 hover:bg-gray-700 hover:text-white transition-all' }}">
                     <div class="flex items-center">

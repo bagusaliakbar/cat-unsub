@@ -168,13 +168,18 @@
         
         @if($currentQuestion)
             <div class="flex justify-between items-start mb-6 pb-4 border-b border-gray-100">
-                <h3 class="text-lg font-bold text-gray-800">
-                    Soal No. {{ $currentQuestionIndex + 1 }}
-                </h3>
-                <title>{{ config('app.name', 'Laravel') }}</title>
-
-                <!-- Favicon -->
-                <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+                <div class="flex flex-col">
+                    <h3 class="text-lg font-bold text-gray-800">
+                        Soal No. {{ $currentQuestionIndex + 1 }}
+                    </h3>
+                    @if($currentQuestion->category)
+                        <div class="mt-1">
+                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded-md border border-blue-200">
+                                {{ $currentQuestion->category->name }}
+                            </span>
+                        </div>
+                    @endif
+                </div>
 
                 <div class="flex space-x-3 items-center">
                     <span class="bg-gray-100 text-gray-600 text-xs font-bold px-3 py-1 rounded-full">{{ $currentQuestion->points }} Poin</span>

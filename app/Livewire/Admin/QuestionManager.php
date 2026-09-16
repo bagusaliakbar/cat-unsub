@@ -25,6 +25,7 @@ class QuestionManager extends Component
     // Filters
     public $filter_category = '';
     public $filter_difficulty = '';
+    public $filter_type = '';
     
     // UI State
     public $viewMode = 'grid';
@@ -66,6 +67,10 @@ class QuestionManager extends Component
         
         if ($this->filter_difficulty) {
             $query->where('difficulty', $this->filter_difficulty);
+        }
+
+        if ($this->filter_type) {
+            $query->where('type', $this->filter_type);
         }
 
         $questions = $query->latest()->paginate(10);

@@ -45,7 +45,7 @@
             
             <!-- Full Width Header -->
             <header class="bg-white border-b border-gray-100 shadow-sm w-full shrink-0">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="w-full px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16 items-center">
                         <div class="flex items-center space-x-3">
                             <div class="bg-blue-50 p-1.5 rounded-lg border border-blue-100">

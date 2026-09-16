@@ -142,9 +142,9 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-bold">
                             @if($session->status === 'completed')
                                 @if($session->score >= $exam->passing_grade)
-                                    <span class="text-green-600 text-lg">{{ round($session->score) }} <span class="text-xs font-normal text-green-600 bg-green-100 px-2 py-0.5 rounded-full ml-1">Lulus</span></span>
+                                    <span class="text-green-600 text-lg">{{ round($session->score) }}</span>
                                 @else
-                                    <span class="text-red-600 text-lg">{{ round($session->score) }} <span class="text-xs font-normal text-red-600 bg-red-100 px-2 py-0.5 rounded-full ml-1">Gagal</span></span>
+                                    <span class="text-red-600 text-lg">{{ round($session->score) }}</span>
                                 @endif
                             @elseif($session->is_paused)
                                 <span class="text-gray-500 text-lg line-through" title="Ujian sedang dijeda">{{ round($session->live_score) }}</span>

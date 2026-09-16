@@ -55,15 +55,8 @@
 <body class="p-4 sm:p-8 max-w-4xl mx-auto text-black text-[11pt]" onload="window.print()">
 
     <!-- Header / Kop Surat -->
-    <div class="flex items-center mb-6 kop-surat-border pb-3">
-        <div class="w-24 flex-shrink-0 flex justify-center items-center">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo Universitas Subang" class="w-20 object-contain">
-        </div>
-        <div class="flex-grow text-center pr-12">
-            <h1 class="text-xl font-bold uppercase tracking-wide text-blue-900" style="-webkit-print-color-adjust: exact; print-color-adjust: exact; color: #1e3a8a;">UNIVERSITAS SUBANG</h1>
-            <h2 class="text-xl font-bold uppercase tracking-wide text-blue-900 mb-1" style="-webkit-print-color-adjust: exact; print-color-adjust: exact; color: #1e3a8a;">LEMBAGA PENELITIAN DAN PENGABDIAN KEPADA MASYARAKAT</h2>
-            <p class="text-xs">Jalan R.A. Kartini Km. 3 Tlp. (0260) 411415, Fax (0260) 415677 Subang, <span class="text-blue-500 underline" style="-webkit-print-color-adjust: exact; print-color-adjust: exact; color: #3b82f6;">e-mail : lppm.unsub@gmail.ac.id</span></p>
-        </div>
+    <div class="mb-4 text-center">
+        <img src="{{ asset('images/kop-unsub.jpg') }}" alt="Kop Universitas Subang" class="w-full mx-auto h-auto object-contain">
     </div>
 
     <!-- Title -->
