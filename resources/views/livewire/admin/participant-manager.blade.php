@@ -84,7 +84,7 @@
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
                                         @if($participant->profile_photo_path)
-                                            <img class="h-10 w-10 rounded-full object-cover border border-gray-200" src="{{ asset('storage/' . $participant->profile_photo_path) }}" alt="{{ $participant->name }}">
+                                            <img class="h-10 w-10 rounded-full object-cover border border-gray-200" src="{{ $participant->profile_photo_url }}" alt="{{ $participant->name }}">
                                         @else
                                             <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-lg">
                                                 {{ strtoupper(substr($participant->name, 0, 1)) }}
@@ -184,7 +184,7 @@
                                         @if ($photo)
                                             <img class="h-16 w-16 object-cover rounded-full border border-gray-200" src="{{ $photo->temporaryUrl() }}" alt="Preview">
                                         @elseif ($existing_photo)
-                                            <img class="h-16 w-16 object-cover rounded-full border border-gray-200" src="{{ asset('storage/' . $existing_photo) }}" alt="Current Photo">
+                                            <img class="h-16 w-16 object-cover rounded-full border border-gray-200" src="{{ route('storage.file', $existing_photo) }}" alt="Current Photo">
                                         @else
                                             <div class="h-16 w-16 object-cover rounded-full border border-gray-200 bg-gray-50 flex items-center justify-center text-gray-400">
                                                 <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>

@@ -28,7 +28,7 @@
             <div class="flex justify-center mb-6">
                 <div class="w-24 h-32 border-2 border-gray-200 rounded-lg overflow-hidden shadow-sm flex items-center justify-center bg-gray-100">
                     @if($participant->profile_photo_path)
-                        <img src="{{ asset('storage/' . $participant->profile_photo_path) }}" alt="Foto Peserta" class="w-full h-full object-cover">
+                        <img src="{{ $participant->profile_photo_url }}" alt="Foto Peserta" class="w-full h-full object-cover">
                     @else
                         <span class="text-gray-400 text-xs font-semibold text-center leading-tight">Foto<br>3 x 4</span>
                     @endif

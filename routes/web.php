@@ -14,11 +14,21 @@ Route::get('dashboard', function () {
 
 // Rute Verifikasi QR Code Peserta
 Route::get('/verify/{token}', function ($token) {
-    $participant = \App\Models\User::where('participant_number', $token)
-        ->where('role', 'participant')
+    $participant = App\Models\User::with(['assignedExams', 'wave'])
+        ->where('participant_number', $token)
         ->firstOrFail();
+
     return view('verification', compact('participant'));
 })->name('verify');
+
+// Route to bypass symlink issues on shared hosting
+Route::get('/storage-file/{path}', function ($path) {
+    $absolutePath = storage_path('app/public/' . $path);
+    if (!file_exists($absolutePath)) {
+        abort(404);
+    }
+    return response()->file($absolutePath);
+})->where('path', '.*')->name('storage.file');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
