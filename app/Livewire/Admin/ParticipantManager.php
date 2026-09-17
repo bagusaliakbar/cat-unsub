@@ -104,7 +104,8 @@ class ParticipantManager extends Component
             'birth_date' => 'nullable|date',
             'latest_education' => 'nullable|string|max:255',
             'address' => 'nullable|string',
-            'photo' => 'nullable|image|max:2048', // Max 2MB
+            // Relaxed validation to prevent shared hosting fileinfo/gd errors
+            'photo' => 'nullable', 
         ];
 
         // Password is required only on create
@@ -135,14 +136,22 @@ class ParticipantManager extends Component
         }
 
         if ($this->photo) {
-            // Delete old photo if it exists
-            if ($this->user_id) {
-                $user = User::find($this->user_id);
-                if ($user && $user->profile_photo_path) {
-                    Storage::disk('public')->delete($user->profile_photo_path);
+            try {
+                // Delete old photo if it exists
+                if ($this->user_id) {
+                    $user = User::find($this->user_id);
+                    if ($user && $user->profile_photo_path) {
+                        Storage::disk('public')->delete($user->profile_photo_path);
+                    }
                 }
+                
+                // Upload new photo
+                $data['profile_photo_path'] = $this->photo->store('profile-photos', 'public');
+            } catch (\Exception $e) {
+                // If storage fails, log it and proceed without updating the photo
+                \Log::error('Photo upload failed: ' . $e->getMessage());
+                session()->flash('error', 'Data tersimpan, tapi foto gagal diunggah: ' . $e->getMessage());
             }
-            $data['profile_photo_path'] = $this->photo->store('profile-photos', 'public');
         }
 
         User::updateOrCreate(['id' => $this->user_id], $data);
