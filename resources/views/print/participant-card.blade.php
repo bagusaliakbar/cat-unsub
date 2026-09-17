@@ -6,109 +6,178 @@
     <title>Kartu Peserta Ujian - {{ $participant->name }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
         
         body { 
-            font-family: 'Times New Roman', Times, serif; 
+            font-family: 'Inter', sans-serif; 
             background: #f3f4f6; 
-            color: #000;
+            color: #1e293b;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
         @media print {
             @page { 
-                margin: 1cm; 
-                size: A4;
+                margin: 0; 
+                size: A4 portrait;
             }
             body { 
                 background: #fff; 
                 margin: 0; 
-                padding: 0; 
+                padding: 1cm; 
             }
             .no-print { display: none !important; }
             .card-container {
                 box-shadow: none !important;
-                border: 2px dashed #ccc !important;
+                border: none !important;
                 page-break-inside: avoid;
             }
         }
         .card-container {
-            width: 10cm;
-            height: auto;
-            min-height: 14cm;
-            border: 1px solid #ddd;
+            width: 14.8cm; /* A5 width approx */
+            min-height: 21cm;
             background: #fff;
             margin: 20px auto;
             position: relative;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        /* Custom curve for header */
+        .header-curve {
+            position: relative;
+            background-color: #1e3a8a; /* blue-900 */
+            border-bottom-left-radius: 50% 15%;
+            border-bottom-right-radius: 50% 15%;
+            padding-bottom: 2rem;
+            z-index: 10;
         }
     </style>
 </head>
+@php
+    $exam = $participant->assignedExams()->first();
+@endphp
 <body class="p-4 sm:p-8" onload="window.print()">
 
-    <div class="card-container p-4">
-        <!-- Header / Kop -->
-        <div class="flex items-center justify-center border-b-2 border-black pb-2 mb-4">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-12 w-auto object-contain mr-3">
-            <div class="text-center">
-                <h1 class="font-bold text-sm uppercase">KARTU TANDA PESERTA UJIAN</h1>
-                <h2 class="font-bold text-xs uppercase">SELEKSI TERTULIS BERBASIS CAT</h2>
-            </div>
+    <div class="card-container flex flex-col">
+        <!-- Logo Section -->
+        <div class="pt-6 pb-2 px-8 flex items-center justify-center bg-white z-20">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-16 w-auto object-contain mr-4">
+            <h1 class="font-extrabold text-2xl text-blue-950 uppercase tracking-wide">UNIVERSITAS SUBANG</h1>
         </div>
 
-        <!-- Info Peserta -->
-        <table class="w-full text-xs mb-4">
-            <tr>
-                <td class="w-24 font-bold py-1 align-top">Nomor Token</td>
-                <td class="w-2 text-center py-1 align-top">:</td>
-                <td class="py-1 align-top font-bold">{{ $participant->participant_number ?? '-' }}</td>
-            </tr>
-            <tr>
-                <td class="w-24 font-bold py-1 align-top">NIK / Username</td>
-                <td class="w-2 text-center py-1 align-top">:</td>
-                <td class="py-1 align-top font-bold">{{ $participant->nik ?? '-' }}</td>
-            </tr>
-            <tr>
-                <td class="w-24 font-bold py-1 align-top">Nama Peserta</td>
-                <td class="w-2 text-center py-1 align-top">:</td>
-                <td class="py-1 align-top">{{ strtoupper($participant->name) }}</td>
-            </tr>
-            <tr>
-                <td class="w-24 font-bold py-1 align-top">TTL</td>
-                <td class="w-2 text-center py-1 align-top">:</td>
-                <td class="py-1 align-top">
-                    {{ $participant->birth_place ?? '-' }}, 
-                    {{ $participant->birth_date ? \Carbon\Carbon::parse($participant->birth_date)->format('d-m-Y') : '-' }}
-                </td>
-            </tr>
-            <tr>
-                <td class="w-24 font-bold py-1 align-top">Instansi / Asal</td>
-                <td class="w-2 text-center py-1 align-top">:</td>
-                <td class="py-1 align-top">{{ $participant->institution ?? '-' }}</td>
-            </tr>
-            <tr>
-                <td class="w-24 font-bold py-1 align-top">Gelombang</td>
-                <td class="w-2 text-center py-1 align-top">:</td>
-                <td class="py-1 align-top">{{ $participant->wave ? $participant->wave->name : '-' }}</td>
-            </tr>
-        </table>
-
-        <!-- Foto dan TTD -->
-        <div class="flex justify-between items-end mt-6">
-            <div class="w-20 h-24 border-2 border-gray-400 flex items-center justify-center text-gray-400 text-[10px]">
-                Pas Foto 3x4
-            </div>
-            <div class="text-center text-xs">
-                <p class="mb-12">Tanda Tangan Peserta,</p>
-                <p>.......................................</p>
-            </div>
+        <!-- Header Section -->
+        <div class="header-curve text-center pt-2 px-6">
+            <h1 class="font-bold text-2xl text-white uppercase tracking-wider shadow-sm">KARTU TANDA PESERTA UJIAN</h1>
+            <h2 class="font-semibold text-sm text-blue-100 uppercase tracking-widest mt-1">SELEKSI TERTULIS BERBASIS CAT</h2>
         </div>
 
-        <div class="mt-4 pt-4 border-t border-dashed border-gray-400 text-[10px] text-justify text-gray-600">
-            <strong>Catatan:</strong> Kartu ini wajib dibawa saat pelaksanaan ujian dan ditunjukkan kepada panitia/pengawas beserta kartu identitas asli (KTP/KK).
+        <!-- Body Section -->
+        <div class="px-8 py-6 flex-1 flex flex-col relative z-20 -mt-4">
+            <!-- Info Peserta / Token Highlight -->
+            <div class="bg-blue-50 rounded-xl p-3 flex items-center justify-between mb-6 shadow-sm border border-blue-100">
+                <span class="font-bold text-blue-900 ml-4">Nomor Peserta / Token :</span>
+                <span class="font-extrabold text-3xl text-blue-950 tracking-wider mr-6">{{ $participant->participant_number ?? '-' }}</span>
+            </div>
+
+            <div class="flex justify-between gap-4">
+                <!-- Data Table -->
+                <div class="flex-1">
+                    <table class="w-full text-sm">
+                        <tbody>
+                            <tr class="h-10">
+                                <td class="w-32 text-gray-700">Nama Peserta</td>
+                                <td class="w-4 text-center">:</td>
+                                <td class="font-bold text-gray-900">{{ strtoupper($participant->name) }}</td>
+                            </tr>
+                            <tr class="h-10">
+                                <td class="text-gray-700">NIK / Username</td>
+                                <td class="text-center">:</td>
+                                <td class="font-medium text-gray-900">{{ $participant->nik ?? '-' }}</td>
+                            </tr>
+                            <tr class="h-10">
+                                <td class="text-gray-700">Tanggal Ujian</td>
+                                <td class="text-center">:</td>
+                                <td class="font-medium text-gray-900">
+                                    {{ $exam && $exam->start_time ? \Carbon\Carbon::parse($exam->start_time)->isoFormat('dddd, D MMMM Y') : '-' }}
+                                </td>
+                            </tr>
+                            <tr class="h-10">
+                                <td class="text-gray-700">Waktu Ujian</td>
+                                <td class="text-center">:</td>
+                                <td class="font-medium text-gray-900">
+                                    {{ $exam && $exam->start_time ? \Carbon\Carbon::parse($exam->start_time)->format('H.i') . ' - ' . \Carbon\Carbon::parse($exam->end_time)->format('H.i') . ' WIB' : '-' }}
+                                </td>
+                            </tr>
+                            <tr class="h-10">
+                                <td class="text-gray-700">Lokasi Ujian</td>
+                                <td class="text-center">:</td>
+                                <td class="font-medium text-gray-900">Universitas Subang</td>
+                            </tr>
+                            <tr class="h-10">
+                                <td class="text-gray-700">Ruang</td>
+                                <td class="text-center">:</td>
+                                <td class="font-medium text-gray-900">{{ $exam ? $exam->location : '-' }}</td>
+                            </tr>
+                            <tr class="h-10">
+                                <td class="text-gray-700">Sesi</td>
+                                <td class="text-center">:</td>
+                                <td class="font-medium text-gray-900">{{ $participant->wave ? $participant->wave->name : '-' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Right Side (Photo & QR) -->
+                <div class="flex flex-col items-center w-36 shrink-0 pt-2">
+                    <div class="w-28 h-36 border border-gray-300 rounded-sm overflow-hidden bg-gray-100 flex items-center justify-center mb-1">
+                        @if($participant->profile_photo_path)
+                            <img src="{{ asset('storage/' . $participant->profile_photo_path) }}" alt="Foto Peserta" class="w-full h-full object-cover">
+                        @else
+                            <span class="text-gray-400 text-xs">Foto 3 x 4</span>
+                        @endif
+                    </div>
+                    <p class="text-[10px] text-gray-500 mb-4">Foto 3 &times; 4</p>
+                    
+                    <div class="bg-white p-2">
+                        {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate(route('verify', $participant->participant_number)) !!}
+                    </div>
+                    <p class="text-center font-bold text-sm text-gray-800 tracking-widest">{{ $participant->participant_number }}</p>
+                </div>
+            </div>
+            
+            <!-- Notes Section -->
+            <div class="mt-8 bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-4 shadow-sm relative z-20">
+                <div class="w-8 h-8 bg-blue-900 text-white rounded-full flex items-center justify-center font-extrabold text-lg shrink-0 shadow-md">
+                    !
+                </div>
+                <div class="text-[11px] text-gray-700 leading-relaxed pt-0.5">
+                    <p class="font-bold text-sm text-gray-900 mb-1">Catatan:</p>
+                    <ol class="list-decimal pl-4 space-y-1">
+                        <li>Kartu ini wajib dibawa dan ditunjukkan kepada panitia/pengawas pada saat pelaksanaan ujian.</li>
+                        <li>Peserta wajib membawa KTP/Kartu Identitas asli yang masih berlaku.</li>
+                        <li>Datang minimal 15 menit sebelum waktu ujian.</li>
+                        <li>Patuhi tata tertib pelaksanaan ujian.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer Waves Graphic -->
+        <div class="mt-auto relative z-10 -mt-10">
+            <svg viewBox="0 0 1440 220" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full block transform translate-y-1">
+                <!-- Lightest blue (bottom) -->
+                <path d="M0 64L48 80C96 96 192 128 288 122.7C384 117 480 75 576 69.3C672 64 768 96 864 128C960 160 1056 192 1152 192C1248 192 1344 160 1392 144L1440 128V220H1392C1344 220 1248 220 1152 220C1056 220 960 220 864 220C768 220 672 220 576 220C480 220 384 220 288 220C192 220 96 220 48 220H0V64Z" fill="#bae6fd"/>
+                <!-- Medium blue -->
+                <path d="M0 128L48 117.3C96 107 192 85 288 96C384 107 480 149 576 160C672 171 768 149 864 122.7C960 96 1056 64 1152 64C1248 64 1344 96 1392 112L1440 128V220H1392C1344 220 1248 220 1152 220C1056 220 960 220 864 220C768 220 672 220 576 220C480 220 384 220 288 220C192 220 96 220 48 220H0V128Z" fill="#38bdf8"/>
+                <!-- Dark blue (top) -->
+                <path d="M0 192L48 176C96 160 192 128 288 117.3C384 107 480 117 576 133.3C672 149 768 171 864 165.3C960 160 1056 128 1152 117.3C1248 107 1344 117 1392 122.7L1440 128V220H1392C1344 220 1248 220 1152 220C1056 220 960 220 864 220C768 220 672 220 576 220C480 220 384 220 288 220C192 220 96 220 48 220H0V192Z" fill="#0284c7"/>
+            </svg>
         </div>
     </div>
 
     <!-- Print Button (Hidden on Print) -->
-    <div class="fixed bottom-8 right-8 no-print flex space-x-4">
+    <div class="fixed bottom-8 right-8 no-print flex space-x-4 z-50">
         <a href="{{ route('admin.participants') }}" class="px-6 py-2.5 bg-gray-500 hover:bg-gray-600 text-white rounded-lg shadow-lg font-bold text-sm">
             Tutup
         </a>

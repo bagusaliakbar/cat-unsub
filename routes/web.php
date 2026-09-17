@@ -12,6 +12,14 @@ Route::get('dashboard', function () {
     return redirect()->route('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// Rute Verifikasi QR Code Peserta
+Route::get('/verify/{token}', function ($token) {
+    $participant = \App\Models\User::where('participant_number', $token)
+        ->where('role', 'participant')
+        ->firstOrFail();
+    return view('verification', compact('participant'));
+})->name('verify');
+
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
