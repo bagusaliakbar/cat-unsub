@@ -92,7 +92,7 @@
                                 <td class="font-bold text-gray-900">{{ strtoupper($participant->name) }}</td>
                             </tr>
                             <tr class="h-10">
-                                <td class="text-gray-700">NIK / Username</td>
+                                <td class="text-gray-700">NIK</td>
                                 <td class="text-center">:</td>
                                 <td class="font-medium text-gray-900">{{ $participant->nik ?? '-' }}</td>
                             </tr>
@@ -100,7 +100,7 @@
                                 <td class="text-gray-700">Tanggal Ujian</td>
                                 <td class="text-center">:</td>
                                 <td class="font-medium text-gray-900">
-                                    {{ $exam && $exam->start_time ? \Carbon\Carbon::parse($exam->start_time)->isoFormat('dddd, D MMMM Y') : '-' }}
+                                    {{ $exam && $exam->start_time ? \Carbon\Carbon::parse($exam->start_time)->locale('id')->isoFormat('dddd, D MMMM Y') : '-' }}
                                 </td>
                             </tr>
                             <tr class="h-10">
@@ -138,7 +138,6 @@
                             <span class="text-gray-400 text-xs">Foto 3 x 4</span>
                         @endif
                     </div>
-                    <p class="text-[10px] text-gray-500 mb-4">Foto 3 &times; 4</p>
                     
                     <div class="bg-white p-2">
                         {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate(route('verify', $participant->participant_number)) !!}
