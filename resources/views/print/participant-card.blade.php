@@ -130,19 +130,39 @@
                 </div>
 
                 <!-- Right Side (Photo & QR) -->
-                <div class="flex flex-col items-center w-36 shrink-0 pt-2">
-                    <div class="w-28 h-36 border border-gray-300 rounded-sm overflow-hidden bg-gray-100 flex items-center justify-center mb-1">
-                        @if($participant->profile_photo_path)
-                            <img src="{{ $participant->profile_photo_url }}" alt="Foto Peserta" class="w-full h-full object-cover">
-                        @else
-                            <span class="text-gray-400 text-xs">Foto 3 x 4</span>
-                        @endif
+                <div class="flex flex-col items-center w-36 shrink-0 pt-1">
+                    
+                    <!-- Foto Peserta (Premium Look) -->
+                    <div class="relative w-28 h-36 mb-4">
+                        <!-- Decorative Frame (Gradient Border) -->
+                        <div class="absolute -inset-1 bg-gradient-to-b from-[#263c7b] to-[#38bdf8] rounded-xl shadow-md opacity-90"></div>
+                        
+                        <!-- Photo Container -->
+                        <div class="absolute inset-0 bg-white p-1 rounded-lg">
+                            <div class="w-full h-full bg-gray-50 rounded-md overflow-hidden relative shadow-inner">
+                                @if($participant->profile_photo_path)
+                                    <img src="{{ $participant->profile_photo_url }}" alt="Foto Peserta" class="w-full h-full object-cover">
+                                    <!-- Subtle overlay for elegance -->
+                                    <div class="absolute inset-0 border border-black/5 rounded-md"></div>
+                                @else
+                                    <div class="w-full h-full flex flex-col items-center justify-center text-[#263c7b] opacity-40">
+                                        <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                        <span class="text-[9px] font-bold tracking-widest uppercase">FOTO 3X4</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="bg-white p-2">
-                        {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->generate(route('verify', $participant->participant_number)) !!}
+                    <!-- QR Code with subtle styling -->
+                    <div class="bg-white p-1.5 rounded-lg border border-gray-200 shadow-sm">
+                        {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(85)->generate(route('verify', $participant->participant_number)) !!}
                     </div>
-                    <p class="text-center font-bold text-sm text-gray-800 tracking-widest">{{ $participant->participant_number }}</p>
+                    
+                    <!-- Participant Number Badge -->
+                    <div class="mt-2.5 bg-gradient-to-r from-[#263c7b] to-[#38bdf8] text-white px-4 py-1 rounded-full shadow-sm w-full text-center">
+                        <p class="font-bold text-xs tracking-widest">{{ $participant->participant_number }}</p>
+                    </div>
                 </div>
             </div>
             
