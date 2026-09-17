@@ -26,7 +26,13 @@
         <!-- Body -->
         <div class="p-6">
             <div class="flex justify-center mb-6">
-                <img src="{{ $participant->profile_photo_path ? asset('storage/' . $participant->profile_photo_path) : 'https://ui-avatars.com/api/?name=' . urlencode($participant->name) . '&color=1d4ed8&background=eff6ff' }}" alt="Foto Peserta" class="w-24 h-32 object-cover rounded-lg border-2 border-gray-200 shadow-sm">
+                <div class="w-24 h-32 border-2 border-gray-200 rounded-lg overflow-hidden shadow-sm flex items-center justify-center bg-gray-100">
+                    @if($participant->profile_photo_path)
+                        <img src="{{ asset('storage/' . $participant->profile_photo_path) }}" alt="Foto Peserta" class="w-full h-full object-cover">
+                    @else
+                        <span class="text-gray-400 text-xs font-semibold text-center leading-tight">Foto<br>3 x 4</span>
+                    @endif
+                </div>
             </div>
 
             <div class="space-y-4">

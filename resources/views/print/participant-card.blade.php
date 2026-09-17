@@ -132,7 +132,11 @@
                 <!-- Right Side (Photo & QR) -->
                 <div class="flex flex-col items-center w-36 shrink-0 pt-2">
                     <div class="w-28 h-36 border border-gray-300 rounded-sm overflow-hidden bg-gray-100 flex items-center justify-center mb-1">
-                        <img src="{{ $participant->profile_photo_url }}" alt="Foto Peserta" class="w-full h-full object-cover">
+                        @if($participant->profile_photo_path)
+                            <img src="{{ asset('storage/' . $participant->profile_photo_path) }}" alt="Foto Peserta" class="w-full h-full object-cover">
+                        @else
+                            <span class="text-gray-400 text-xs">Foto 3 x 4</span>
+                        @endif
                     </div>
                     
                     <div class="bg-white p-2">
