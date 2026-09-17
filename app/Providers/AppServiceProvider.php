@@ -19,8 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Paksa HTTPS di production agar aset CSS/JS termuat sempurna di hosting
-        if (config('app.env') === 'production' || str_contains(config('app.url'), 'https://')) {
+        // Paksa HTTPS di hosting agar Livewire tidak error (POST ter-redirect jadi GET)
+        if (!app()->environment('local') || request()->header('x-forwarded-proto') === 'https' || (!str_contains(request()->getHost(), 'localhost') && !str_contains(request()->getHost(), '.test'))) {
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
     }

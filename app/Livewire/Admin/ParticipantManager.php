@@ -18,7 +18,7 @@ class ParticipantManager extends Component
     public $isModalOpen = false;
     public $user_id, $name, $nik, $email, $password, $institution, $participant_number, $wave_id;
     public $birth_place, $birth_date, $latest_education, $address;
-    public $photo_base64; // For uploading new photo via base64
+    public $photo; // For uploading new photo
     public $existing_photo_url; // To show existing photo
     public $filter_wave = '';
     public $search = '';
@@ -78,7 +78,7 @@ class ParticipantManager extends Component
         $this->birth_date = null;
         $this->latest_education = '';
         $this->address = '';
-        $this->photo_base64 = null;
+        $this->photo = null;
         $this->existing_photo_url = null;
     }
 
@@ -104,7 +104,7 @@ class ParticipantManager extends Component
             'birth_date' => 'nullable|date',
             'latest_education' => 'nullable|string|max:255',
             'address' => 'nullable|string',
-            'photo_base64' => 'nullable', 
+            'photo' => 'nullable', 
         ];
 
         // Password is required only on create
@@ -134,7 +134,7 @@ class ParticipantManager extends Component
             $data['password'] = Hash::make($this->password);
         }
 
-        if ($this->photo_base64) {
+        if ($this->photo) {
             try {
                 // Delete old photo if it exists
                 if ($this->user_id) {
@@ -144,18 +144,11 @@ class ParticipantManager extends Component
                     }
                 }
                 
-                // Process base64 string
-                $image_parts = explode(";base64,", $this->photo_base64);
-                $image_type_aux = explode("image/", $image_parts[0]);
-                $image_type = $image_type_aux[1] ?? 'jpg';
-                $image_base64 = base64_decode($image_parts[1]);
-                $filename = uniqid() . '.' . $image_type;
-                
-                Storage::disk('public')->put('profile-photos/' . $filename, $image_base64);
-                
-                $data['profile_photo_path'] = 'profile-photos/' . $filename;
+                // Upload new photo
+                $data['profile_photo_path'] = $this->photo->store('profile-photos', 'public');
             } catch (\Exception $e) {
-                \Log::error('Photo base64 upload failed: ' . $e->getMessage());
+                // If storage fails, log it and proceed without updating the photo
+                \Log::error('Photo upload failed: ' . $e->getMessage());
                 session()->flash('error', 'Data tersimpan, tapi foto gagal diunggah: ' . $e->getMessage());
             }
         }
@@ -184,7 +177,7 @@ class ParticipantManager extends Component
         $this->password = ''; // Leave password blank on edit
         
         $this->existing_photo_url = $user->profile_photo_path ? route('storage.file', $user->profile_photo_path) : null;
-        $this->photo_base64 = null;
+        $this->photo = null;
 
         $this->openModal();
     }
