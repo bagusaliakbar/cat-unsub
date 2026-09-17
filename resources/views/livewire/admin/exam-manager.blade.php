@@ -447,7 +447,7 @@
                     <div class="px-6 py-4 bg-white overflow-y-auto flex-1">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             @forelse($bank_questions as $q)
-                                <label class="relative flex p-4 cursor-pointer rounded-xl border {{ in_array($q->id, $selected_questions) ? 'bg-blue-50/50 border-blue-400 shadow-sm ring-1 ring-blue-400' : 'bg-white border-gray-200 hover:bg-gray-50' }} transition-all group">
+                                <label wire:key="question-{{ $q->id }}" class="relative flex p-4 cursor-pointer rounded-xl border {{ in_array((string)$q->id, $selected_questions) ? 'bg-blue-50/50 border-blue-400 shadow-sm ring-1 ring-blue-400' : 'bg-white border-gray-200 hover:bg-gray-50' }} transition-all group">
                                     <div class="flex items-start h-5">
                                         <input type="checkbox" wire:click="toggleQuestion('{{ $q->id }}')" {{ in_array((string)$q->id, $selected_questions) ? 'checked' : '' }} class="w-5 h-5 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500 mt-0.5">
                                     </div>
@@ -547,7 +547,7 @@
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($all_participants as $participant)
-                                        <tr class="hover:bg-blue-50 transition-colors {{ in_array((string)$participant->id, $selected_participants) ? 'bg-blue-50' : '' }}">
+                                        <tr wire:key="participant-{{ $participant->id }}" class="hover:bg-blue-50 transition-colors {{ in_array((string)$participant->id, $selected_participants) ? 'bg-blue-50' : '' }}">
                                             <td class="px-6 py-4 whitespace-nowrap text-center">
                                                 <input wire:click="toggleParticipant('{{ $participant->id }}')" {{ in_array((string)$participant->id, $selected_participants) ? 'checked' : '' }} type="checkbox" class="focus:ring-blue-500 h-5 w-5 text-blue-600 border-gray-300 rounded shadow-sm cursor-pointer">
                                             </td>
