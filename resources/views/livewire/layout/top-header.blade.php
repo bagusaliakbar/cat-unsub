@@ -22,7 +22,13 @@ new class extends Component
         <div class="hidden md:flex flex-col text-left">
             <span class="text-sm font-bold text-gray-700 leading-tight" x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></span>
             <span class="text-xs text-gray-500 leading-tight">
-                {{ auth()->user()->role === 'admin' ? 'Administrator' : (auth()->user()->participant_number ? 'No: ' . auth()->user()->participant_number : 'Peserta') }}
+                @if(auth()->user()->role === 'admin')
+                    Administrator
+                @elseif(auth()->user()->role === 'pengawas')
+                    Pengawas Ujian
+                @else
+                    {{ auth()->user()->participant_number ? 'No: ' . auth()->user()->participant_number : 'Peserta' }}
+                @endif
             </span>
         </div>
         <svg class="w-4 h-4 text-gray-500" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transition: transform 0.2s;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
