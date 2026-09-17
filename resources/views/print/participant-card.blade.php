@@ -77,7 +77,7 @@
         <div class="px-8 py-6 flex-1 flex flex-col relative z-20 -mt-2">
             <!-- Info Peserta / Token Highlight -->
             <div class="bg-[#f0f4f8] rounded-[1rem] p-3 flex items-center justify-between mb-6 border border-gray-100">
-                <span class="font-bold text-[#2b3a70] ml-4 text-base">Nomor Peserta / Token :</span>
+                <span class="font-bold text-[#2b3a70] ml-4 text-base">Token Ujian :</span>
                 <span class="font-extrabold text-3xl text-[#1e2a5a] tracking-wider mr-6" style="font-family: 'Arial', sans-serif;">{{ $participant->participant_number ?? '-' }}</span>
             </div>
 
