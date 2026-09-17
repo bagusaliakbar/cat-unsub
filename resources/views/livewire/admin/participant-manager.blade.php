@@ -172,6 +172,36 @@
                     <form>
                         <div class="px-6 py-6 bg-white space-y-5">
                             
+                            <!-- Foto Upload -->
+                            <div>
+                                <label class="block text-gray-700 text-sm font-semibold mb-2">Pas Foto (Opsional)</label>
+                                <div class="flex items-center space-x-4">
+                                    <div class="shrink-0">
+                                        @if ($photo)
+                                            <img class="h-16 w-16 object-cover rounded-full border border-gray-200" src="{{ $photo->temporaryUrl() }}" alt="Preview">
+                                        @elseif ($existing_photo)
+                                            <img class="h-16 w-16 object-cover rounded-full border border-gray-200" src="{{ asset('storage/' . $existing_photo) }}" alt="Current Photo">
+                                        @else
+                                            <div class="h-16 w-16 object-cover rounded-full border border-gray-200 bg-gray-50 flex items-center justify-center text-gray-400">
+                                                <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <label class="block">
+                                        <span class="sr-only">Pilih pas foto</span>
+                                        <input type="file" wire:model="photo" accept="image/*" class="block w-full text-sm text-gray-500
+                                            file:mr-4 file:py-2 file:px-4
+                                            file:rounded-full file:border-0
+                                            file:text-sm file:font-semibold
+                                            file:bg-blue-50 file:text-blue-700
+                                            hover:file:bg-blue-100 transition-colors cursor-pointer"
+                                        />
+                                    </label>
+                                </div>
+                                <div wire:loading wire:target="photo" class="text-sm text-blue-600 mt-2 font-medium">Mengunggah...</div>
+                                @error('photo') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>@enderror
+                            </div>
+
                             <div>
                                 <label for="name" class="block text-gray-700 text-sm font-semibold mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
                                 <input type="text" id="name" wire:model="name" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-colors shadow-sm" placeholder="Masukkan nama peserta">

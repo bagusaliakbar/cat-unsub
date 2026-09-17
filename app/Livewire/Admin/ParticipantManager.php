@@ -5,16 +5,21 @@ namespace App\Livewire\Admin;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class ParticipantManager extends Component
 {
     use WithPagination;
+    use WithFileUploads;
 
     public $isModalOpen = false;
     public $user_id, $name, $nik, $email, $password, $institution, $participant_number, $wave_id;
     public $birth_place, $birth_date, $latest_education, $address;
+    public $photo; // For uploading new photo
+    public $existing_photo; // To show existing photo
     public $filter_wave = '';
     public $search = '';
 
@@ -73,6 +78,8 @@ class ParticipantManager extends Component
         $this->birth_date = null;
         $this->latest_education = '';
         $this->address = '';
+        $this->photo = null;
+        $this->existing_photo = null;
     }
 
     public function store()
@@ -97,6 +104,7 @@ class ParticipantManager extends Component
             'birth_date' => 'nullable|date',
             'latest_education' => 'nullable|string|max:255',
             'address' => 'nullable|string',
+            'photo' => 'nullable|image|max:2048', // Max 2MB
         ];
 
         // Password is required only on create
@@ -126,6 +134,17 @@ class ParticipantManager extends Component
             $data['password'] = Hash::make($this->password);
         }
 
+        if ($this->photo) {
+            // Delete old photo if it exists
+            if ($this->user_id) {
+                $user = User::find($this->user_id);
+                if ($user && $user->profile_photo_path) {
+                    Storage::disk('public')->delete($user->profile_photo_path);
+                }
+            }
+            $data['profile_photo_path'] = $this->photo->store('profile-photos', 'public');
+        }
+
         User::updateOrCreate(['id' => $this->user_id], $data);
 
         session()->flash('message', $this->user_id ? 'Peserta berhasil diperbarui.' : 'Peserta berhasil ditambahkan.');
@@ -148,13 +167,20 @@ class ParticipantManager extends Component
         $this->latest_education = $user->latest_education;
         $this->address = $user->address;
         $this->password = ''; // Leave password blank on edit
+        $this->existing_photo = $user->profile_photo_path;
 
         $this->openModal();
     }
 
     public function delete($id)
     {
-        User::find($id)->delete();
+        $user = User::find($id);
+        if ($user) {
+            if ($user->profile_photo_path) {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            }
+            $user->delete();
+        }
         session()->flash('message', 'Peserta berhasil dihapus.');
     }
 }
