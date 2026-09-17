@@ -83,9 +83,13 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
-                                        <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-lg">
-                                            {{ strtoupper(substr($participant->name, 0, 1)) }}
-                                        </div>
+                                        @if($participant->profile_photo_path)
+                                            <img class="h-10 w-10 rounded-full object-cover border border-gray-200" src="{{ asset('storage/' . $participant->profile_photo_path) }}" alt="{{ $participant->name }}">
+                                        @else
+                                            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-lg">
+                                                {{ strtoupper(substr($participant->name, 0, 1)) }}
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="ml-4">
                                         <div class="text-sm font-bold text-gray-900">{{ $participant->name }}</div>
