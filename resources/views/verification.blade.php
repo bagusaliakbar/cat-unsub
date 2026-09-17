@@ -20,7 +20,7 @@
                 <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
             </div>
             <h1 class="text-2xl font-bold tracking-wider">DATA VALID</h1>
-            <p class="text-blue-100 mt-1 text-sm">Peserta Resmi Ujian CAT</p>
+            <p class="text-blue-100 mt-1 text-sm">Peserta Ujian CAT</p>
         </div>
 
         <!-- Body -->
@@ -41,12 +41,12 @@
                 </div>
 
                 <div>
-                    <p class="text-xs text-gray-500 font-semibold uppercase">NIK / Username</p>
+                    <p class="text-xs text-gray-500 font-semibold uppercase">NIK</p>
                     <p class="text-base font-semibold text-gray-700">{{ $participant->nik }}</p>
                 </div>
 
                 <div>
-                    <p class="text-xs text-gray-500 font-semibold uppercase">Asal Instansi / Pendidikan</p>
+                    <p class="text-xs text-gray-500 font-semibold uppercase">Asal Instansi</p>
                     <p class="text-base font-semibold text-gray-700">{{ $participant->institution ?? '-' }}</p>
                 </div>
                 
