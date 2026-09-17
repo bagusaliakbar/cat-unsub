@@ -11,7 +11,7 @@ class CategoryManager extends Component
     use WithPagination;
 
     public $isModalOpen = false;
-    public $category_id, $name;
+    public $category_id, $name, $description;
     public $search = '';
 
     public function render()
@@ -19,7 +19,8 @@ class CategoryManager extends Component
         $query = QuestionCategory::query();
 
         if ($this->search) {
-            $query->where('name', 'like', '%' . $this->search . '%');
+            $query->where('name', 'like', '%' . $this->search . '%')
+                  ->orWhere('description', 'like', '%' . $this->search . '%');
         }
 
         $categories = $query->orderBy('name', 'asc')->paginate(10);
@@ -49,17 +50,22 @@ class CategoryManager extends Component
     {
         $this->category_id = null;
         $this->name = '';
+        $this->description = '';
     }
 
     public function store()
     {
         $this->validate([
             'name' => 'required|string|max:255|unique:question_categories,name,' . $this->category_id,
+            'description' => 'nullable|string',
         ]);
 
         QuestionCategory::updateOrCreate(
             ['id' => $this->category_id],
-            ['name' => $this->name]
+            [
+                'name' => $this->name,
+                'description' => $this->description,
+            ]
         );
 
         session()->flash('message', $this->category_id ? 'Kategori berhasil diperbarui.' : 'Kategori berhasil ditambahkan.');
@@ -73,6 +79,7 @@ class CategoryManager extends Component
         $category = QuestionCategory::findOrFail($id);
         $this->category_id = $id;
         $this->name = $category->name;
+        $this->description = $category->description;
 
         $this->openModal();
     }

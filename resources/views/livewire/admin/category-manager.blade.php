@@ -80,6 +80,7 @@
                             <tr>
                                 <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-24">ID</th>
                                 <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nama Kategori</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Deskripsi</th>
                                 <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider w-40">Aksi</th>
                             </tr>
                         </thead>
@@ -92,6 +93,9 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         {{ $category->name }}
                                     </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        {{ $category->description ?: '-' }}
+                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <button type="button" wire:click.prevent="edit({{ $category->id }})" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-3 py-1 rounded-md transition-colors mr-2">Edit</button>
                                         <button type="button" wire:click.prevent="delete({{ $category->id }})" wire:confirm="Yakin ingin menghapus kategori ini?" class="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1 rounded-md transition-colors">Hapus</button>
@@ -99,7 +103,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="px-6 py-10 whitespace-nowrap text-sm text-gray-500 text-center">
+                                    <td colspan="4" class="px-6 py-10 whitespace-nowrap text-sm text-gray-500 text-center">
                                         <div class="flex flex-col items-center justify-center">
                                             <svg class="w-12 h-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                                             <p class="text-gray-500 text-lg font-medium">Belum ada kategori yang ditambahkan.</p>
@@ -165,6 +169,11 @@
                                         <label class="block text-gray-700 text-sm font-semibold mb-2">Nama Kategori</label>
                                         <input type="text" wire:model="name" class="shadow-sm border-gray-300 rounded-xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" placeholder="Contoh: TWK, TIU, TKP">
                                         @error('name') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>@enderror
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-semibold mb-2">Deskripsi (Opsional)</label>
+                                        <textarea wire:model="description" rows="3" class="shadow-sm border-gray-300 rounded-xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" placeholder="Jelaskan mengenai kategori ini..."></textarea>
+                                        @error('description') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>@enderror
                                     </div>
                                 </div>
                             </div>
