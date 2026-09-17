@@ -9,6 +9,9 @@ Route::get('dashboard', function () {
     if (auth()->user()->role === 'admin') {
         return redirect()->route('admin.dashboard');
     }
+    if (auth()->user()->role === 'pengawas') {
+        return redirect()->route('pengawas.dashboard');
+    }
     return redirect()->route('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -100,6 +103,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/activity-log', \App\Livewire\Admin\ActivityLog::class)->name('activity-log');
     Route::get('/backup-restore', \App\Livewire\Admin\BackupManager::class)->name('backup');
     Route::get('/monitor', \App\Livewire\Admin\MonitorIndex::class)->name('monitor');
+    Route::get('/pengawas', \App\Livewire\Admin\PengawasManager::class)->name('pengawas');
 });
 
 // Participant Routes
@@ -110,4 +114,23 @@ Route::middleware(['auth'])->prefix('participant')->name('participant.')->group(
     Route::get('/exam/{examId}', \App\Livewire\Participant\ExamExecution::class)->name('exam.execute');
     Route::get('/exam/{examId}/result', \App\Livewire\Participant\ExamResult::class)->name('exam.result');
     Route::get('/history', \App\Livewire\Participant\History::class)->name('history');
+});
+
+// Pengawas Routes
+Route::middleware(['auth'])->prefix('pengawas')->name('pengawas.')->group(function () {
+    Route::get('/dashboard', \App\Livewire\Pengawas\Dashboard::class)->name('dashboard');
+    Route::get('/exams/{examId}/monitor', \App\Livewire\Pengawas\ExamMonitoring::class)->name('exams.monitor');
+    
+    // Allow pengawas to print monitoring results too
+    Route::get('/exams/{examId}/monitor/print', function ($examId) {
+        if (auth()->user()->role !== 'pengawas' && auth()->user()->role !== 'admin') abort(403);
+        $exam = \App\Models\Exam::findOrFail($examId);
+        $sessions = \App\Models\ExamSession::with(['user'])
+            ->where('exam_id', $examId)
+            ->whereNotNull('started_at')
+            ->orderByDesc('score')
+            ->get();
+        $report = \App\Models\ExamReport::where('exam_id', $examId)->first();
+        return view('print.exam-results', compact('exam', 'sessions', 'report'));
+    })->name('exams.monitor.print');
 });
