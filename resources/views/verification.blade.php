@@ -50,18 +50,6 @@
                     <p class="text-base font-semibold text-gray-700">{{ $participant->institution ?? '-' }}</p>
                 </div>
                 
-                <div>
-                    <p class="text-xs text-gray-500 font-semibold uppercase">Status Ujian</p>
-                    @if($participant->assignedExams->count() > 0)
-                        @foreach($participant->assignedExams as $exam)
-                            <span class="inline-block mt-1 mr-1 px-3 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded-full border border-blue-200">
-                                {{ $exam->title }}
-                            </span>
-                        @endforeach
-                    @else
-                        <p class="text-base font-semibold text-red-600">Belum Terdaftar pada Ujian</p>
-                    @endif
-                </div>
             </div>
         </div>
 
