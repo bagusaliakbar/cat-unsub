@@ -90,6 +90,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         return view('print.attendance', compact('exam', 'report'));
     })->name('exams.attendance');
     Route::get('/questions', \App\Livewire\Admin\QuestionManager::class)->name('questions');
+    Route::get('/categories', \App\Livewire\Admin\CategoryManager::class)->name('categories');
     Route::get('/participants', \App\Livewire\Admin\ParticipantManager::class)->name('participants');
     Route::get('/participants/{participantId}/print', function ($participantId) {
         $participant = \App\Models\User::findOrFail($participantId);
