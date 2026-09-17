@@ -57,7 +57,7 @@
         <!-- Info Peserta -->
         <table class="w-full text-xs mb-4">
             <tr>
-                <td class="w-24 font-bold py-1 align-top">Nomor Peserta</td>
+                <td class="w-24 font-bold py-1 align-top">Nomor Token</td>
                 <td class="w-2 text-center py-1 align-top">:</td>
                 <td class="py-1 align-top font-bold">{{ $participant->participant_number ?? '-' }}</td>
             </tr>
