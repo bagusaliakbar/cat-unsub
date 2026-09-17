@@ -118,7 +118,6 @@
                 @endif
             </div>
         </div>
-    </div>
 
     <!-- Modal Form Kategori -->
     <div x-data="{ open: @entangle('isModalOpen') }" 
