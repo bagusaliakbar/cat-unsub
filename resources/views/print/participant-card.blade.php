@@ -46,11 +46,12 @@
         /* Custom curve for header */
         .header-curve {
             position: relative;
-            background-color: #1e3a8a; /* blue-900 */
-            border-bottom-left-radius: 50% 15%;
-            border-bottom-right-radius: 50% 15%;
-            padding-bottom: 2rem;
+            background-color: #263c7b; /* Closer to the dark blue in image */
+            border-bottom-left-radius: 40% 10px;
+            border-bottom-right-radius: 40% 10px;
+            padding: 1rem 0;
             z-index: 10;
+            margin: 0 10px;
         }
     </style>
 </head>
@@ -59,25 +60,25 @@
 @endphp
 <body class="p-4 sm:p-8" onload="window.print()">
 
-    <div class="card-container flex flex-col">
+    <div class="card-container flex flex-col pt-4">
         <!-- Logo Section -->
-        <div class="pt-6 pb-2 px-8 flex items-center justify-center bg-white z-20">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-16 w-auto object-contain mr-4">
-            <h1 class="font-extrabold text-2xl text-blue-950 uppercase tracking-wide">UNIVERSITAS SUBANG</h1>
+        <div class="flex items-center justify-center bg-white z-20 pb-4">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-20 w-auto object-contain mr-4">
+            <h1 class="font-extrabold text-[26px] text-[#222a55] tracking-wide" style="font-family: 'Arial', sans-serif;">UNIVERSITAS SUBANG</h1>
         </div>
 
         <!-- Header Section -->
-        <div class="header-curve text-center pt-2 px-6">
-            <h1 class="font-bold text-2xl text-white uppercase tracking-wider shadow-sm">KARTU TANDA PESERTA UJIAN</h1>
-            <h2 class="font-semibold text-sm text-blue-100 uppercase tracking-widest mt-1">SELEKSI TERTULIS BERBASIS CAT</h2>
+        <div class="header-curve text-center">
+            <h1 class="font-bold text-[22px] text-white tracking-widest">KARTU TANDA PESERTA UJIAN</h1>
+            <h2 class="font-semibold text-xs text-blue-100 tracking-[0.2em] mt-1">SELEKSI TERTULIS BERBASIS CAT</h2>
         </div>
 
         <!-- Body Section -->
-        <div class="px-8 py-6 flex-1 flex flex-col relative z-20 -mt-4">
+        <div class="px-8 py-6 flex-1 flex flex-col relative z-20 -mt-2">
             <!-- Info Peserta / Token Highlight -->
-            <div class="bg-blue-50 rounded-xl p-3 flex items-center justify-between mb-6 shadow-sm border border-blue-100">
-                <span class="font-bold text-blue-900 ml-4">Nomor Peserta / Token :</span>
-                <span class="font-extrabold text-3xl text-blue-950 tracking-wider mr-6">{{ $participant->participant_number ?? '-' }}</span>
+            <div class="bg-[#f0f4f8] rounded-[1rem] p-3 flex items-center justify-between mb-6 border border-gray-100">
+                <span class="font-bold text-[#2b3a70] ml-4 text-base">Nomor Peserta / Token :</span>
+                <span class="font-extrabold text-3xl text-[#1e2a5a] tracking-wider mr-6" style="font-family: 'Arial', sans-serif;">{{ $participant->participant_number ?? '-' }}</span>
             </div>
 
             <div class="flex justify-between gap-4">
