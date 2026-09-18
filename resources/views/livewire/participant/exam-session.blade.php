@@ -189,25 +189,25 @@
     <div class="flex-1 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 relative min-h-[500px] flex flex-col">
         
         @if($currentQuestion)
-            <div class="flex justify-between items-start mb-6 pb-4 border-b border-gray-100">
-                <div class="flex flex-col">
+            <div class="flex justify-between items-start mb-6 pb-4 border-b border-gray-100 gap-4 flex-col sm:flex-row">
+                <div class="flex flex-col flex-1 min-w-0">
                     <h3 class="text-lg font-bold text-gray-800">
                         Soal No. {{ $currentQuestionIndex + 1 }}
                     </h3>
                     @if($currentQuestion->category)
-                        <div class="mt-1">
-                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded-md border border-blue-200">
+                        <div class="mt-2">
+                            <div class="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1.5 rounded-md border border-blue-200 break-words">
                                 {{ $currentQuestion->category->name }}
-                            </span>
+                            </div>
                         </div>
                     @endif
                 </div>
 
-                <div class="flex space-x-3 items-center">
-                    <span class="bg-gray-100 text-gray-600 text-xs font-bold px-3 py-1 rounded-full">{{ $currentQuestion->points }} Poin</span>
+                <div class="flex flex-row gap-2 sm:space-x-3 items-center shrink-0 mt-3 sm:mt-0">
+                    <span class="bg-gray-100 text-gray-600 text-xs font-bold px-3 py-1.5 rounded-full whitespace-nowrap">{{ $currentQuestion->points }} Poin</span>
                     
-                    <button wire:click="toggleDoubtful({{ $currentQuestion->id }})" class="flex items-center text-sm font-medium px-3 py-1 rounded-full border transition-colors {{ ($doubtful[$currentQuestion->id] ?? false) ? 'bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-200' : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50' }}">
-                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                    <button wire:click="toggleDoubtful({{ $currentQuestion->id }})" class="flex items-center text-sm font-medium px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap {{ ($doubtful[$currentQuestion->id] ?? false) ? 'bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-200' : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50' }}">
+                        <svg class="w-4 h-4 mr-1.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
                         {{ ($doubtful[$currentQuestion->id] ?? false) ? 'Ditandai Ragu-ragu' : 'Tandai Ragu-ragu' }}
                     </button>
                 </div>
