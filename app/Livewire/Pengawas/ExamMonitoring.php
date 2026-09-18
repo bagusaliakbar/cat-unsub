@@ -65,11 +65,15 @@ class ExamMonitoring extends Component
     {
         $session = ExamSession::findOrFail($sessionId);
         if ($session->status !== 'completed' && !$session->is_paused) {
-            $passed = now()->diffInSeconds($session->started_at);
-            $total = $this->exam->duration_minutes * 60;
-            $leftover = max(0, $total - $passed);
+            // Gunakan waktu dari Database server untuk menghindari clock skew antar node hosting
+            $dbTime = \Illuminate\Support\Facades\DB::selectOne("SELECT NOW() as now")->now;
+            $passed = max(0, \Carbon\Carbon::parse($dbTime)->diffInSeconds($session->started_at));
             
-            \Log::info("Pengawas PAUSE Session {$sessionId} - duration: {$this->exam->duration_minutes}m ({$total}s) - started_at: {$session->started_at} - now: " . now() . " - passed: {$passed}s - leftover: {$leftover}s");
+            $total = $this->exam->duration_minutes * 60;
+            // Pastikan leftover tidak pernah melebihi total waktu ujian
+            $leftover = min($total, max(0, $total - $passed));
+            
+            \Log::info("Pengawas PAUSE Session {$sessionId} - dbTime: {$dbTime} - started_at: {$session->started_at} - passed: {$passed}s - leftover: {$leftover}s");
 
             $session->is_paused = true;
             $session->leftover_seconds = $leftover;
@@ -82,10 +86,15 @@ class ExamMonitoring extends Component
         $session = ExamSession::findOrFail($sessionId);
         if ($session->status !== 'completed' && $session->is_paused) {
             $total = $this->exam->duration_minutes * 60;
-            $passed = $total - $session->leftover_seconds;
+            // Gunakan waktu DB untuk hitungan aman
+            $dbTime = \Illuminate\Support\Facades\DB::selectOne("SELECT NOW() as now")->now;
             
-            $newStartedAt = now()->subSeconds($passed);
-            \Log::info("Pengawas RESUME Session {$sessionId} - duration: {$this->exam->duration_minutes}m ({$total}s) - leftover: {$session->leftover_seconds}s - passed: {$passed}s - new_started_at: {$newStartedAt}");
+            // Pastikan leftover_seconds tidak lebih dari total waktu
+            $leftover = min($total, max(0, $session->leftover_seconds ?? 0));
+            $passed = $total - $leftover;
+            
+            $newStartedAt = \Carbon\Carbon::parse($dbTime)->subSeconds($passed);
+            \Log::info("Pengawas RESUME Session {$sessionId} - duration: {$this->exam->duration_minutes}m ({$total}s) - leftover: {$leftover}s - passed: {$passed}s - new_started_at: {$newStartedAt} (dbTime: {$dbTime})");
 
             $session->started_at = $newStartedAt;
             $session->is_paused = false;
