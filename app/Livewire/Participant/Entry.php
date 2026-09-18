@@ -100,7 +100,7 @@ class Entry extends Component
 
                 if ($session) {
                     if ($session->session_token && $session->session_token !== $currentSessionId) {
-                        $this->addError('input_token', 'Ujian ini sudah sedang dikerjakan di perangkat lain!');
+                        $this->addError('general_error', 'Ujian ini sedang dikerjakan di perangkat lain! Jika perangkat sebelumnya bermasalah, silakan minta panitia untuk mereset kunci perangkat Anda.');
                         return;
                     }
                     if (!$session->session_token) {

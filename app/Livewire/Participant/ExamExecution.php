@@ -47,7 +47,10 @@ class ExamExecution extends Component
         }
 
         // Initialize remaining time correctly
-        $this->checkStatus();
+        $statusCheck = $this->checkStatus();
+        if ($statusCheck) {
+            return $statusCheck;
+        }
         
         // Auto submit if time already passed and not paused
         if ($this->remainingSeconds <= 0 && !$this->session->is_paused) {
