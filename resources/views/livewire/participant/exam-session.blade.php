@@ -2,7 +2,7 @@
     <div class="flex justify-between items-center w-full">
         <h2 class="font-bold text-xl text-gray-800 leading-tight flex items-center">
             <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-            {{ $exam->title }}
+            {{ $exam->title }} (v1.1)
         </h2>
         <div class="flex items-center space-x-4">
             <div id="exam-timer" class="text-lg md:text-xl font-mono font-bold px-4 py-1.5 bg-gray-100 rounded-lg shadow-inner border border-gray-200 text-gray-700 transition-colors">
