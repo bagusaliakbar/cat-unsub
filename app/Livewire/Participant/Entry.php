@@ -63,6 +63,21 @@ class Entry extends Component
             return;
         }
 
+        // Check if there is an active session on another device
+        $currentSessionId = request()->session()->getId();
+        $activeSession = \App\Models\ExamSession::where('user_id', $this->participant->id)
+            ->whereIn('status', ['started', 'in_progress'])
+            ->whereNotNull('session_token')
+            ->where('session_token', '!=', $currentSessionId)
+            ->first();
+
+        if ($activeSession) {
+            $this->addError('participant_number', 'Akun ini sedang aktif mengerjakan ujian di perangkat lain. Hubungi panitia untuk Buka Kunci Perangkat jika Anda berpindah perangkat.');
+            return;
+        }
+
+
+
         Auth::login($this->participant);
         return redirect()->route('home');
     }

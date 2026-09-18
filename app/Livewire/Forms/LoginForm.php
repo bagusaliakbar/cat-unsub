@@ -40,6 +40,23 @@ class LoginForm extends Form
 
         RateLimiter::clear($this->throttleKey());
         
+        $user = Auth::user();
+        if ($user && in_array($user->role, ['participant', 'peserta'])) {
+            $currentSessionId = request()->session()->getId();
+            $activeSession = \App\Models\ExamSession::where('user_id', $user->id)
+                ->whereIn('status', ['started', 'in_progress'])
+                ->whereNotNull('session_token')
+                ->where('session_token', '!=', $currentSessionId)
+                ->first();
+
+            if ($activeSession) {
+                Auth::logout();
+                throw ValidationException::withMessages([
+                    'form.email' => 'Akun ini sedang aktif mengerjakan ujian di perangkat lain. Hubungi panitia untuk Buka Kunci Perangkat jika Anda berpindah perangkat.',
+                ]);
+            }
+        }
+        
         \App\Services\LogService::record('login', 'User berhasil login ke dalam sistem.');
     }
 
