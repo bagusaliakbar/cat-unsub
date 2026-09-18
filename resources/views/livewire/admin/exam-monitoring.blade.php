@@ -149,8 +149,8 @@
                                                   }, 1000);
                                               }
                                           }"
-                                          x-text="String(Math.floor(remaining / 60)).padStart(2, '0') + ':' + String(Math.floor(remaining % 60)).padStart(2, '0')">
-                                        {{ str_pad(floor($session->remaining_seconds / 60), 2, '0', STR_PAD_LEFT) }}:{{ str_pad(floor($session->remaining_seconds % 60), 2, '0', STR_PAD_LEFT) }}
+                                          x-text="String(Math.floor(remaining / 3600)).padStart(2, '0') + ':' + String(Math.floor((remaining % 3600) / 60)).padStart(2, '0') + ':' + String(Math.floor(remaining % 60)).padStart(2, '0')">
+                                        {{ str_pad(floor($session->remaining_seconds / 3600), 2, '0', STR_PAD_LEFT) }}:{{ str_pad(floor(($session->remaining_seconds % 3600) / 60), 2, '0', STR_PAD_LEFT) }}:{{ str_pad(floor($session->remaining_seconds % 60), 2, '0', STR_PAD_LEFT) }}
                                     </span>
                                 </div>
                                 @endif
