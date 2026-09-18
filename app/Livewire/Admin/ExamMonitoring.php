@@ -193,7 +193,8 @@ class ExamMonitoring extends Component
             if ($session->status === 'completed') {
                 $session->live_score = $session->score;
             } else {
-                $session->live_score = $totalPoints > 0 ? round(($score / $totalPoints) * 100, 2) : 0;
+                // Tampilkan raw score (total poin), bukan persentase, agar sinkron dengan final score
+                $session->live_score = $score;
             }
             
             $session->stat_correct = $correct;
