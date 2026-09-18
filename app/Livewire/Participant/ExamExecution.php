@@ -104,6 +104,14 @@ class ExamExecution extends Component
         $this->session->refresh();
         $this->violationCount = $this->session->violation_count;
         
+        $currentSessionId = request()->session()->getId();
+        if ($this->session->session_token && $this->session->session_token !== $currentSessionId) {
+            \Illuminate\Support\Facades\Auth::logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+            return redirect()->route('home')->with('error', 'Sesi ujian Anda diambil alih oleh perangkat lain!');
+        }
+
         if ($this->session->status === 'completed') {
             return redirect()->route('participant.dashboard');
         }

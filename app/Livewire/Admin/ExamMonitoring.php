@@ -72,6 +72,14 @@ class ExamMonitoring extends Component
         $session->delete();
     }
 
+    public function resetDevice($sessionId)
+    {
+        $session = ExamSession::findOrFail($sessionId);
+        $session->update(['session_token' => null]);
+        
+        \App\Services\LogService::record('admin_action', "Admin mereset kunci perangkat peserta (Sesi: {$sessionId}) agar bisa login dari perangkat lain.");
+    }
+
     public function pauseSession($sessionId)
     {
         $session = ExamSession::findOrFail($sessionId);

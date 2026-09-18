@@ -92,17 +92,29 @@ class Entry extends Component
                     }
                 }
 
-                // Buat sesi ujian jika belum ada
-                \App\Models\ExamSession::firstOrCreate(
-                    [
+                $currentSessionId = request()->session()->getId();
+
+                $session = \App\Models\ExamSession::where('user_id', $this->participant->id)
+                    ->where('exam_id', $exam->id)
+                    ->first();
+
+                if ($session) {
+                    if ($session->session_token && $session->session_token !== $currentSessionId) {
+                        $this->addError('input_token', 'Ujian ini sudah sedang dikerjakan di perangkat lain!');
+                        return;
+                    }
+                    if (!$session->session_token) {
+                        $session->update(['session_token' => $currentSessionId]);
+                    }
+                } else {
+                    \App\Models\ExamSession::create([
                         'user_id' => $this->participant->id,
                         'exam_id' => $exam->id,
-                    ],
-                    [
                         'started_at' => now(),
                         'status' => 'started',
-                    ]
-                );
+                        'session_token' => $currentSessionId,
+                    ]);
+                }
 
                 $this->redirectRoute('participant.exam.execute', ['examId' => $exam->id], navigate: true);
             }
