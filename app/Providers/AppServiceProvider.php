@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
             
             // Konfigurasi endpoint Livewire agar tidak ter-redirect (memaksa HTTPS pada script dan update route)
             \Livewire\Livewire::setUpdateRoute(function ($handle) {
-                return \Illuminate\Support\Facades\Route::post('/livewire/update', $handle);
+                return \Illuminate\Support\Facades\Route::post('/livewire/update', $handle)->middleware('web');
             });
         }
     }
