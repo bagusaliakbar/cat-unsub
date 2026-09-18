@@ -5,7 +5,7 @@
             {{ $exam->title }}
         </h2>
         <div class="flex items-center space-x-4">
-            <div id="exam-timer" class="text-lg md:text-xl font-mono font-bold px-4 py-1.5 bg-gray-100 rounded-lg shadow-inner border border-gray-200 text-gray-700 transition-colors" data-end="{{ $endTimeFormatted }}">
+            <div id="exam-timer" class="text-lg md:text-xl font-mono font-bold px-4 py-1.5 bg-gray-100 rounded-lg shadow-inner border border-gray-200 text-gray-700 transition-colors">
                 00:00:00
             </div>
         </div>
@@ -96,6 +96,9 @@
     },
 
     initTimer() {
+        let localEndTime = null;
+        let lastRemaining = null;
+
         const updateTimer = () => {
             const timerEl = document.getElementById('exam-timer');
             if (!timerEl) return;
@@ -107,11 +110,27 @@
                 return;
             }
             
-            const dataEl = document.getElementById('livewire-end-time');
-            const endTimeStr = dataEl ? dataEl.dataset.end : timerEl.dataset.end;
-            const endTime = new Date(endTimeStr).getTime();
+            const dataEl = document.getElementById('livewire-remaining-time');
+            if (dataEl && dataEl.dataset.remaining) {
+                const currentRemaining = parseInt(dataEl.dataset.remaining);
+                
+                if (localEndTime === null) {
+                    localEndTime = new Date().getTime() + (currentRemaining * 1000);
+                    lastRemaining = currentRemaining;
+                } else {
+                    const currentLocalRemaining = (localEndTime - new Date().getTime()) / 1000;
+                    // Resync local end time if drift is more than 3 seconds (e.g. after pause/resume or network delay)
+                    if (Math.abs(currentLocalRemaining - currentRemaining) > 3) {
+                        localEndTime = new Date().getTime() + (currentRemaining * 1000);
+                        lastRemaining = currentRemaining;
+                    }
+                }
+            }
+            
+            if (!localEndTime) return;
+
             const now = new Date().getTime();
-            const distance = endTime - now;
+            const distance = localEndTime - now;
             
             if (distance < 0) {
                 timerEl.innerHTML = 'WAKTU HABIS';
@@ -147,8 +166,8 @@
     }
 }" x-init="initFullscreen(); initTimer();" class="select-none relative">
     
-    <!-- Hidden element inside livewire root to keep track of updated end time -->
-    <div id="livewire-end-time" class="hidden" data-end="{{ $endTimeFormatted }}"></div>
+    <!-- Hidden element inside livewire root to keep track of updated remaining time -->
+    <div id="livewire-remaining-time" class="hidden" data-remaining="{{ $remainingSeconds }}"></div>
 
     @if($session->is_paused)
         <div id="paused-overlay" class="fixed inset-0 z-[100] bg-gray-900 bg-opacity-95 flex flex-col items-center justify-center p-6 text-center">

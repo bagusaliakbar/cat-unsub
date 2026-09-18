@@ -15,7 +15,7 @@ class ExamExecution extends Component
     public $session;
     public $questions;
     public $currentQuestionIndex = 0;
-    public $endTimeFormatted;
+    public $remainingSeconds = 0;
     
     // To hold current answers
     public $answers = [];
@@ -58,7 +58,7 @@ class ExamExecution extends Component
             return;
         }
 
-        $this->endTimeFormatted = $endTime->toIso8601String();
+        $this->remainingSeconds = max(0, now()->diffInSeconds($endTime, false));
         $this->questions = $this->exam->questions;
 
         // Load existing answers
@@ -112,7 +112,7 @@ class ExamExecution extends Component
                 $endTime = \Carbon\Carbon::parse($this->exam->end_time);
             }
             
-            $this->endTimeFormatted = $endTime->toIso8601String();
+            $this->remainingSeconds = max(0, now()->diffInSeconds($endTime, false));
         }
     }
 
