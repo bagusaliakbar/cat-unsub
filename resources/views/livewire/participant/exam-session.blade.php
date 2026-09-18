@@ -15,7 +15,7 @@
 <!-- Single Root Element for Livewire -->
 <div wire:poll.7s="checkStatus" x-data="{
     isFullscreen: false,
-    violationCount: 0,
+    violationCount: @entangle('violationCount'),
     isAlerting: false,
     violationMessage: '',
     showViolationModal: false,
@@ -70,7 +70,6 @@
         this.isAlerting = true;
         
         this.isFullscreen = false; 
-        this.violationCount++;
         
         // Record violation to backend
         this.$wire.recordViolation(message);

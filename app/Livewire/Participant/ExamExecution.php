@@ -16,6 +16,7 @@ class ExamExecution extends Component
     public $questions;
     public $currentQuestionIndex = 0;
     public $remainingSeconds = 0;
+    public $violationCount = 0;
     
     // To hold current answers
     public $answers = [];
@@ -37,6 +38,8 @@ class ExamExecution extends Component
         $this->session = ExamSession::where('user_id', Auth::id())
             ->where('exam_id', $this->exam->id)
             ->firstOrFail();
+
+        $this->violationCount = $this->session->violation_count;
 
         // Redirect if already completed
         if ($this->session->status === 'completed') {
@@ -99,6 +102,7 @@ class ExamExecution extends Component
     public function checkStatus()
     {
         $this->session->refresh();
+        $this->violationCount = $this->session->violation_count;
         
         if ($this->session->status === 'completed') {
             return redirect()->route('participant.dashboard');
@@ -236,6 +240,7 @@ class ExamExecution extends Component
     {
         if ($this->session && $this->session->status !== 'completed') {
             $this->session->increment('violation_count');
+            $this->violationCount = $this->session->refresh()->violation_count;
             \App\Services\LogService::record('violation', 'Peserta ' . Auth::user()->name . ' (NIK: ' . Auth::user()->nik . ') melakukan pelanggaran: ' . ($message ?? 'Aktivitas mencurigakan'));
         }
     }
