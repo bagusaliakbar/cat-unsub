@@ -120,16 +120,17 @@
             if (dataEl && dataEl.dataset.remaining) {
                 const currentRemaining = parseInt(dataEl.dataset.remaining);
                 
-                if (localEndTime === null) {
-                    localEndTime = new Date().getTime() + (currentRemaining * 1000);
-                    lastRemaining = currentRemaining;
-                } else {
-                    const currentLocalRemaining = (localEndTime - new Date().getTime()) / 1000;
-                    // Resync local end time if drift is more than 3 seconds (e.g. after pause/resume or network delay)
-                    if (Math.abs(currentLocalRemaining - currentRemaining) > 3) {
+                if (localEndTime === null || lastRemaining !== currentRemaining) {
+                    if (localEndTime === null) {
                         localEndTime = new Date().getTime() + (currentRemaining * 1000);
-                        lastRemaining = currentRemaining;
+                    } else {
+                        const currentLocalRemaining = (localEndTime - new Date().getTime()) / 1000;
+                        // Resync local end time if drift is more than 3 seconds (e.g. after pause/resume or network delay)
+                        if (Math.abs(currentLocalRemaining - currentRemaining) > 3) {
+                            localEndTime = new Date().getTime() + (currentRemaining * 1000);
+                        }
                     }
+                    lastRemaining = currentRemaining;
                 }
             }
             
