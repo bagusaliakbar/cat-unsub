@@ -78,6 +78,8 @@ class ExamMonitoring extends Component
         $session->update(['session_token' => null]);
         
         \App\Services\LogService::record('admin_action', "Admin mereset kunci perangkat peserta (Sesi: {$sessionId}) agar bisa login dari perangkat lain.");
+        
+        session()->flash('message', 'Berhasil membuka kunci perangkat untuk peserta ini. Peserta sekarang bisa login dari perangkat lain.');
     }
 
     public function pauseSession($sessionId)

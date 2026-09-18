@@ -5,6 +5,14 @@
         </h2>
     </x-slot>
     <div class="w-full py-10 px-4 sm:px-6 lg:px-8" wire:poll.5s>
+    
+    @if (session()->has('message'))
+        <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl shadow-sm relative flex items-center" role="alert">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span class="block sm:inline font-medium">{{ session('message') }}</span>
+        </div>
+    @endif
+
         <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
             <div class="flex items-center text-sm text-gray-600 font-medium space-x-2">
                 <span class="text-blue-600 flex items-center">
