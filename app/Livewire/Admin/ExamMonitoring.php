@@ -192,9 +192,18 @@ class ExamMonitoring extends Component
 
             if ($session->status === 'completed') {
                 $session->live_score = $session->score;
+                $session->remaining_seconds = 0;
             } else {
                 // Tampilkan raw score (total poin), bukan persentase, agar sinkron dengan final score
                 $session->live_score = $score;
+                
+                // Hitung sisa waktu
+                if ($session->is_paused) {
+                    $session->remaining_seconds = $session->leftover_seconds;
+                } else {
+                    $endTime = \Carbon\Carbon::parse($session->started_at)->addMinutes($this->exam->duration_minutes);
+                    $session->remaining_seconds = max(0, now()->diffInSeconds($endTime, false));
+                }
             }
             
             $session->stat_correct = $correct;

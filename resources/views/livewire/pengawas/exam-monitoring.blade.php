@@ -136,6 +136,13 @@
                                 <div class="flex items-center text-xs text-gray-400 mt-0.5">
                                     Durasi: {{ (int) \Carbon\Carbon::parse($session->started_at)->diffInMinutes($session->completed_at) }} menit
                                 </div>
+                                @else
+                                <div class="flex items-center text-xs">
+                                    <span class="w-12 text-gray-400">Sisa:</span>
+                                    <span class="font-medium font-mono {{ $session->remaining_seconds < 60 ? 'text-red-600' : 'text-blue-600' }}">
+                                        {{ str_pad(floor($session->remaining_seconds / 60), 2, '0', STR_PAD_LEFT) }}:{{ str_pad($session->remaining_seconds % 60, 2, '0', STR_PAD_LEFT) }}
+                                    </span>
+                                </div>
                                 @endif
                             </div>
                         </td>
