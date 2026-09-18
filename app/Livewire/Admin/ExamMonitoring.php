@@ -80,6 +80,8 @@ class ExamMonitoring extends Component
             $total = $this->exam->duration_minutes * 60;
             $leftover = max(0, $total - $passed);
             
+            \Log::info("Admin PAUSE Session {$sessionId} - duration: {$this->exam->duration_minutes}m ({$total}s) - started_at: {$session->started_at} - now: " . now() . " - passed: {$passed}s - leftover: {$leftover}s");
+
             $session->is_paused = true;
             $session->leftover_seconds = $leftover;
             $session->save();
@@ -93,7 +95,10 @@ class ExamMonitoring extends Component
             $total = $this->exam->duration_minutes * 60;
             $passed = $total - $session->leftover_seconds;
             
-            $session->started_at = now()->subSeconds($passed);
+            $newStartedAt = now()->subSeconds($passed);
+            \Log::info("Admin RESUME Session {$sessionId} - duration: {$this->exam->duration_minutes}m ({$total}s) - leftover: {$session->leftover_seconds}s - passed: {$passed}s - new_started_at: {$newStartedAt}");
+
+            $session->started_at = $newStartedAt;
             $session->is_paused = false;
             $session->leftover_seconds = null;
             $session->save();

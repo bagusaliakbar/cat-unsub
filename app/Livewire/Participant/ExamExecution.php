@@ -99,17 +99,26 @@ class ExamExecution extends Component
     public function checkStatus()
     {
         $this->session->refresh();
+        
+        if ($this->session->status === 'completed') {
+            return redirect()->route('participant.dashboard');
+        }
+
         if (!$this->session->is_paused) {
             $startedAt = \Carbon\Carbon::parse($this->session->started_at);
             $endTime = $startedAt->copy()->addMinutes($this->exam->duration_minutes);
             
-            if ($this->exam->end_time && $endTime->greaterThan($this->exam->end_time)) {
-                $endTime = \Carbon\Carbon::parse($this->exam->end_time);
+            // Auto submit if time already passed and not paused
+            if ($this->remainingSeconds <= 0 && !$this->session->is_paused) {
+                $this->finishExam();
+                return;
             }
             
             $this->remainingSeconds = max(0, now()->diffInSeconds($endTime, false));
+            \Log::info("Participant checkStatus (Active) - Session {$this->session->id} - duration: {$this->exam->duration_minutes}m - startedAt: {$startedAt} - endTime: {$endTime} - now: " . now() . " - remainingSeconds: {$this->remainingSeconds}s");
         } else {
             $this->remainingSeconds = $this->session->leftover_seconds ?? 0;
+            \Log::info("Participant checkStatus (Paused) - Session {$this->session->id} - leftover: {$this->session->leftover_seconds}s - remainingSeconds: {$this->remainingSeconds}s");
         }
     }
 
