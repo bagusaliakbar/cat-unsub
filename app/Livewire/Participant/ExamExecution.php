@@ -108,11 +108,9 @@ class ExamExecution extends Component
             $startedAt = \Carbon\Carbon::parse($this->session->started_at);
             $endTime = $startedAt->copy()->addMinutes($this->exam->duration_minutes);
             
-            // Gunakan waktu DB untuk menghindari timer loncat karena clock skew antar server node
-            $dbTime = \Illuminate\Support\Facades\DB::selectOne("SELECT NOW() as now")->now;
-            
-            $this->remainingSeconds = max(0, \Carbon\Carbon::parse($dbTime)->diffInSeconds($endTime, false));
-            \Log::info("Participant checkStatus (Active) - Session {$this->session->id} - duration: {$this->exam->duration_minutes}m - startedAt: {$startedAt} - endTime: {$endTime} - dbTime: {$dbTime} - remainingSeconds: {$this->remainingSeconds}s");
+            // Revert dbTime back to now() to fix timezone offset (07:10:00 bug)
+            $this->remainingSeconds = max(0, now()->diffInSeconds($endTime, false));
+            \Log::info("Participant checkStatus (Active) - Session {$this->session->id} - duration: {$this->exam->duration_minutes}m - startedAt: {$startedAt} - endTime: {$endTime} - now: " . now() . " - remainingSeconds: {$this->remainingSeconds}s");
 
             // Auto submit if time already passed and not paused
             if ($this->remainingSeconds <= 0) {

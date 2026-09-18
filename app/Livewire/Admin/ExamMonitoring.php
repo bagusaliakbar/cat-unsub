@@ -76,15 +76,14 @@ class ExamMonitoring extends Component
     {
         $session = ExamSession::findOrFail($sessionId);
         if ($session->status !== 'completed' && !$session->is_paused) {
-            // Gunakan waktu dari Database server untuk menghindari clock skew antar node hosting
-            $dbTime = \Illuminate\Support\Facades\DB::selectOne("SELECT NOW() as now")->now;
-            $passed = max(0, \Carbon\Carbon::parse($dbTime)->diffInSeconds($session->started_at));
+            // Gunakan abs() untuk mencegah nilai negatif jika ada clock skew antar server
+            $passed = abs(now()->diffInSeconds($session->started_at));
             
             $total = $this->exam->duration_minutes * 60;
-            // Pastikan leftover tidak pernah melebihi total waktu ujian
+            // Pastikan leftover tidak pernah melebihi total waktu ujian (mencegah timer melompat)
             $leftover = min($total, max(0, $total - $passed));
             
-            \Log::info("Admin PAUSE Session {$sessionId} - dbTime: {$dbTime} - started_at: {$session->started_at} - passed: {$passed}s - leftover: {$leftover}s");
+            \Log::info("Admin PAUSE Session {$sessionId} - duration: {$this->exam->duration_minutes}m ({$total}s) - started_at: {$session->started_at} - now: " . now() . " - passed: {$passed}s - leftover: {$leftover}s");
 
             $session->is_paused = true;
             $session->leftover_seconds = $leftover;
@@ -97,15 +96,13 @@ class ExamMonitoring extends Component
         $session = ExamSession::findOrFail($sessionId);
         if ($session->status !== 'completed' && $session->is_paused) {
             $total = $this->exam->duration_minutes * 60;
-            // Gunakan waktu DB untuk hitungan aman
-            $dbTime = \Illuminate\Support\Facades\DB::selectOne("SELECT NOW() as now")->now;
             
             // Pastikan leftover_seconds tidak lebih dari total waktu
             $leftover = min($total, max(0, $session->leftover_seconds ?? 0));
             $passed = $total - $leftover;
             
-            $newStartedAt = \Carbon\Carbon::parse($dbTime)->subSeconds($passed);
-            \Log::info("Admin RESUME Session {$sessionId} - duration: {$this->exam->duration_minutes}m ({$total}s) - leftover: {$leftover}s - passed: {$passed}s - new_started_at: {$newStartedAt} (dbTime: {$dbTime})");
+            $newStartedAt = now()->subSeconds($passed);
+            \Log::info("Admin RESUME Session {$sessionId} - duration: {$this->exam->duration_minutes}m ({$total}s) - leftover: {$leftover}s - passed: {$passed}s - new_started_at: {$newStartedAt} - now: " . now());
 
             $session->started_at = $newStartedAt;
             $session->is_paused = false;
