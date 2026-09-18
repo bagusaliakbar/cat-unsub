@@ -139,7 +139,17 @@
                                 @else
                                 <div class="flex items-center text-xs">
                                     <span class="w-12 text-gray-400">Sisa:</span>
-                                    <span class="font-medium font-mono {{ $session->remaining_seconds < 60 ? 'text-red-600' : 'text-blue-600' }}">
+                                    <span class="font-medium font-mono {{ $session->remaining_seconds < 60 ? 'text-red-600' : 'text-blue-600' }}"
+                                          x-data="{ 
+                                              remaining: {{ $session->remaining_seconds }},
+                                              interval: null,
+                                              init() {
+                                                  this.interval = setInterval(() => {
+                                                      if(this.remaining > 0) this.remaining--;
+                                                  }, 1000);
+                                              }
+                                          }"
+                                          x-text="String(Math.floor(remaining / 60)).padStart(2, '0') + ':' + String(remaining % 60).padStart(2, '0')">
                                         {{ str_pad(floor($session->remaining_seconds / 60), 2, '0', STR_PAD_LEFT) }}:{{ str_pad($session->remaining_seconds % 60, 2, '0', STR_PAD_LEFT) }}
                                     </span>
                                 </div>
