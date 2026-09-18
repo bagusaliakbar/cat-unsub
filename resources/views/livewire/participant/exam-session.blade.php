@@ -103,7 +103,6 @@
 
     initTimer() {
         let localEndTime = null;
-        let lastRemaining = null;
 
         const updateTimer = () => {
             const timerEl = document.getElementById('exam-timer');
@@ -120,17 +119,15 @@
             if (dataEl && dataEl.dataset.remaining) {
                 const currentRemaining = parseInt(dataEl.dataset.remaining);
                 
-                if (localEndTime === null || lastRemaining !== currentRemaining) {
-                    if (localEndTime === null) {
+                if (localEndTime === null) {
+                    localEndTime = new Date().getTime() + (currentRemaining * 1000);
+                } else {
+                    const currentLocalRemaining = (localEndTime - new Date().getTime()) / 1000;
+                    // Resync local end time if drift is more than 10 seconds 
+                    // (prevents jumping during 7s Livewire poll, but catches pause/resume)
+                    if (Math.abs(currentLocalRemaining - currentRemaining) > 10) {
                         localEndTime = new Date().getTime() + (currentRemaining * 1000);
-                    } else {
-                        const currentLocalRemaining = (localEndTime - new Date().getTime()) / 1000;
-                        // Resync local end time if drift is more than 3 seconds (e.g. after pause/resume or network delay)
-                        if (Math.abs(currentLocalRemaining - currentRemaining) > 3) {
-                            localEndTime = new Date().getTime() + (currentRemaining * 1000);
-                        }
                     }
-                    lastRemaining = currentRemaining;
                 }
             }
             
