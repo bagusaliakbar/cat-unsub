@@ -268,27 +268,34 @@
                 Navigasi Soal
             </h4>
             
-            <div class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-5 gap-2 mb-6">
-                @foreach($questionOrder as $index => $qId)
-                    @php
-                        $isAnswered = !empty($answers[$qId]);
-                        $isDoubtful = $doubtful[$qId] ?? false;
-                        $isActive = $currentQuestionIndex === $index;
+            <div class="max-h-[300px] md:max-h-[400px] lg:max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar mb-6">
+                <div class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-5 gap-2">
+                    @foreach($questionOrder as $index => $qId)
+                        @php
+                            $isAnswered = !empty($answers[$qId]);
+                            $isDoubtful = $doubtful[$qId] ?? false;
+                            $isActive = $currentQuestionIndex === $index;
+                            
+                            $btnClass = 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'; // Default (Unanswered)
+                            
+                            if ($isActive) {
+                                $btnClass = 'bg-blue-600 border-blue-600 text-white ring-2 ring-blue-200 ring-offset-1';
+                            } elseif ($isDoubtful) {
+                                $btnClass = 'bg-yellow-400 border-yellow-500 text-yellow-900 font-bold shadow-inner';
+                            } elseif ($isAnswered) {
+                                $btnClass = 'bg-green-500 border-green-600 text-white shadow-inner';
+                            }
+                        @endphp
                         
-                        $btnClass = 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'; // Default (Unanswered)
-                        
-                        if ($isActive) {
-                            $btnClass = 'bg-blue-600 border-blue-600 text-white ring-2 ring-blue-200 ring-offset-1';
-                        } elseif ($isDoubtful) {
-                            $btnClass = 'bg-yellow-400 border-yellow-500 text-yellow-900 font-bold shadow-inner';
-                        } elseif ($isAnswered) {
-                            $btnClass = 'bg-green-500 border-green-600 text-white shadow-inner';
-                        }
-                    @endphp
-                    <button wire:click="goToQuestion({{ $index }})" class="w-12 h-12 flex items-center justify-center rounded-xl border text-base font-bold transition-all {{ $btnClass }}">
-                        {{ $index + 1 }}
-                    </button>
-                @endforeach
+                        <button 
+                            wire:click="goToQuestion({{ $index }})"
+                            class="w-full aspect-square flex items-center justify-center rounded-xl text-sm transition-all border {{ $btnClass }}"
+                            title="Soal No. {{ $index + 1 }}"
+                        >
+                            {{ $index + 1 }}
+                        </button>
+                    @endforeach
+                </div>
             </div>
 
             <!-- Legend -->
