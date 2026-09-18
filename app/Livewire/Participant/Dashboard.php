@@ -47,14 +47,29 @@ class Dashboard extends Component
             }
         }
 
-        // Create session if it doesn't exist yet
-        ExamSession::firstOrCreate(
-            ['user_id' => Auth::id(), 'exam_id' => $exam->id],
-            [
+        $currentSessionId = request()->session()->getId();
+
+        $session = ExamSession::where('user_id', Auth::id())
+            ->where('exam_id', $exam->id)
+            ->first();
+
+        if ($session) {
+            if ($session->session_token && $session->session_token !== $currentSessionId) {
+                session()->flash('error_'.$examId, 'Ujian ini sedang dikerjakan di perangkat lain! Minta panitia mereset kunci perangkat Anda.');
+                return;
+            }
+            if (!$session->session_token) {
+                $session->update(['session_token' => $currentSessionId]);
+            }
+        } else {
+            ExamSession::create([
+                'user_id' => Auth::id(),
+                'exam_id' => $exam->id,
                 'status' => 'started',
                 'started_at' => now(),
-            ]
-        );
+                'session_token' => $currentSessionId,
+            ]);
+        }
 
         \App\Services\LogService::record('start_exam', 'Peserta memulai ujian: ' . $exam->title);
 

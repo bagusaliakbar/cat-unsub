@@ -40,6 +40,7 @@ class ExamResult extends Component
                 [
                     'started_at' => now(),
                     'status' => 'started',
+                    'session_token' => request()->session()->getId(),
                 ]
             );
             
