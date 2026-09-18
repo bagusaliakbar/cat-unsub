@@ -43,22 +43,15 @@ class ExamExecution extends Component
             return redirect()->route('participant.exam.result', ['examId' => $this->exam->id]);
         }
 
-        // Calculate end time based on duration
-        $startedAt = \Carbon\Carbon::parse($this->session->started_at);
-        $endTime = $startedAt->copy()->addMinutes($this->exam->duration_minutes);
-
-        // Jika ujian memiliki batas waktu akhir (end_time) spesifik, potong waktu pengerjaan
-        if ($this->exam->end_time && $endTime->greaterThan($this->exam->end_time)) {
-            $endTime = \Carbon\Carbon::parse($this->exam->end_time);
-        }
+        // Initialize remaining time correctly
+        $this->checkStatus();
         
-        // Auto submit if time already passed
-        if (now()->greaterThanOrEqualTo($endTime)) {
+        // Auto submit if time already passed and not paused
+        if ($this->remainingSeconds <= 0 && !$this->session->is_paused) {
             $this->finishExam();
             return;
         }
 
-        $this->remainingSeconds = max(0, now()->diffInSeconds($endTime, false));
         $this->questions = $this->exam->questions;
 
         // Load existing answers
@@ -75,6 +68,8 @@ class ExamExecution extends Component
 
     public function render()
     {
+        $this->checkStatus();
+        
         $currentQuestion = $this->questions[$this->currentQuestionIndex] ?? null;
         
         // Randomize options if the question type is multiple choice
@@ -113,6 +108,8 @@ class ExamExecution extends Component
             }
             
             $this->remainingSeconds = max(0, now()->diffInSeconds($endTime, false));
+        } else {
+            $this->remainingSeconds = $this->session->leftover_seconds ?? 0;
         }
     }
 
