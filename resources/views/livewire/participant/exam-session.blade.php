@@ -17,6 +17,8 @@
     isFullscreen: false,
     violationCount: 0,
     isAlerting: false,
+    violationMessage: '',
+    showViolationModal: false,
     
     // Add hidden div to hold the latest endTimeFormatted updated by Livewire
     
@@ -77,8 +79,12 @@
             document.exitFullscreen().catch(e => {});
         }
 
-        alert('PERINGATAN PELANGGARAN (' + this.violationCount + 'x)\n\n' + message + '\n\nSistem mencatat aktivitas mencurigakan ini.');
-        
+        this.violationMessage = message;
+        this.showViolationModal = true;
+    },
+    
+    closeViolationModal() {
+        this.showViolationModal = false;
         setTimeout(() => { this.isAlerting = false; }, 1000);
     },
     
@@ -380,6 +386,34 @@
         <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
         <span class="font-bold text-lg">KONEKSI INTERNET TERPUTUS!</span>
         <span class="ml-2">Jawaban Anda tidak dapat disimpan hingga koneksi kembali stabil.</span>
+    </div>
+
+    <!-- Custom Violation Modal -->
+    <div x-show="showViolationModal" x-cloak class="fixed inset-0 z-[200] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-900 bg-opacity-75 backdrop-blur-sm transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-red-100">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex flex-col items-center text-center">
+                    <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
+                        <svg class="h-8 w-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl leading-6 font-extrabold text-gray-900 mb-2" id="modal-title">
+                        Peringatan Pelanggaran! (<span x-text="violationCount"></span>x)
+                    </h3>
+                    <div class="mt-2 text-sm text-gray-500 mb-6 px-2" x-text="violationMessage"></div>
+                    <div class="w-full bg-red-50 border border-red-200 p-4 rounded-xl text-red-800 text-sm font-medium flex items-center justify-center text-center">
+                        <svg class="w-5 h-5 mr-2 flex-shrink-0 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        <span>Sistem telah mencatat aktivitas mencurigakan ini!</span>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-6 py-4 border-t border-gray-100">
+                    <button type="button" @click="closeViolationModal" class="w-full inline-flex justify-center items-center rounded-xl border border-transparent shadow-md px-6 py-3 bg-red-600 text-base font-bold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all">
+                        Saya Mengerti
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
 <style>
