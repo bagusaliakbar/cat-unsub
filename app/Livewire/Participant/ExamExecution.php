@@ -84,6 +84,7 @@ class ExamExecution extends Component
                     'created_at' => $now,
                     'updated_at' => $now,
                 ];
+            }
             // Use insertOrIgnore to prevent duplicate key errors if two requests initialize concurrently
             UserAnswer::insertOrIgnore($answersData);
         } else {
