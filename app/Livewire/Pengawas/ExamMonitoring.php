@@ -204,12 +204,6 @@ class ExamMonitoring extends Component
                 $startedAt = \Carbon\Carbon::parse($session->started_at);
                 $totalSeconds = $this->exam->duration_minutes * 60;
                 
-                if ($session->is_paused) {
-                    $leftover = $session->leftover_seconds ?? 0;
-                    $passed = max(0, $totalSeconds - $leftover);
-                    $startedAt = now()->subSeconds($passed);
-                }
-
                 $endTimeByDuration = $startedAt->copy()->addMinutes($this->exam->duration_minutes);
                 $endTime = $endTimeByDuration;
 
@@ -220,7 +214,13 @@ class ExamMonitoring extends Component
                     }
                 }
 
-                $session->remaining_seconds = max(0, now()->diffInSeconds($endTime, false));
+                if ($session->is_paused) {
+                    $passed = max(0, $totalSeconds - ($session->leftover_seconds ?? 0));
+                    $pausedAt = $startedAt->copy()->addSeconds($passed);
+                    $session->remaining_seconds = max(0, $pausedAt->diffInSeconds($endTime, false));
+                } else {
+                    $session->remaining_seconds = max(0, now()->diffInSeconds($endTime, false));
+                }
             }
             
             $session->stat_correct = $correct;

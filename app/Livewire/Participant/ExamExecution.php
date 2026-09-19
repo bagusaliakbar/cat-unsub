@@ -166,12 +166,6 @@ class ExamExecution extends Component
         $startedAt = \Carbon\Carbon::parse($this->session->started_at);
         $totalSeconds = $this->exam->duration_minutes * 60;
         
-        if ($this->session->is_paused) {
-            $leftover = $this->session->leftover_seconds ?? 0;
-            $passed = max(0, $totalSeconds - $leftover);
-            $startedAt = now()->subSeconds($passed);
-        }
-
         $endTimeByDuration = $startedAt->copy()->addMinutes($this->exam->duration_minutes);
         $endTime = $endTimeByDuration;
 
@@ -182,9 +176,13 @@ class ExamExecution extends Component
             }
         }
 
-        $this->remainingSeconds = max(0, now()->diffInSeconds($endTime, false));
+        if ($this->session->is_paused) {
+            $passed = max(0, $totalSeconds - ($this->session->leftover_seconds ?? 0));
+            $pausedAt = $startedAt->copy()->addSeconds($passed);
+            $this->remainingSeconds = max(0, $pausedAt->diffInSeconds($endTime, false));
+        } else {
+            $this->remainingSeconds = max(0, now()->diffInSeconds($endTime, false));
 
-        if (!$this->session->is_paused) {
             // Auto submit if time already passed and not paused
             if ($this->remainingSeconds <= 0) {
                 $this->finishExam();
