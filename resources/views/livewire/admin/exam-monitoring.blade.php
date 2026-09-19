@@ -150,11 +150,14 @@
                                     <span class="font-medium font-mono {{ $session->remaining_seconds < 60 ? 'text-red-600' : 'text-blue-600' }}"
                                           x-data="{ 
                                               remaining: {{ $session->remaining_seconds }},
+                                              isPaused: {{ $session->is_paused ? 'true' : 'false' }},
                                               interval: null,
                                               init() {
-                                                  this.interval = setInterval(() => {
-                                                      if(this.remaining > 0) this.remaining--;
-                                                  }, 1000);
+                                                  if (!this.isPaused) {
+                                                      this.interval = setInterval(() => {
+                                                          if(this.remaining > 0) this.remaining--;
+                                                      }, 1000);
+                                                  }
                                               }
                                           }"
                                           x-text="String(Math.floor(remaining / 3600)).padStart(2, '0') + ':' + String(Math.floor((remaining % 3600) / 60)).padStart(2, '0') + ':' + String(Math.floor(remaining % 60)).padStart(2, '0')">
