@@ -99,6 +99,26 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         $participant = \App\Models\User::findOrFail($participantId);
         return view('print.participant-card', compact('participant'));
     })->name('participants.print');
+
+    Route::get('/participants/print-all', function (Illuminate\Http\Request $request) {
+        $query = \App\Models\User::with('wave')->whereIn('role', ['peserta', 'participant']);
+        
+        if ($request->has('wave_id') && $request->wave_id != '') {
+            $query->where('wave_id', $request->wave_id);
+        }
+        
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('nik', 'like', '%' . $search . '%')
+                  ->orWhere('participant_number', 'like', '%' . $search . '%');
+            });
+        }
+        
+        $participants = $query->orderBy('created_at', 'desc')->get();
+        return view('print.participant-cards-all', compact('participants'));
+    })->name('participants.print_all');
     Route::get('/waves', \App\Livewire\Admin\WaveManager::class)->name('waves');
     Route::get('/activity-log', \App\Livewire\Admin\ActivityLog::class)->name('activity-log');
     Route::get('/backup-restore', \App\Livewire\Admin\BackupManager::class)->name('backup');
