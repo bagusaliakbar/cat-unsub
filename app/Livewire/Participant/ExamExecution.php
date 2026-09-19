@@ -13,7 +13,7 @@ class ExamExecution extends Component
 {
     public $exam;
     public $session;
-    public $questions;
+    public $questionIds = [];
     public $currentQuestionIndex = 0;
     public $remainingSeconds = 0;
     public $violationCount = 0;
@@ -33,7 +33,7 @@ class ExamExecution extends Component
 
     public function mount($examId)
     {
-        $this->exam = Exam::with('questions.options')->findOrFail($examId);
+        $this->exam = Exam::findOrFail($examId);
         
         $this->session = ExamSession::where('user_id', Auth::id())
             ->where('exam_id', $this->exam->id)
@@ -58,7 +58,7 @@ class ExamExecution extends Component
             return;
         }
 
-        $this->questions = $this->exam->questions;
+        $this->questionIds = $this->exam->questions()->pluck('id')->toArray();
 
         // Load existing answers
         $existingAnswers = UserAnswer::where('exam_session_id', $this->session->id)->get();
@@ -76,17 +76,17 @@ class ExamExecution extends Component
     {
         $this->checkStatus();
         
-        $currentQuestion = $this->questions[$this->currentQuestionIndex] ?? null;
+        $currentQuestionId = $this->questionIds[$this->currentQuestionIndex] ?? null;
+        $currentQuestion = $currentQuestionId ? Question::with('options')->find($currentQuestionId) : null;
         
         // Randomize options if the question type is multiple choice
         $currentOptions = collect();
         if ($currentQuestion && $currentQuestion->type === 'multiple_choice') {
-            // Usually options should be cached per session or seed, but for now we'll just get them
             $currentOptions = $currentQuestion->options;
         }
 
-        $totalQuestions = count($this->questions);
-        $questionOrder = $this->questions->pluck('id')->toArray();
+        $totalQuestions = count($this->questionIds);
+        $questionOrder = $this->questionIds;
 
         return view('livewire.participant.exam-session', compact(
             'currentQuestion',
@@ -142,7 +142,7 @@ class ExamExecution extends Component
     {
         if ($this->session->is_paused) return;
         
-        $question = $this->questions->where('id', $questionId)->first();
+        $question = Question::find($questionId);
         if ($question) {
             $this->saveAnswer($questionId, $value, $question->type);
         }
@@ -150,7 +150,7 @@ class ExamExecution extends Component
 
     public function nextQuestion()
     {
-        if ($this->currentQuestionIndex < count($this->questions) - 1) {
+        if ($this->currentQuestionIndex < count($this->questionIds) - 1) {
             $this->currentQuestionIndex++;
         }
     }
@@ -198,7 +198,7 @@ class ExamExecution extends Component
 
     public function showSummary()
     {
-        $total = count($this->questions);
+        $total = count($this->questionIds);
         $answered = count(array_filter($this->answers, fn($val) => !empty($val)));
         $unanswered = $total - $answered;
         $doubtfulCount = count(array_filter($this->doubtful, fn($val) => $val === true));

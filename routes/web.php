@@ -40,7 +40,7 @@ Route::view('profile', 'profile')
 require __DIR__.'/auth.php';
 
 // Admin Routes
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', \App\Livewire\Admin\Dashboard::class)->name('dashboard');
     Route::get('/exams', \App\Livewire\Admin\ExamManager::class)->name('exams');
     Route::get('/exams/{examId}/monitor', \App\Livewire\Admin\ExamMonitoring::class)->name('exams.monitor');
@@ -127,7 +127,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 });
 
 // Participant Routes
-Route::middleware(['auth'])->prefix('participant')->name('participant.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':participant'])->prefix('participant')->name('participant.')->group(function () {
     Route::get('/dashboard', function() {
         return redirect()->route('home');
     })->name('dashboard');
@@ -137,7 +137,7 @@ Route::middleware(['auth'])->prefix('participant')->name('participant.')->group(
 });
 
 // Pengawas Routes
-Route::middleware(['auth'])->prefix('pengawas')->name('pengawas.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':pengawas'])->prefix('pengawas')->name('pengawas.')->group(function () {
     Route::get('/dashboard', \App\Livewire\Pengawas\Dashboard::class)->name('dashboard');
     Route::get('/exams/{examId}/monitor', \App\Livewire\Pengawas\ExamMonitoring::class)->name('exams.monitor');
     
