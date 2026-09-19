@@ -58,7 +58,7 @@ class ExamExecution extends Component
             return;
         }
 
-        $this->questionIds = $this->exam->questions()->pluck('id')->toArray();
+        $this->questionIds = $this->exam->questions()->pluck('questions.id')->toArray();
 
         // Load existing answers
         $existingAnswers = UserAnswer::where('exam_session_id', $this->session->id)->get();
