@@ -201,12 +201,26 @@ class ExamMonitoring extends Component
             } else {
                 $session->live_score = $score;
                 
+                $startedAt = \Carbon\Carbon::parse($session->started_at);
+                $totalSeconds = $this->exam->duration_minutes * 60;
+                
                 if ($session->is_paused) {
-                    $session->remaining_seconds = $session->leftover_seconds;
-                } else {
-                    $endTime = \Carbon\Carbon::parse($session->started_at)->addMinutes($this->exam->duration_minutes);
-                    $session->remaining_seconds = max(0, now()->diffInSeconds($endTime, false));
+                    $leftover = $session->leftover_seconds ?? 0;
+                    $passed = max(0, $totalSeconds - $leftover);
+                    $startedAt = now()->subSeconds($passed);
                 }
+
+                $endTimeByDuration = $startedAt->copy()->addMinutes($this->exam->duration_minutes);
+                $endTime = $endTimeByDuration;
+
+                if ($this->exam->end_time) {
+                    $examEndTime = \Carbon\Carbon::parse($this->exam->end_time);
+                    if ($examEndTime->lessThan($endTimeByDuration)) {
+                        $endTime = $examEndTime;
+                    }
+                }
+
+                $session->remaining_seconds = max(0, now()->diffInSeconds($endTime, false));
             }
             
             $session->stat_correct = $correct;

@@ -163,22 +163,33 @@ class ExamExecution extends Component
             return redirect()->route('participant.dashboard');
         }
 
-        if (!$this->session->is_paused) {
-            $startedAt = \Carbon\Carbon::parse($this->session->started_at);
-            $endTime = $startedAt->copy()->addMinutes($this->exam->duration_minutes);
-            
-            // Revert dbTime back to now() to fix timezone offset (07:10:00 bug)
-            $this->remainingSeconds = max(0, now()->diffInSeconds($endTime, false));
-            \Log::info("Participant checkStatus (Active) - Session {$this->session->id} - duration: {$this->exam->duration_minutes}m - startedAt: {$startedAt} - endTime: {$endTime} - now: " . now() . " - remainingSeconds: {$this->remainingSeconds}s");
+        $startedAt = \Carbon\Carbon::parse($this->session->started_at);
+        $totalSeconds = $this->exam->duration_minutes * 60;
+        
+        if ($this->session->is_paused) {
+            $leftover = $this->session->leftover_seconds ?? 0;
+            $passed = max(0, $totalSeconds - $leftover);
+            $startedAt = now()->subSeconds($passed);
+        }
 
+        $endTimeByDuration = $startedAt->copy()->addMinutes($this->exam->duration_minutes);
+        $endTime = $endTimeByDuration;
+
+        if ($this->exam->end_time) {
+            $examEndTime = \Carbon\Carbon::parse($this->exam->end_time);
+            if ($examEndTime->lessThan($endTimeByDuration)) {
+                $endTime = $examEndTime;
+            }
+        }
+
+        $this->remainingSeconds = max(0, now()->diffInSeconds($endTime, false));
+
+        if (!$this->session->is_paused) {
             // Auto submit if time already passed and not paused
             if ($this->remainingSeconds <= 0) {
                 $this->finishExam();
                 return;
             }
-        } else {
-            $this->remainingSeconds = $this->session->leftover_seconds ?? 0;
-            \Log::info("Participant checkStatus (Paused) - Session {$this->session->id} - leftover: {$this->session->leftover_seconds}s - remainingSeconds: {$this->remainingSeconds}s");
         }
     }
 
