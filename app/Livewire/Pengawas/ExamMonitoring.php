@@ -98,7 +98,7 @@ class ExamMonitoring extends Component
             
             // Pastikan leftover_seconds tidak lebih dari total waktu
             $leftover = min($total, max(0, $session->leftover_seconds ?? 0));
-            $passed = $total - $leftover;
+            $passed = max(0, $total - $leftover);
             
             $newStartedAt = now()->subSeconds($passed);
             \Log::info("Pengawas RESUME Session {$sessionId} - duration: {$this->exam->duration_minutes}m ({$total}s) - leftover: {$leftover}s - passed: {$passed}s - new_started_at: {$newStartedAt} - now: " . now());
@@ -118,9 +118,9 @@ class ExamMonitoring extends Component
             ->get();
             
         foreach ($sessions as $session) {
-            $passed = now()->diffInSeconds($session->started_at);
+            $passed = abs(now()->diffInSeconds($session->started_at));
             $total = $this->exam->duration_minutes * 60;
-            $leftover = max(0, $total - $passed);
+            $leftover = min($total, max(0, $total - $passed));
             
             $session->is_paused = true;
             $session->leftover_seconds = $leftover;
@@ -137,7 +137,8 @@ class ExamMonitoring extends Component
             
         foreach ($sessions as $session) {
             $total = $this->exam->duration_minutes * 60;
-            $passed = $total - $session->leftover_seconds;
+            $leftover = min($total, max(0, $session->leftover_seconds ?? 0));
+            $passed = max(0, $total - $leftover);
             
             $session->started_at = now()->subSeconds($passed);
             $session->is_paused = false;
