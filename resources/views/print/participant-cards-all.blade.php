@@ -77,103 +77,131 @@
         </div>
 
         <!-- Header Section -->
-        <div class="header-curve shadow-md">
-            <h2 class="text-center text-white font-extrabold text-2xl tracking-widest leading-tight">KARTU PESERTA</h2>
-            <h3 class="text-center text-blue-100 font-bold text-sm tracking-widest mt-1">
-                {{ $exam ? mb_strtoupper($exam->title) : 'UJIAN CAT' }}
-            </h3>
+        <div class="header-curve text-center">
+            <h1 class="font-bold text-[22px] text-white tracking-widest">KARTU TANDA PESERTA UJIAN</h1>
+            <h2 class="font-semibold text-xs text-blue-100 tracking-[0.2em] mt-1">SELEKSI TERTULIS BERBASIS CAT</h2>
         </div>
 
-        <!-- Main Content (Photo + Details) -->
-        <div class="flex-1 flex flex-col items-center px-10 pt-8 pb-4 relative z-0" style="margin-top: -15px;">
-            <!-- Background Watermark -->
-            <div class="absolute inset-0 z-0 opacity-5 flex items-center justify-center">
-                <img src="{{ asset('images/logo.png') }}" alt="Watermark" class="w-64 h-64 object-contain">
+        <!-- Body Section -->
+        <div class="px-8 py-6 flex-1 flex flex-col relative z-20 -mt-2">
+            <!-- Info Peserta / Token Highlight -->
+            <div class="bg-[#f0f4f8] rounded-[1rem] p-3 flex items-center justify-between mb-6 border border-gray-100">
+                <span class="font-bold text-[#2b3a70] ml-4 text-base">Token Ujian :</span>
+                <span class="font-extrabold text-3xl text-[#1e2a5a] tracking-wider mr-6" style="font-family: 'Arial', sans-serif;">{{ $participant->participant_number ?? '-' }}</span>
             </div>
 
-            <div class="relative z-10 w-full flex flex-col items-center">
-                <!-- Photo frame -->
-                <div class="mb-6 relative">
-                    <div class="w-32 h-40 border-4 border-white shadow-lg overflow-hidden bg-gray-100 rounded-md">
-                        @if($participant->photo_path)
-                            <img src="{{ Storage::url($participant->photo_path) }}" alt="Foto {{ $participant->name }}" class="w-full h-full object-cover">
-                        @else
-                            <div class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-50 border-2 border-dashed border-gray-200">
-                                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                            </div>
-                        @endif
-                    </div>
+            <div class="flex justify-between gap-4">
+                <!-- Data Table -->
+                <div class="flex-1">
+                    <table class="w-full text-sm">
+                        <tbody>
+                            <tr class="h-10">
+                                <td class="w-32 text-gray-700">Nama Peserta</td>
+                                <td class="w-4 text-center">:</td>
+                                <td class="font-bold text-gray-900">{{ strtoupper($participant->name) }}</td>
+                            </tr>
+                            <tr class="h-10">
+                                <td class="text-gray-700">NIK</td>
+                                <td class="text-center">:</td>
+                                <td class="font-medium text-gray-900">{{ $participant->nik ?? '-' }}</td>
+                            </tr>
+                            <tr class="h-10">
+                                <td class="text-gray-700">Tanggal Ujian</td>
+                                <td class="text-center">:</td>
+                                <td class="font-medium text-gray-900">
+                                    {{ $exam && $exam->start_time ? \Carbon\Carbon::parse($exam->start_time)->locale('id')->isoFormat('dddd, D MMMM Y') : '-' }}
+                                </td>
+                            </tr>
+                            <tr class="h-10">
+                                <td class="text-gray-700">Waktu Ujian</td>
+                                <td class="text-center">:</td>
+                                <td class="font-medium text-gray-900">
+                                    {{ $exam && $exam->start_time ? \Carbon\Carbon::parse($exam->start_time)->format('H.i') . ' - ' . \Carbon\Carbon::parse($exam->end_time)->format('H.i') . ' WIB' : '-' }}
+                                </td>
+                            </tr>
+                            <tr class="h-10">
+                                <td class="text-gray-700">Lokasi Ujian</td>
+                                <td class="text-center">:</td>
+                                <td class="font-medium text-gray-900">Universitas Subang</td>
+                            </tr>
+                            <tr class="h-10">
+                                <td class="text-gray-700">Ruang</td>
+                                <td class="text-center">:</td>
+                                <td class="font-medium text-gray-900">{{ $exam ? $exam->location : '-' }}</td>
+                            </tr>
+                            <tr class="h-10">
+                                <td class="text-gray-700">Sesi</td>
+                                <td class="text-center">:</td>
+                                <td class="font-medium text-gray-900">{{ $participant->wave ? $participant->wave->name : '-' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- Participant Name & Nomor -->
-                <div class="text-center mb-8 w-full border-b-2 border-gray-100 pb-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-1 leading-tight uppercase">{{ $participant->name }}</h3>
-                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-widest">{{ $participant->participant_number }}</p>
-                </div>
-
-                <!-- Details Grid -->
-                <div class="w-full space-y-4">
-                    <div class="flex items-center">
-                        <div class="w-8 flex justify-center text-[#263c7b]">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
-                        </div>
-                        <div class="flex-1 ml-3">
-                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Nomor Ujian / ID</p>
-                            <p class="font-bold text-gray-800 text-sm">{{ $participant->participant_number }}</p>
-                        </div>
-                    </div>
+                <!-- Right Side (Photo & QR) -->
+                <div class="flex flex-col items-center w-36 shrink-0 pt-1">
                     
-                    <div class="flex items-center">
-                        <div class="w-8 flex justify-center text-[#263c7b]">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                        </div>
-                        <div class="flex-1 ml-3">
-                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Password Ujian</p>
-                            <p class="font-bold text-gray-800 text-sm tracking-widest font-mono">
-                                {{ $participant->nik ? mb_substr($participant->nik, 0, 6) : '123456' }}
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center">
-                        <div class="w-8 flex justify-center text-[#263c7b]">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        </div>
-                        <div class="flex-1 ml-3">
-                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Tanggal & Gelombang</p>
-                            <p class="font-bold text-gray-800 text-sm">
-                                @if($participant->wave)
-                                    {{ \Carbon\Carbon::parse($participant->wave->start_time)->translatedFormat('d F Y') }} <span class="mx-1 text-gray-300">|</span> {{ $participant->wave->name }}
+                    <!-- Foto Peserta (Premium Look) -->
+                    <div class="relative w-28 h-36 mb-4">
+                        <!-- Decorative Frame (Gradient Border) -->
+                        <div class="absolute -inset-1 bg-gradient-to-b from-[#263c7b] to-[#38bdf8] rounded-xl shadow-md opacity-90"></div>
+                        
+                        <!-- Photo Container -->
+                        <div class="absolute inset-0 bg-white p-1 rounded-lg">
+                            <div class="w-full h-full bg-gray-50 rounded-md overflow-hidden relative shadow-inner">
+                                @if($participant->profile_photo_path)
+                                    <img src="{{ $participant->profile_photo_url }}" alt="Foto Peserta" class="w-full h-full object-cover">
+                                    <!-- Subtle overlay for elegance -->
+                                    <div class="absolute inset-0 border border-black/5 rounded-md"></div>
                                 @else
-                                    -
+                                    <div class="w-full h-full flex flex-col items-center justify-center text-[#263c7b] opacity-40">
+                                        <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                        <span class="text-[9px] font-bold tracking-widest uppercase">FOTO 3X4</span>
+                                    </div>
                                 @endif
-                            </p>
+                            </div>
                         </div>
                     </div>
-
-                    @if($exam)
-                    <div class="flex items-center">
-                        <div class="w-8 flex justify-center text-[#263c7b]">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                        </div>
-                        <div class="flex-1 ml-3">
-                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Kategori Ujian</p>
-                            <p class="font-bold text-gray-800 text-sm line-clamp-1">{{ $exam->title }}</p>
-                        </div>
+                    
+                    <!-- QR Code with subtle styling -->
+                    <div class="bg-white p-1.5 rounded-lg border border-gray-200 shadow-sm">
+                        {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(85)->generate(route('verify', $participant->participant_number)) !!}
                     </div>
-                    @endif
+                    
+                    <!-- Participant Number Badge -->
+                    <div class="mt-2.5 bg-gradient-to-r from-[#263c7b] to-[#38bdf8] text-white px-4 py-1 rounded-full shadow-sm w-full text-center">
+                        <p class="font-bold text-xs tracking-widest">{{ $participant->participant_number }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notes Section -->
+            <div class="mt-8 bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-4 shadow-sm relative z-20">
+                <div class="w-8 h-8 bg-blue-900 text-white rounded-full flex items-center justify-center font-extrabold text-lg shrink-0 shadow-md">
+                    !
+                </div>
+                <div class="text-[11px] text-gray-700 leading-relaxed pt-0.5">
+                    <p class="font-bold text-sm text-gray-900 mb-1">Catatan:</p>
+                    <ol class="list-decimal pl-4 space-y-1">
+                        <li>Kartu ini wajib dibawa dan ditunjukkan kepada panitia/pengawas pada saat pelaksanaan ujian.</li>
+                        <li>Peserta wajib membawa KTP/Kartu Identitas asli yang masih berlaku.</li>
+                        <li>Datang minimal 15 menit sebelum waktu ujian.</li>
+                        <li>Patuhi tata tertib pelaksanaan ujian.</li>
+                    </ol>
                 </div>
             </div>
         </div>
-
-        <!-- Warning Section -->
-        <div class="mt-auto p-5 bg-yellow-50 border-t border-yellow-200">
-            <div class="flex items-start">
-                <svg class="w-4 h-4 text-yellow-600 mt-0.5 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                <p class="text-xs text-yellow-800 font-medium leading-relaxed">
-                    Bawa kartu ini saat ujian. Simpan ID dan Password dengan baik, jangan berikan kepada siapapun.
-                </p>
-            </div>
+        
+        <!-- Footer Waves Graphic -->
+        <div class="mt-auto relative z-10 -mt-10">
+            <svg viewBox="0 0 1440 220" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full block transform translate-y-1">
+                <!-- Lightest blue (bottom) -->
+                <path d="M0 64L48 80C96 96 192 128 288 122.7C384 117 480 75 576 69.3C672 64 768 96 864 128C960 160 1056 192 1152 192C1248 192 1344 160 1392 144L1440 128V220H1392C1344 220 1248 220 1152 220C1056 220 960 220 864 220C768 220 672 220 576 220C480 220 384 220 288 220C192 220 96 220 48 220H0V64Z" fill="#bae6fd"/>
+                <!-- Medium blue -->
+                <path d="M0 128L48 117.3C96 107 192 85 288 96C384 107 480 149 576 160C672 171 768 149 864 122.7C960 96 1056 64 1152 64C1248 64 1344 96 1392 112L1440 128V220H1392C1344 220 1248 220 1152 220C1056 220 960 220 864 220C768 220 672 220 576 220C480 220 384 220 288 220C192 220 96 220 48 220H0V128Z" fill="#38bdf8"/>
+                <!-- Dark blue (top) -->
+                <path d="M0 192L48 176C96 160 192 128 288 117.3C384 107 480 117 576 133.3C672 149 768 171 864 165.3C960 160 1056 128 1152 117.3C1248 107 1344 117 1392 122.7L1440 128V220H1392C1344 220 1248 220 1152 220C1056 220 960 220 864 220C768 220 672 220 576 220C480 220 384 220 288 220C192 220 96 220 48 220H0V192Z" fill="#0284c7"/>
+            </svg>
         </div>
     </div>
     @endforeach
