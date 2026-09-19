@@ -88,7 +88,8 @@
                                                 else if (elem.msRequestFullscreen) { elem.msRequestFullscreen(); }
                                             " 
                                             wire:click="startExam({{ $exam->id }})"
-                                            class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-4 rounded-xl transition shadow-md hover:shadow-lg flex items-center justify-center transform hover:-translate-y-0.5">
+                                            wire:loading.attr="disabled"
+                                            class="w-full bg-yellow-500 hover:bg-yellow-600 disabled:opacity-50 text-white font-bold py-3 px-4 rounded-xl transition shadow-md hover:shadow-lg flex items-center justify-center transform hover:-translate-y-0.5">
                                         Lanjutkan Ujian
                                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                     </button>
@@ -192,7 +193,8 @@
                                                                     }
                                                                 " 
                                                                 wire:click="startExam({{ $exam->id }})"
-                                                                class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-6 py-3 text-base font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm transition">
+                                                                wire:loading.attr="disabled"
+                                                                class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-6 py-3 text-base font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm transition disabled:opacity-50">
                                                             Mulai Kerjakan
                                                         </button>
                                                         <button type="button" @click="openRules = false" class="mt-3 w-full inline-flex justify-center rounded-xl border border-gray-300 shadow-sm px-6 py-3 bg-white text-base font-bold text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition">

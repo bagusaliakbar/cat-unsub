@@ -164,7 +164,7 @@ class ExamMonitoring extends Component
 
     public function render()
     {
-        $query = ExamSession::with(['user', 'answers.question', 'answers.option'])
+        $query = ExamSession::with(['user'])
             ->where('exam_id', $this->exam->id);
             
         if ($this->filter_wave) {
@@ -174,40 +174,43 @@ class ExamMonitoring extends Component
         }
         
         $sessions = $query->get();
+        $sessionIds = $sessions->pluck('id')->toArray();
+
+        $stats = [];
+        if (!empty($sessionIds)) {
+            $stats = \Illuminate\Support\Facades\DB::table('user_answers')
+                ->join('questions', 'user_answers.question_id', '=', 'questions.id')
+                ->leftJoin('options', 'user_answers.option_id', '=', 'options.id')
+                ->whereIn('user_answers.exam_session_id', $sessionIds)
+                ->select(
+                    'user_answers.exam_session_id',
+                    \Illuminate\Support\Facades\DB::raw('SUM(CASE WHEN options.is_correct = 1 THEN questions.points ELSE 0 END) as live_score'),
+                    \Illuminate\Support\Facades\DB::raw('SUM(CASE WHEN options.is_correct = 1 THEN 1 ELSE 0 END) as stat_correct'),
+                    \Illuminate\Support\Facades\DB::raw('SUM(CASE WHEN options.id IS NOT NULL AND options.is_correct = 0 THEN 1 ELSE 0 END) as stat_wrong'),
+                    \Illuminate\Support\Facades\DB::raw('SUM(CASE WHEN user_answers.option_id IS NOT NULL OR user_answers.answer_text IS NOT NULL THEN 1 ELSE 0 END) as stat_answered')
+                )
+                ->groupBy('user_answers.exam_session_id')
+                ->get()
+                ->keyBy('exam_session_id');
+        }
 
         $totalPoints = $this->exam->questions()->sum('points');
-        
         $waves = \App\Models\Wave::where('is_active', true)->get();
 
-        $sessions = $sessions->map(function ($session) use ($totalPoints) {
-            $score = 0;
-            $correct = 0;
-            $wrong = 0;
-            $answered = 0;
-
-            foreach ($session->answers as $ans) {
-                if ($ans->option_id || $ans->answer_text) {
-                    $answered++;
-                }
-
-                if ($ans->question && $ans->question->type === 'multiple_choice') {
-                    if ($ans->option && $ans->option->is_correct) {
-                        $score += $ans->question->points;
-                        $correct++;
-                    } elseif ($ans->option_id) {
-                        $wrong++;
-                    }
-                }
-            }
+        $sessions = $sessions->map(function ($session) use ($stats) {
+            $sessionStat = $stats->get($session->id);
+            
+            $score = $sessionStat ? (float)$sessionStat->live_score : 0;
+            $correct = $sessionStat ? (int)$sessionStat->stat_correct : 0;
+            $wrong = $sessionStat ? (int)$sessionStat->stat_wrong : 0;
+            $answered = $sessionStat ? (int)$sessionStat->stat_answered : 0;
 
             if ($session->status === 'completed') {
                 $session->live_score = $session->score;
                 $session->remaining_seconds = 0;
             } else {
-                // Tampilkan raw score (total poin), bukan persentase, agar sinkron dengan final score
                 $session->live_score = $score;
                 
-                // Hitung sisa waktu
                 if ($session->is_paused) {
                     $session->remaining_seconds = $session->leftover_seconds;
                 } else {
