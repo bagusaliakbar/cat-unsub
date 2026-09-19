@@ -106,7 +106,6 @@
                 <th class="w-32 text-center">Nomor Peserta</th>
                 <th class="text-center">Nama Peserta</th>
                 <th class="w-48 text-center">Tanda Tangan</th>
-                <th class="w-24 text-center">Ket</th>
             </tr>
         </thead>
         <tbody>
@@ -124,12 +123,11 @@
                         @endif
                     </div>
                 </td>
-                <td></td>
             </tr>
             @endforeach
             @if($exam->participants->count() == 0)
             <tr>
-                <td colspan="5" class="py-4 text-center">Belum ada peserta yang terdaftar pada ujian ini.</td>
+                <td colspan="4" class="text-center py-4 text-gray-500">Belum ada peserta yang ditugaskan ke ujian ini.</td>
             </tr>
             @endif
         </tbody>
