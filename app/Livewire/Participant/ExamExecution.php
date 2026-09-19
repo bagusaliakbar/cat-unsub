@@ -18,9 +18,9 @@ class ExamExecution extends Component
     public $remainingSeconds = 0;
     public $violationCount = 0;
     
-    // To hold current answers
     public $answers = [];
     public $doubtful = [];
+    public $optionsOrder = [];
     
     // Summary Modal Properties
     public $showSummaryModal = false;
@@ -58,7 +58,37 @@ class ExamExecution extends Component
             return;
         }
 
-        $this->questionIds = $this->exam->questions()->pluck('questions.id')->toArray();
+        if (empty($this->session->question_order)) {
+            $questions = $this->exam->questions()->with('options')->get();
+            
+            if ($this->exam->randomize_questions) {
+                $questions = $questions->shuffle();
+            }
+            
+            $this->questionIds = $questions->pluck('id')->toArray();
+            $this->session->update(['question_order' => $this->questionIds]);
+            
+            // Pre-populate user answers to store options_order and prevent race conditions
+            $answersData = [];
+            $now = now();
+            foreach ($questions as $question) {
+                $optionsOrder = null;
+                if ($this->exam->randomize_options && $question->type === 'multiple_choice') {
+                    $optionsOrder = json_encode($question->options->pluck('id')->shuffle()->toArray());
+                }
+                
+                $answersData[] = [
+                    'exam_session_id' => $this->session->id,
+                    'question_id' => $question->id,
+                    'options_order' => $optionsOrder,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            // Use insertOrIgnore to prevent duplicate key errors if two requests initialize concurrently
+            UserAnswer::insertOrIgnore($answersData);
+        } else {
+            $this->questionIds = $this->session->question_order;
+        }
 
         // Load existing answers
         $existingAnswers = UserAnswer::where('exam_session_id', $this->session->id)->get();
@@ -69,6 +99,11 @@ class ExamExecution extends Component
                 $this->answers[$ans->question_id] = $ans->answer_text;
             }
             $this->doubtful[$ans->question_id] = (bool)$ans->is_doubtful;
+            
+            if ($ans->options_order) {
+                // Ensure it's treated as an array (cast takes care of it, but just in case)
+                $this->optionsOrder[$ans->question_id] = is_string($ans->options_order) ? json_decode($ans->options_order, true) : $ans->options_order;
+            }
         }
     }
 
@@ -83,6 +118,14 @@ class ExamExecution extends Component
         $currentOptions = collect();
         if ($currentQuestion && $currentQuestion->type === 'multiple_choice') {
             $currentOptions = $currentQuestion->options;
+            
+            if (isset($this->optionsOrder[$currentQuestion->id])) {
+                $order = $this->optionsOrder[$currentQuestion->id];
+                $currentOptions = $currentOptions->sortBy(function($option) use ($order) {
+                    $pos = array_search($option->id, $order);
+                    return $pos === false ? 999 : $pos;
+                })->values();
+            }
         }
 
         $totalQuestions = count($this->questionIds);
