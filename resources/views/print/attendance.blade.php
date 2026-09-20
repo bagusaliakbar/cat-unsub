@@ -61,7 +61,7 @@
 
     <!-- Title -->
     <div class="text-center mb-8">
-        <h3 class="text-lg font-bold uppercase underline">DAFTAR HADIR PESERTA UJIAN SELEKSI TERTULIS BERBASIS CAT</h3>
+        <h3 class="text-lg font-bold uppercase">DAFTAR HADIR PESERTA UJIAN SELEKSI TERTULIS BERBASIS CAT</h3>
         @if($report && $report->village)
         <h3 class="text-lg font-bold uppercase">CALON KEPALA DESA ANTAR WAKTU (PAW) DESA {{ strtoupper($report->village) }}</h3>
         <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }} KABUPATEN SUBANG</h3>
@@ -71,9 +71,9 @@
     <!-- Info Ujian -->
     <table class="w-full mb-6 text-left align-top">
         <tr>
-            <td class="w-40 font-bold align-top">Mata Ujian</td>
+            <td class="w-40 font-bold align-top">Ujian</td>
             <td class="w-4 text-center align-top">:</td>
-            <td class="align-top">Ujian Penyaringan Calon Kepala Desa (CAT)</td>
+            <td class="align-top">{{ $exam->title }}</td>
         </tr>
         <tr>
             <td class="w-40 font-bold align-top">Hari / Tanggal</td>
