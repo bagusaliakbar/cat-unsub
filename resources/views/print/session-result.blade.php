@@ -133,8 +133,7 @@
     </div>
     @endif
 
-    <div class="page-break"></div>
-    <h4 class="font-bold mb-4 uppercase">Rincian Jawaban:</h4>
+    <h4 class="font-bold mb-4 uppercase mt-8">Rincian Jawaban:</h4>
 
     <table class="w-full table-bordered mb-8 text-sm">
         <thead>
