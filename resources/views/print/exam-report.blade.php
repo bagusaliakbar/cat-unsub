@@ -133,10 +133,11 @@
     <p class="mb-10 text-justify indent-10">Demikian Berita Acara ini dibuat dengan sebenarnya dalam rangkap secukupnya, ditandatangani oleh pihak penyelenggara dan saksi-saksi untuk dipergunakan sebagaimana mestinya.</p>
 
     <!-- Signatures -->
-    <div class="break-inside-avoid">
-        <div class="text-center font-bold mb-6">Yang Membuat Berita Acara</div>
-        
-        <div class="flex justify-between mb-8">
+    <div>
+        <div class="break-inside-avoid">
+            <div class="text-center font-bold mb-6">Yang Membuat Berita Acara</div>
+            
+            <div class="flex justify-between mb-8">
             <div class="text-center w-1/2">
                 <p>Mengetahui</p>
                 <p>Penanggungjawab</p>
@@ -151,7 +152,7 @@
             </div>
         </div>
 
-        <div class="mt-4">
+        <div class="mt-4 break-inside-avoid">
             <p class="font-bold text-center mb-4">Disaksikan oleh :</p>
             <table class="w-full text-sm">
                 <tbody>
