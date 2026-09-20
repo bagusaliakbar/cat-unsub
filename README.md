@@ -20,34 +20,51 @@ Aplikasi ini dibangun menggunakan tumpukan web modern dengan performa tinggi:
 ## 🌟 Fitur Utama (Core Features)
 
 ### 👨‍💼 Panel Administrator (Panitia)
-- **Manajemen Bank Soal & Kategori:** Mengelola ratusan soal (Pilihan Ganda & Essay) lengkap dengan penentuan bobot nilai (poin) secara fleksibel.
-- **Manajemen Ujian Lanjut (Advanced Exam Manager):**
-  - Mengatur batas waktu ujian Absolut (`start_time` & `end_time`).
-  - *Timer Sinkronisasi*: Memastikan ujian berhenti secara otomatis pada `end_time` terlepas dari kapan peserta login, menanggulangi *cheat* perpanjangan waktu lokal.
-  - Dukungan **Token Ujian** dinamis untuk otentikasi sesi.
-  - Mengatur *Passing Grade* (Nilai Kelulusan).
-- **Manajemen Gelombang (Waves) & Peserta:** Pengelompokan peserta ke dalam sesi / ruang kelas ujian (*Assign Bulk*).
-- **Pemantauan Ujian Langsung (Live Monitoring):** Memantau peserta yang sedang ujian secara *real-time* tanpa perlu me-*refresh* halaman.
-- **Kendali Kedaruratan (Pause & Freeze):** 
-  - Admin dapat mem-pause (menjeda) timer peserta jika terjadi masalah teknis jaringan/PC. 
-  - Timer peserta akan membeku (freeze) dan ujian akan otomatis terkunci sampai admin me-resume kembali.
-- **Interactive Printables (Dokumen Cetak Cerdas):**
-  - **Daftar Hadir (Attendance):** Input nama Pengawas secara dinamis (via prompt) sebelum mencetak dokumen.
-  - **Berita Acara Ujian:** Tata letak (*layout*) pintar yang mencegah terpotongnya area tanda tangan (Smart Break-Inside Avoid).
-  - **Rincian Jawaban Peserta:** Logik detail jawaban Benar/Salah dan Jawaban Kosong.
-  - **Form Kejadian Khusus (Incident Report):** Formulir cetak *editable* (Content-Editable) yang memungkinkan pengawas mengetik laporan (Waktu Kejadian, Kronologi, dll) langsung di browser sebelum dokumen diprint, atau mencetaknya dalam keadaan kosong (bergaris) untuk ditulis tangan.
+
+**1. Manajemen Ujian Lanjut (Advanced Exam Manager)**
+Sistem ini dilengkapi dengan kontrol ujian yang sangat presisi:
+- **Sinkronisasi Waktu Absolut (`start_time` & `end_time`):** Ujian diatur berdasarkan zona waktu server secara *real-time*. Jika ujian dijadwalkan selesai pukul 10:00, maka *timer* seluruh peserta akan serentak berhenti pada pukul 10:00 terlepas dari kapan mereka memulai. Hal ini menanggulangi kecurangan eksploitasi perpanjangan waktu lokal.
+- **Token Dinamis:** Dilengkapi dengan pembuatan token acak untuk setiap sesi ujian guna memastikan hanya peserta yang berada di ruangan dan menerima token dari pengawas yang dapat mengakses soal.
+- **Penentuan Ambang Batas (Passing Grade):** Fitur penentuan standar kelulusan yang secara otomatis melabeli peserta sebagai "Lulus" atau "Tidak Lulus" di akhir sesi.
+
+**2. Manajemen Bank Soal & Kategori**
+- Pengelompokan soal berbasis Kategori/Mata Pelajaran (contoh: Pancasila, Pemerintahan Desa).
+- Mendukung tipe soal Pilihan Ganda (Multiple Choice) dengan penentuan bobot nilai (poin) yang dinamis pada tiap soal.
+- Opsi untuk mengacak urutan soal (*Randomize Questions*) bagi setiap peserta agar meminimalisir saling contek antar peserta di sebelah.
+
+**3. Pemantauan & Kendali Ujian Langsung (Live Monitoring)**
+- **Dashboard Real-time:** Memantau status pengerjaan seluruh peserta tanpa perlu memuat ulang halaman (*auto-refresh*). Admin dapat melihat siapa yang *Online*, *Mengerjakan*, atau *Selesai*.
+- **Kendali Kedaruratan (Pause/Freeze System):** Inovasi khusus untuk menanggulangi kendala teknis (PC mati, jaringan putus). Admin dapat menekan tombol **Pause** pada peserta tertentu, yang akan membekukan (*freeze*) sisa waktu ujian mereka. Setelah masalah teratasi, Admin dapat menekan **Resume** dan peserta bisa melanjutkan dengan sisa waktu yang dikunci sebelumnya.
+- **Force Submit:** Kemampuan Admin untuk memaksa pengumpulan lembar jawaban (*Force Submit*) peserta jika peserta tersebut melanggar tata tertib berat atau enggan menekan selesai.
+
+**4. Interactive Printables (Dokumen Cetak Cerdas)**
+Sistem dilengkapi modul pembuatan laporan otomatis berstandar birokrasi pemerintahan:
+- **Cetak Kartu Peserta (Participant Cards):** *Generate* nomor ujian dan biodata dalam bentuk kartu identitas yang terstruktur rapi.
+- **Daftar Hadir (Attendance Sheet):** Mencetak daftar hadir yang otomatis disesuaikan dengan ujian. Dilengkapi fitur *Smart Prompt*, di mana Admin dapat mengetik nama Pengawas Ruangan secara *pop-up* tepat sebelum mencetak.
+- **Berita Acara Ujian (Exam Report):** Pembuatan berita acara resmi secara instan. Menggunakan teknologi *Smart Layouting* (Break-Inside Avoid) yang mencegah terpotongnya area tanda tangan (seperti saksi dan panitia) di antara dua halaman cetak.
+- **Form Kejadian Khusus (Incident Report):** *Content-editable* formulir. Pengawas dapat mengetik langsung rincian kejadian khusus, kronologi, dan keputusan panitia ke dalam form *browser* sebelum mencetak, atau mencetak dalam bentuk format bergaris (Lined Paper UI) untuk diisi manual menggunakan pulpen.
+- **Rincian Jawaban (Answer Breakdown):** Mencetak riwayat pengerjaan per-peserta secara individual lengkap dengan penanda jawaban yang benar, salah, atau dikosongkan.
 
 ### 🧑‍🎓 Panel Peserta (Ujian)
-- **Login Praktis:** Peserta hanya perlu masuk menggunakan Nomer Token atau Nomor Peserta tanpa kerumitan menghafal password.
-- **Dasbor Eksekusi Cerdas (Smart Execution Dashboard):** 
-  - Menampilkan status ujian (Belum Dimulai, Mulai, Waktu Habis, Selesai) yang tersinkron secara *live*.
-  - Melarang akses ganda pada ujian yang sama jika statusnya sedang berjalan (mencegah *multi-login*).
-- **Sistem Keamanan Pelanggaran (Basic Proctoring):**
-  - Mendeteksi dan mencatat *log* jika peserta mencoba berpindah *tab/browser* (Window Blur).
-  - Mendeteksi jika peserta keluar dari layar penuh (Exit Fullscreen).
-  - Mendeteksi jika peserta mengubah ukuran jendela browser (Window Resize).
-- **Ujian Interaktif:** Navigasi soal tanpa memuat ulang halaman (*No Reload*), indikator warna (Terjawab, Ragu, Belum Terjawab), dan integrasi penghitung waktu (Countdown Timer) yang stabil.
-- **Simulasi & Try Out:** Mode khusus untuk mencoba ujian berulang kali (Kerjakan Ulang) guna kepentingan simulasi CAT.
+
+**1. Keamanan & Aksesibilitas (Participant Portal)**
+- **Login Praktis:** Metode login dirancang anti-repot, di mana peserta cukup memasukkan Nomer Token (atau Nomor Peserta) tanpa harus menghafal kombinasi sandi (Password) yang rumit.
+- **Anti Multi-Login:** Sistem memblokir akses ganda (*Multi-Device Block*) pada ujian yang sama jika status sesi sebelumnya masih aktif berjalan.
+
+**2. Pengawasan Otomatis (Proctoring Module)**
+Sistem dilengkapi sensor keamanan berbasis *browser* untuk mencegah kecurangan dasar:
+- **Window Blur Detection:** Mendeteksi dan mencatat setiap kali peserta mencoba berpindah *tab* ke mesin pencari atau aplikasi lain.
+- **Exit Fullscreen Detection:** Mendeteksi jika peserta dengan sengaja menutup layar penuh (*fullscreen*) selama durasi ujian.
+- **Window Resize Detection:** Merekam upaya pengecilan ukuran jendela layar ujian. 
+Setiap tindakan di atas akan dicatat sebagai jumlah *Pelanggaran* pada sistem *Live Monitoring* Admin.
+
+**3. Dasbor Pengerjaan Interaktif (Exam Interface)**
+- **Navigasi Cepat Tanpa Reload (SPA):** Transisi antar nomor soal terjadi secara instan tanpa perlu memuat ulang (*refresh*) halaman, meminimalisir kemungkinan gagal muat (RTO).
+- **Indikator Visual & Ragu-ragu:** Palet warna untuk mengetahui mana soal yang sudah dijawab, mana yang sengaja ditandai ragu-ragu (*Flag for review*), dan mana yang belum tersentuh.
+- **Auto-Submit & Sinkronisasi Countdown:** Waktu pengerjaan tampil besar dan tersinkronisasi di sudut layar. Apabila waktu menyentuh angka 00:00:00, ujian otomatis terkunci dan data jawaban tersimpan (*Auto-Submit*).
+
+**4. Mode Simulasi Ujian (Try Out)**
+- Mendukung pembuatan "Ujian Simulasi" di mana peserta diizinkan menekan tombol "Kerjakan Ulang" untuk mengulangi sesi ujian berkali-kali sebagai sarana latihan adaptasi sistem CAT (tanpa menghapus riwayat sesi resmi).
 
 ---
 
