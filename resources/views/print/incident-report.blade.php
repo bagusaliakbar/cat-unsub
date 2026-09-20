@@ -162,7 +162,7 @@
                     <p>Subang, {{ \Carbon\Carbon::now()->isoFormat('D MMMM Y') }}</p>
                     <p>Panitia Seleksi</p>
                     <div class="h-20"></div>
-                    <p>Dr. Ujang Charda S., S.H.,M.H., M.IP., M.AP</p>
+                    <p class="font-bold">Dr. Ujang Charda S., S.H.,M.H., M.IP., M.AP</p>
                 </div>
             </div>
         </div>
