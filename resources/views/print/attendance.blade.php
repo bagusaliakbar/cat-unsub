@@ -91,7 +91,7 @@
             <td class="w-4 text-center align-top">:</td>
             <td class="align-top">
                 @if($exam->start_time)
-                    {{ \Carbon\Carbon::parse($exam->start_time)->format('H:i') }} WIB s.d Selesai ({{ $exam->duration_minutes }} Menit)
+                    {{ \Carbon\Carbon::parse($exam->start_time)->format('H:i') }} WIB s.d {{ $exam->end_time ? \Carbon\Carbon::parse($exam->end_time)->format('H:i') . ' WIB' : 'Selesai' }} ({{ $exam->duration_minutes }} Menit)
                 @else
                     -
                 @endif
