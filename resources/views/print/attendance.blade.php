@@ -52,7 +52,7 @@
         }
     </style>
 </head>
-<body class="p-4 sm:p-8 max-w-4xl mx-auto text-black text-[11pt]" onload="window.print()">
+<body class="p-4 sm:p-8 max-w-4xl mx-auto text-black text-[11pt]" onload="initPrint()">
 
     <!-- Header / Kop Surat -->
     <div class="mb-4 text-center">
@@ -73,7 +73,7 @@
         <tr>
             <td class="w-40 font-bold align-top">Ujian</td>
             <td class="w-4 text-center align-top">:</td>
-            <td class="align-top">{{ $exam->title }}</td>
+            <td class="align-top">{{ ucwords(strtolower($exam->title)) }}</td>
         </tr>
         <tr>
             <td class="w-40 font-bold align-top">Hari / Tanggal</td>
@@ -146,7 +146,7 @@
                 <p>Subang, {{ $exam->start_time ? \Carbon\Carbon::parse($exam->start_time)->locale('id')->translatedFormat('d F Y') : \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</p>
                 <p>Pengawas Ruangan</p>
                 <div class="h-24"></div>
-                <p class="font-bold"><u>..................................................</u></p>
+                <p class="font-bold"><u><span id="nama-pengawas">..................................................</span></u></p>
             </div>
         </div>
     </div>
@@ -156,11 +156,32 @@
         <a href="{{ route('admin.exams') }}" class="px-6 py-2.5 bg-gray-500 hover:bg-gray-600 text-white rounded-lg shadow-lg font-bold">
             Tutup
         </a>
-        <button onclick="window.print()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg font-bold flex items-center">
+        <button onclick="initPrint()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg font-bold flex items-center">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
             Cetak (Print)
         </button>
     </div>
 
+    <script>
+        function initPrint() {
+            let currentName = document.getElementById('nama-pengawas').innerText;
+            let defaultName = currentName.includes('.....') ? '' : currentName;
+            
+            let nama = prompt("Masukkan Nama Pengawas Ruangan (Kosongkan jika ingin berupa titik-titik):", defaultName);
+            
+            if (nama !== null) {
+                if (nama.trim() !== "") {
+                    document.getElementById('nama-pengawas').innerText = nama;
+                } else {
+                    document.getElementById('nama-pengawas').innerText = "..................................................";
+                }
+            }
+            
+            // Beri jeda sedikit agar DOM update sebelum jendela print terbuka
+            setTimeout(() => {
+                window.print();
+            }, 100);
+        }
+    </script>
 </body>
 </html>
