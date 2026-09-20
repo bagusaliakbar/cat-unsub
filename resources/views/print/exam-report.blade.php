@@ -65,7 +65,7 @@
         <h3 class="text-lg font-bold uppercase">BERITA ACARA HASIL SELEKSI TERTULIS BERBASIS CAT</h3>
         <h3 class="text-lg font-bold uppercase">CALON KEPALA DESA ANTAR WAKTU (PAW) DESA {{ strtoupper($report->village ?? '[NAMA DESA]') }}</h3>
         <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district ?? '[NAMA KECAMATAN]') }} KABUPATEN SUBANG</h3>
-        <p class="mt-1">Nomor: {{ $report->reference_number ?? '[Nomor Surat]' }}</p>
+        <p class="mt-1 font-bold">Nomor: {{ $report->reference_number ?? '[Nomor Surat]' }}</p>
     </div>
 
     <!-- Content -->
