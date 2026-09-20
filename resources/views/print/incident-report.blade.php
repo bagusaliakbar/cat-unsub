@@ -96,7 +96,7 @@
             <tr>
                 <td class="w-48 font-bold align-top">Kegiatan</td>
                 <td class="w-4 text-center align-top">:</td>
-                <td class="align-top">{{ $exam->title }}</td>
+                <td class="align-top">{{ ucwords(strtolower($exam->title)) }}</td>
             </tr>
             <tr>
                 <td class="font-bold align-top">Tanggal</td>
