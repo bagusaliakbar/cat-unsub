@@ -157,8 +157,8 @@ Sistem ini membutuhkan perangkat lunak dasar berikut:
 **Peserta Ujian (Simulasi/Testing):**
 - **URL Login Peserta:** `http://localhost:8000/` (Halaman Utama)
 - **Contoh NIK untuk login:**
-  - `3201010101900001` (Budi Santoso)
-  - `3201010202920002` (Siti Aminah)
-  - `3201010303930003` (Agus Pratama)
+  - `P-001` (Budi Santoso)
+  - `P-002` (Siti Aminah)
+  - `P-003` (Agus Pratama)
 
-> **Catatan Teknis (Fitur Baru):** Repositori ini telah ditingkatkan dengan algoritma *strict mode bypass* untuk datetime, *smart layouting* (break-avoid) saat mencetak laporan ujian PDF, serta cetak form interaktif (*contenteditable*) untuk efisiensi birokrasi pengawas.
+
