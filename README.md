@@ -66,7 +66,7 @@ flowchart TD
 
     %% Participant Flow
     subgraph Peserta ["Panel Peserta"]
-        P1["Login via NIK"] --> P2{"Cek Status Ujian"}
+        P1["Input Token"] --> P2{"Cek Status Ujian"}
         
         P2 -- Belum Waktunya --> P3["Tunggu Waktu (Live)"]
         P2 -- Berlangsung --> P4["Input Token Pengawas"]
