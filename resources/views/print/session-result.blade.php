@@ -62,7 +62,11 @@
 
     <!-- Title -->
     <div class="text-center mb-8">
-        <h3 class="text-lg font-bold uppercase underline">DETAIL HASIL UJIAN PESERTA</h3>
+        <h3 class="text-lg font-bold uppercase">DETAIL HASIL UJIAN PESERTA</h3>
+        @if($report && $report->village)
+        <h3 class="text-lg font-bold uppercase">CALON KEPALA DESA ANTAR WAKTU (PAW) DESA {{ strtoupper($report->village) }}</h3>
+        <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }} KABUPATEN SUBANG</h3>
+        @endif
     </div>
 
     <!-- Info Peserta & Ujian -->
@@ -81,7 +85,7 @@
             <tr>
                 <td class="w-40 font-bold align-top">Ujian</td>
                 <td class="w-4 text-center align-top">:</td>
-                <td class="align-top uppercase">{{ $session->exam->title }}</td>
+                <td class="align-top uppercase">{{ ucwords(strtolower($session->exam->title)) }}</td>
             </tr>
             <tr>
                 <td class="w-40 font-bold align-top">Waktu Pengerjaan</td>
@@ -173,7 +177,7 @@
                     @elseif($answer->is_correct === 0)
                         <span class="text-red-600">SALAH</span>
                     @else
-                        <span class="text-gray-500">KOSONG</span>
+                        <span class="text-gray-500">-</span>
                     @endif
                 </td>
             </tr>
