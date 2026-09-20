@@ -102,9 +102,9 @@
                 <td class="align-top text-red-600 font-bold">{{ $session->violation_count }} kali</td>
             </tr>
             <tr>
-                <td class="w-40 font-bold align-top text-lg pt-4">Skor Akhir</td>
-                <td class="w-4 text-center align-top text-lg pt-4">:</td>
-                <td class="align-top text-lg font-bold pt-4 {{ $session->score >= $session->exam->passing_grade ? 'text-green-600' : 'text-red-600' }}">
+                <td class="w-40 font-bold align-top pt-4">Skor Akhir</td>
+                <td class="w-4 text-center align-top pt-4">:</td>
+                <td class="align-top font-bold pt-4 {{ $session->score >= $session->exam->passing_grade ? 'text-green-600' : 'text-red-600' }}">
                     {{ round($session->score) }}
                 </td>
             </tr>
@@ -144,7 +144,7 @@
             <tr>
                 <th class="w-10 text-center">No</th>
                 <th>Soal & Jawaban</th>
-                <th class="w-24 text-center">Status</th>
+
             </tr>
         </thead>
         <tbody>
@@ -171,15 +171,7 @@
                         @endif
                     </div>
                 </td>
-                <td class="text-center align-middle font-bold">
-                    @if($answer->is_correct)
-                        <span class="text-green-600">BENAR</span>
-                    @elseif($answer->is_correct === 0)
-                        <span class="text-red-600">SALAH</span>
-                    @else
-                        <span class="text-gray-500">-</span>
-                    @endif
-                </td>
+
             </tr>
             @endforeach
         </tbody>
