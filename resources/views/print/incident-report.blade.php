@@ -50,6 +50,29 @@
             display: block;
             margin-bottom: 20px;
         }
+        @media screen {
+            .editable:empty:before {
+                content: attr(data-placeholder);
+                color: #9ca3af;
+                font-style: italic;
+            }
+            .editable:hover, .editable:focus {
+                background-color: #fef3c7 !important;
+                outline: 1px dashed #d97706;
+                border-color: transparent !important;
+            }
+        }
+        .editable {
+            outline: none;
+            min-height: 1.5rem;
+            cursor: text;
+        }
+        .lined-paper {
+            background-image: repeating-linear-gradient(transparent, transparent 31px, #000 31px, #000 32px);
+            line-height: 32px;
+            min-height: 128px;
+            width: 100%;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -83,37 +106,34 @@
             <tr>
                 <td class="font-bold align-top">Waktu Kejadian</td>
                 <td class="text-center align-top">:</td>
-                <td class="align-top border-b border-black"></td>
+                <td class="align-top border-b border-black"><div contenteditable="true" class="editable w-full h-full" data-placeholder="Ketik waktu kejadian..."></div></td>
             </tr>
             <tr>
                 <td class="font-bold align-top">Nomor Peserta</td>
                 <td class="text-center align-top">:</td>
-                <td class="align-top border-b border-black"></td>
+                <td class="align-top border-b border-black"><div contenteditable="true" class="editable w-full h-full" data-placeholder="Ketik nomor peserta..."></div></td>
             </tr>
             <tr>
                 <td class="font-bold align-top">Nama Peserta</td>
                 <td class="text-center align-top">:</td>
-                <td class="align-top border-b border-black"></td>
+                <td class="align-top border-b border-black"><div contenteditable="true" class="editable w-full h-full" data-placeholder="Ketik nama peserta..."></div></td>
             </tr>
             <tr>
                 <td class="font-bold align-top">Nomor Komputer</td>
                 <td class="text-center align-top">:</td>
-                <td class="align-top border-b border-black"></td>
+                <td class="align-top border-b border-black"><div contenteditable="true" class="editable w-full h-full" data-placeholder="Ketik nomor komputer..."></div></td>
             </tr>
             <tr>
                 <td class="font-bold align-top">Jenis Kejadian</td>
                 <td class="text-center align-top">:</td>
-                <td class="align-top border-b border-black"></td>
+                <td class="align-top border-b border-black"><div contenteditable="true" class="editable w-full h-full" data-placeholder="Ketik jenis kejadian..."></div></td>
             </tr>
         </table>
         
         <!-- Kronologi -->
         <div class="mb-6">
             <h4 class="font-bold mb-2">Kronologi Kejadian</h4>
-            <div class="border-b border-black h-8 w-full"></div>
-            <div class="border-b border-black h-8 w-full"></div>
-            <div class="border-b border-black h-8 w-full"></div>
-            <div class="border-b border-black h-8 w-full"></div>
+            <div contenteditable="true" class="editable lined-paper" data-placeholder="Ketik kronologi kejadian di sini..."></div>
         </div>
         
         <!-- Tindakan dan Keputusan -->
@@ -128,23 +148,23 @@
             <tbody>
                 <tr>
                     <td class="border border-black px-4 py-3">Tindakan Pengawas</td>
-                    <td class="border border-black px-4 py-3"></td>
+                    <td class="border border-black px-4 py-3"><div contenteditable="true" class="editable w-full h-full" data-placeholder="Ketik tindakan pengawas..."></div></td>
                 </tr>
                 <tr>
                     <td class="border border-black px-4 py-3">Tindakan Operator CAT</td>
-                    <td class="border border-black px-4 py-3"></td>
+                    <td class="border border-black px-4 py-3"><div contenteditable="true" class="editable w-full h-full" data-placeholder="Ketik tindakan operator..."></div></td>
                 </tr>
                 <tr>
                     <td class="border border-black px-4 py-3">Keputusan Panitia</td>
-                    <td class="border border-black px-4 py-3">[SESUAI KETETAPAN PANITIA]</td>
+                    <td class="border border-black px-4 py-3"><div contenteditable="true" class="editable w-full h-full">[SESUAI KETETAPAN PANITIA]</div></td>
                 </tr>
                 <tr>
                     <td class="border border-black px-4 py-3">Dampak terhadap Peserta</td>
-                    <td class="border border-black px-4 py-3"></td>
+                    <td class="border border-black px-4 py-3"><div contenteditable="true" class="editable w-full h-full" data-placeholder="Ketik dampak terhadap peserta..."></div></td>
                 </tr>
                 <tr>
                     <td class="border border-black px-4 py-3">Saksi/Petugas Lain yang Hadir</td>
-                    <td class="border border-black px-4 py-3"></td>
+                    <td class="border border-black px-4 py-3"><div contenteditable="true" class="editable w-full h-full" data-placeholder="Ketik daftar saksi..."></div></td>
                 </tr>
             </tbody>
         </table>
