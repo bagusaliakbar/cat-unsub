@@ -139,19 +139,7 @@
                 <td class="text-center align-top">{{ $index + 1 }}</td>
                 <td class="text-center align-top">{{ \Carbon\Carbon::parse($log->created_at)->format('d-m-Y H:i:s') }}</td>
                 <td class="align-top">
-                    @if($log->details && isset($log->details['type']))
-                        @if($log->details['type'] == 'browser_blur')
-                            Meninggalkan tab ujian (Browser Blur)
-                        @elseif($log->details['type'] == 'fullscreen_exit')
-                            Keluar dari mode layar penuh (Exit Fullscreen)
-                        @elseif($log->details['type'] == 'window_resize')
-                            Mengubah ukuran jendela browser (Window Resize)
-                        @else
-                            {{ $log->details['type'] }}
-                        @endif
-                    @else
-                        Aktivitas mencurigakan
-                    @endif
+                    {{ $log->description ?? 'Aktivitas mencurigakan' }}
                 </td>
                 <td class="align-top">
                     <div contenteditable="true" class="editable w-full h-full" data-placeholder="Ketik tindakan...">Peringatan Otomatis Sistem</div>

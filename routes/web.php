@@ -70,6 +70,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         $session = \App\Models\ExamSession::with(['user', 'exam'])->findOrFail($sessionId);
         $report = \App\Models\ExamReport::where('exam_id', $session->exam_id)->first();
         $violationLogs = \App\Models\SystemLog::where('user_id', $session->user_id)
+            ->where('action', 'violation')
             ->where('created_at', '>=', $session->started_at)
             ->orderBy('created_at', 'asc')
             ->get();
