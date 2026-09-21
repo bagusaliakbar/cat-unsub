@@ -8,7 +8,7 @@
     <style>
         @page {
             size: A4;
-            margin: 2cm;
+            margin: 1cm 2cm 2cm 2cm;
         }
         @media print {
             body {
