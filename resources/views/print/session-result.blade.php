@@ -16,13 +16,13 @@
         }
         @media print {
             @page { 
-                margin: 1cm 2cm 2cm 2cm; 
+                margin: 0; 
                 size: A4;
             }
             body { 
                 background: #fff; 
                 margin: 0; 
-                padding: 0; 
+                padding: 1cm 2cm 2cm 2cm; 
             }
             .no-print { display: none !important; }
             .break-inside-avoid { break-inside: avoid; }

@@ -7,8 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @page {
-            size: A4;
-            margin: 1cm 2cm 2cm 2cm;
+            size: A4 portrait;
+            margin: 0;
         }
         @media print {
             body {
@@ -40,7 +40,7 @@
         @media print {
             .a4-container {
                 margin: 0;
-                padding: 0;
+                padding: 1cm 2cm 2cm 2cm;
                 box-shadow: none;
             }
         }

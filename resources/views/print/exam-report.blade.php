@@ -17,13 +17,13 @@
         }
         @media print {
             @page { 
-                margin: 1cm 2cm 2cm 2cm; 
-                size: A4;
+                margin: 0; 
+                size: A4 portrait;
             }
             body { 
                 background: #fff; 
                 margin: 0; 
-                padding: 0; 
+                padding: 1cm 2cm 2cm 2cm; 
             }
             .no-print { display: none !important; }
             .break-inside-avoid { break-inside: avoid; }
