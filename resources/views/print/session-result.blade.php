@@ -119,7 +119,19 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($session->answers as $index => $answer)
+            @php
+                $orderedAnswers = collect($session->answers);
+                if ($session->question_order && is_array($session->question_order)) {
+                    $answersMap = $orderedAnswers->keyBy('question_id');
+                    $orderedAnswers = collect();
+                    foreach ($session->question_order as $qId) {
+                        if (isset($answersMap[$qId])) {
+                            $orderedAnswers->push($answersMap[$qId]);
+                        }
+                    }
+                }
+            @endphp
+            @foreach($orderedAnswers as $index => $answer)
             <tr class="break-inside-avoid">
                 <td class="text-center align-top">{{ $index + 1 }}</td>
                 <td class="align-top">
@@ -127,34 +139,64 @@
                         {!! $answer->question->text ?? 'Soal tidak ditemukan' !!}
                     </div>
                     
-                    <div class="mt-2">
-                        <span class="font-bold">Jawaban Peserta:</span> 
-                        @if($answer->option)
-                            <span class="{{ $answer->is_correct ? 'text-green-700 font-bold' : 'text-red-700 font-bold' }}">
-                                {{ $answer->option->text }}
-                            </span>
-                        @elseif($answer->answer_text)
-                            <span class="{{ $answer->is_correct ? 'text-green-700 font-bold' : 'text-red-700 font-bold' }}">
-                                {{ $answer->answer_text }}
-                            </span>
-                        @else
-                            <span class="italic text-gray-500">- Tidak Menjawab -</span>
-                        @endif
-                    </div>
-
-                    <div class="mt-1">
+                    @if($answer->question && $answer->question->options && $answer->question->options->count() > 0)
                         @php
-                            $correctOption = $answer->question->options->where('is_correct', true)->first();
+                            $orderedOptions = $answer->question->options;
+                            if ($answer->options_order && is_array($answer->options_order)) {
+                                $optionsMap = $answer->question->options->keyBy('id');
+                                $ordered = collect();
+                                foreach ($answer->options_order as $optId) {
+                                    if (isset($optionsMap[$optId])) {
+                                        $ordered->push($optionsMap[$optId]);
+                                    }
+                                }
+                                if ($ordered->count() == $answer->question->options->count()) {
+                                    $orderedOptions = $ordered;
+                                }
+                            }
+                            $labels = ['A', 'B', 'C', 'D', 'E'];
                         @endphp
-                        <span class="font-bold">Kunci Jawaban:</span> 
-                        @if($correctOption)
-                            <span class="font-bold text-gray-900">{{ $correctOption->text }}</span>
-                        @else
-                            <span class="italic text-gray-500">Essay / Belum Ditentukan</span>
-                        @endif
-                    </div>
+                        <div class="ml-4 mt-2 mb-4">
+                            @foreach($orderedOptions->values() as $idx => $opt)
+                                @php
+                                    $isParticipantChoice = ($answer->option_id == $opt->id);
+                                    $isCorrectOption = $opt->is_correct;
+                                    
+                                    $textClass = "text-black";
+                                    $icon = "";
+                                    if ($isParticipantChoice && $isCorrectOption) {
+                                        $textClass = "text-green-700 font-bold";
+                                        $icon = "✅ (Benar & Dipilih)";
+                                    } elseif ($isParticipantChoice && !$isCorrectOption) {
+                                        $textClass = "text-red-700 font-bold";
+                                        $icon = "❌ (Salah, Dipilih)";
+                                    } elseif (!$isParticipantChoice && $isCorrectOption) {
+                                        $textClass = "text-green-700 font-bold";
+                                        $icon = "👈 (Kunci Jawaban)";
+                                    }
+                                @endphp
+                                <div class="flex items-start mb-1 {{ $textClass }}">
+                                    <div class="w-6 font-bold">{{ $labels[$idx] ?? '-' }}.</div>
+                                    <div class="flex-1">
+                                        <span class="{{ ($isParticipantChoice && !$isCorrectOption) ? 'line-through' : '' }}">{!! $opt->text !!}</span>
+                                        <span class="text-xs ml-2 italic font-normal">{{ $icon }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                            @if(!$answer->option_id)
+                                <div class="mt-2 text-sm italic text-red-600">- Peserta Tidak Menjawab Soal Ini -</div>
+                            @endif
+                        </div>
+                    @else
+                        {{-- Fallback untuk soal Essay / tanpa opsi --}}
+                        <div class="mt-2 text-sm">
+                            <span class="font-bold">Jawaban Peserta:</span> 
+                            <span class="{{ $answer->is_correct ? 'text-green-700 font-bold' : 'text-red-700 font-bold' }}">
+                                {{ $answer->answer_text ?? '- Tidak Menjawab -' }}
+                            </span>
+                        </div>
+                    @endif
                 </td>
-
             </tr>
             @endforeach
         </tbody>
