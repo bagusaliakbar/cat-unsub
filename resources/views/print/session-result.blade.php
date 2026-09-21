@@ -96,11 +96,7 @@
                     {{ $session->completed_at ? \Carbon\Carbon::parse($session->completed_at)->format('H:i:s') : '-' }}
                 </td>
             </tr>
-            <tr>
-                <td class="w-40 font-bold align-top text-red-600">Pelanggaran</td>
-                <td class="w-4 text-center align-top text-red-600">:</td>
-                <td class="align-top text-red-600 font-bold">{{ $session->violation_count }} kali</td>
-            </tr>
+
             <tr>
                 <td class="w-40 font-bold align-top pt-4">Skor Akhir</td>
                 <td class="w-4 text-center align-top pt-4">:</td>
@@ -111,31 +107,6 @@
         </table>
     </div>
 
-    @if($violationLogs->count() > 0)
-    <div class="mb-8 p-4 border border-red-500 bg-red-50" style="-webkit-print-color-adjust: exact; print-color-adjust: exact; background-color: #fef2f2;">
-        <h4 class="font-bold text-red-700 mb-2 uppercase">Log Pelanggaran Peserta:</h4>
-        <ul class="list-disc list-inside text-sm text-red-600">
-            @foreach($violationLogs as $log)
-                <li>
-                    <strong>{{ \Carbon\Carbon::parse($log->created_at)->format('H:i:s') }}:</strong> 
-                    @if($log->details && isset($log->details['type']))
-                        @if($log->details['type'] == 'browser_blur')
-                            Meninggalkan tab ujian (Browser tidak fokus)
-                        @elseif($log->details['type'] == 'fullscreen_exit')
-                            Keluar dari mode layar penuh (Fullscreen)
-                        @elseif($log->details['type'] == 'window_resize')
-                            Mengubah ukuran jendela browser
-                        @else
-                            {{ $log->details['type'] }}
-                        @endif
-                    @else
-                        Terdeteksi aktivitas mencurigakan
-                    @endif
-                </li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
 
     <h4 class="font-bold mb-4 uppercase mt-8">Rincian Jawaban:</h4>
 
