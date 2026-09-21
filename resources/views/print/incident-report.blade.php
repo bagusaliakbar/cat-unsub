@@ -87,7 +87,7 @@
 
     <div class="a4-container relative">
         <!-- Kop Surat Menggunakan Gambar -->
-        <img src="{{ asset('images/kop-unsub.jpg') }}" alt="Kop Surat UNSUB" class="header-image">
+        <img src="{{ asset('images/kop-unsub.jpg') }}" alt="Kop Surat UNSUB" class="w-full mx-auto h-auto object-contain">
         
         <h3 class="text-center font-bold text-lg mb-6 tracking-wide">FORM KEJADIAN KHUSUS</h3>
         
