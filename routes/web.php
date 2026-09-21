@@ -65,6 +65,17 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
             ->get();
         return view('print.session-result', compact('session', 'report', 'violationLogs'));
     })->name('exams.session.print');
+
+    Route::get('/exams/session/{sessionId}/print-violations', function ($sessionId) {
+        $session = \App\Models\ExamSession::with(['user', 'exam'])->findOrFail($sessionId);
+        $report = \App\Models\ExamReport::where('exam_id', $session->exam_id)->first();
+        $violationLogs = \App\Models\SystemLog::where('user_id', $session->user_id)
+            ->where('created_at', '>=', $session->started_at)
+            ->orderBy('created_at', 'asc')
+            ->get();
+        return view('print.violation-report', compact('session', 'report', 'violationLogs'));
+    })->name('exams.session.print-violations');
+
     Route::get('/exams/{examId}/preview', \App\Livewire\Admin\ExamPreview::class)->name('exams.preview');
     Route::get('/exams/{examId}/report', \App\Livewire\Admin\ExamReportForm::class)->name('exams.report');
     Route::get('/exams/{examId}/report/print', function ($examId) {

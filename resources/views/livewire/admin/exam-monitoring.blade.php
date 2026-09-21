@@ -246,6 +246,12 @@
                             <p class="text-sm text-gray-500 mt-1">Skor Akhir: <span class="font-bold {{ $selectedSession->score >= $exam->passing_grade ? 'text-green-600' : 'text-red-600' }}">{{ round($selectedSession->score) }}</span></p>
                         </div>
                         <div class="flex items-center space-x-2">
+                            @if($selectedSession->violation_count > 0)
+                            <a href="{{ route('admin.exams.session.print-violations', $selectedSession->id) }}" target="_blank" class="text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded-full px-4 py-2 font-bold flex items-center transition text-sm">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                Cetak Log
+                            </a>
+                            @endif
                             <a href="{{ route('admin.exams.session.print', $selectedSession->id) }}" target="_blank" class="text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-full px-4 py-2 font-bold flex items-center transition text-sm">
                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                                 Cetak Hasil
