@@ -141,6 +141,18 @@
                             <span class="italic text-gray-500">- Tidak Menjawab -</span>
                         @endif
                     </div>
+
+                    <div class="mt-1">
+                        @php
+                            $correctOption = $answer->question->options->where('is_correct', true)->first();
+                        @endphp
+                        <span class="font-bold">Kunci Jawaban:</span> 
+                        @if($correctOption)
+                            <span class="font-bold text-gray-900">{{ $correctOption->text }}</span>
+                        @else
+                            <span class="italic text-gray-500">Essay / Belum Ditentukan</span>
+                        @endif
+                    </div>
                 </td>
 
             </tr>
