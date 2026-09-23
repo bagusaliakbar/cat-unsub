@@ -15,6 +15,7 @@ class Entry extends Component
     public $participant = null;
     public $assignedExams = [];
     public $confirmingExam = null;
+    public $viewingRulesExam = null;
     public $input_token = '';
 
     public function mount()
@@ -87,6 +88,18 @@ class Entry extends Component
         if ($this->isValidated && $this->participant) {
             $this->confirmingExam = $this->assignedExams->where('id', $examId)->first();
         }
+    }
+
+    public function viewRules($examId)
+    {
+        if ($this->isValidated && $this->participant) {
+            $this->viewingRulesExam = $this->assignedExams->where('id', $examId)->first();
+        }
+    }
+
+    public function closeRules()
+    {
+        $this->viewingRulesExam = null;
     }
 
     public function cancelStart()

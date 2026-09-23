@@ -166,8 +166,8 @@
                                             $isExpired = $exam->end_time && $now->greaterThan(\Carbon\Carbon::parse($exam->end_time));
                                         @endphp
                                         
-                                        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mt-4 sm:mt-0 justify-end" x-data="{ openRules: false }">
-                                            <button @click="openRules = true" type="button" class="w-full sm:w-auto bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-5 py-3 rounded-xl font-bold shadow-sm transition-all flex items-center justify-center shrink-0">
+                                        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mt-4 sm:mt-0 justify-end">
+                                            <button wire:click="viewRules({{ $exam->id }})" wire:loading.attr="disabled" type="button" class="w-full sm:w-auto bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-5 py-3 rounded-xl font-bold shadow-sm transition-all flex items-center justify-center shrink-0">
                                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                                 Tata Tertib
                                             </button>
@@ -211,67 +211,6 @@
                                                     </button>
                                                 @endif
                                             @endif
-                                            
-                                            <!-- Alpine Rules Modal for View Only -->
-                                            <template x-teleport="body">
-                                                <div x-show="openRules" style="display: none;" class="fixed inset-0 z-[70] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                                                    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                                                        <div x-show="openRules" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" @click="openRules = false"></div>
-                                                        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                                                        <div x-show="openRules" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-gray-100">
-                                                            <div class="bg-blue-600 px-6 py-5 flex justify-between items-center shrink-0">
-                                                                <h3 class="text-xl font-bold text-white flex items-center">
-                                                                    <svg class="w-6 h-6 mr-2 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                                                    Tata Tertib Ujian
-                                                                </h3>
-                                                                <button @click="openRules = false" class="text-blue-100 hover:text-white transition-colors">
-                                                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                                                </button>
-                                                            </div>
-                                                            <div class="p-6 md:p-8 overflow-y-auto max-h-[70vh]">
-                                                                <div class="mb-5">
-                                                                    <h4 class="text-xl font-bold text-gray-900">{{ $exam->title }}</h4>
-                                                                </div>
-                                                                <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 text-gray-700 text-sm prose prose-sm max-w-none">
-                                                                    @if($exam->rules)
-                                                                        {!! nl2br(e($exam->rules)) !!}
-                                                                    @else
-                                                                        <div class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wide flex items-center">
-                                                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                                                            Tata Tertib Standar Sistem
-                                                                        </div>
-                                                                        <ul class="text-sm text-gray-700 space-y-4 list-none p-0 m-0">
-                                                                            <li class="flex items-start">
-                                                                                <svg class="w-5 h-5 text-blue-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                                                                <span>Berdoalah sebelum mulai mengerjakan soal ujian.</span>
-                                                                            </li>
-                                                                            <li class="flex items-start">
-                                                                                <svg class="w-5 h-5 text-blue-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                                                                <span>Waktu akan <span class="font-bold text-gray-900">berjalan secara otomatis</span> setelah Anda menekan tombol mulai ujian.</span>
-                                                                            </li>
-                                                                            <li class="flex items-start">
-                                                                                <svg class="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
-                                                                                <span>Dilarang membuka <i>tab</i> browser lain, menutup browser, atau membuka aplikasi lain selama ujian berlangsung. (Sistem akan mendeteksi pelanggaran).</span>
-                                                                            </li>
-                                                                            <li class="flex items-start">
-                                                                                <svg class="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                                                                                <span>Dilarang keras melakukan kecurangan dalam bentuk apapun, termasuk bekerjasama atau menggunakan alat bantu pencarian.</span>
-                                                                            </li>
-                                                                            <li class="flex items-start">
-                                                                                <svg class="w-5 h-5 text-blue-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                                                                                <span>Apabila waktu ujian habis, sistem akan <span class="font-bold text-gray-900">mengumpulkan jawaban Anda secara otomatis</span>.</span>
-                                                                            </li>
-                                                                        </ul>
-                                                                    @endif
-                                                                </div>
-                                                                <div class="mt-6 flex justify-end">
-                                                                    <button @click="openRules = false" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-2.5 px-6 rounded-xl transition-colors">Tutup</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </template>
                                         </div>
                                     </div>
                                 @endforeach
@@ -339,6 +278,67 @@
                         <button onclick="requestFullScreen()" wire:loading.attr="disabled" wire:click="startExam({{ $confirmingExam->id }})" type="button" class="w-full sm:w-auto px-6 py-3 bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center">
                             Saya Mengerti & Mulai
                             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            @endif
+            @if($viewingRulesExam)
+            <div class="fixed inset-0 z-[70] flex items-center justify-center p-4">
+                <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" wire:click="closeRules"></div>
+                <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden relative z-10 flex flex-col max-h-[90vh] border border-gray-100">
+                    <div class="bg-blue-600 px-6 py-5 flex justify-between items-center shrink-0">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <svg class="w-6 h-6 mr-2 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Tata Tertib Ujian
+                        </h3>
+                        <button wire:click="closeRules" class="text-blue-100 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="p-6 md:p-8 overflow-y-auto">
+                        <div class="mb-5">
+                            <h4 class="text-xl font-bold text-gray-900">{{ $viewingRulesExam->title }}</h4>
+                        </div>
+                        
+                        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-5 text-gray-700 text-sm prose prose-sm max-w-none">
+                            @if($viewingRulesExam->rules)
+                                {!! nl2br(e($viewingRulesExam->rules)) !!}
+                            @else
+                                <div class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wide flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Tata Tertib Standar Sistem
+                                </div>
+                                <ul class="text-sm text-gray-700 space-y-4 list-none p-0 m-0">
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-blue-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        <span>Berdoalah sebelum mulai mengerjakan soal ujian.</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-blue-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        <span>Waktu akan <span class="font-bold text-gray-900">berjalan secara otomatis</span> setelah Anda menekan tombol mulai ujian.</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                        <span>Dilarang membuka <i>tab</i> browser lain, menutup browser, atau membuka aplikasi lain selama ujian berlangsung. (Sistem akan mendeteksi pelanggaran).</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                        <span>Dilarang keras melakukan kecurangan dalam bentuk apapun, termasuk bekerjasama atau menggunakan alat bantu pencarian.</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-5 h-5 text-blue-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                                        <span>Apabila waktu ujian habis, sistem akan <span class="font-bold text-gray-900">mengumpulkan jawaban Anda secara otomatis</span>.</span>
+                                    </li>
+                                </ul>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 border-t border-gray-100 bg-gray-50 flex justify-end shrink-0">
+                        <button wire:click="closeRules" type="button" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors">
+                            Tutup
                         </button>
                     </div>
                 </div>
