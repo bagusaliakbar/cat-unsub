@@ -76,15 +76,15 @@
                     </div>
 
                     <!-- Poin Badge -->
-                    <span class="inline-flex items-center h-8 px-3 bg-gray-100 text-gray-700 text-xs font-semibold rounded-full border border-gray-200/80 whitespace-nowrap">
+                    <span class="inline-flex items-center h-8 px-3.5 bg-gray-100 text-gray-700 text-xs font-semibold rounded-full border border-gray-200/80 whitespace-nowrap">
                         {{ $currentQuestion->points }} Poin
                     </span>
                     
                     <!-- Tandai Ragu-ragu -->
                     <button wire:click="toggleDoubtful({{ $currentQuestion->id }})" 
                         type="button" 
-                        class="inline-flex items-center h-8 px-3.5 text-xs font-semibold rounded-full border transition-all whitespace-nowrap shadow-sm {{ ($doubtful[$currentQuestion->id] ?? false) ? 'bg-yellow-100 text-yellow-800 border-yellow-300 hover:bg-yellow-200' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50' }}">
-                        <svg class="w-3.5 h-3.5 mr-1.5 shrink-0 {{ ($doubtful[$currentQuestion->id] ?? false) ? 'text-yellow-600' : 'text-gray-400' }}" fill="{{ ($doubtful[$currentQuestion->id] ?? false) ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
+                        class="inline-flex items-center h-8 px-4 text-xs font-semibold rounded-full border transition-all whitespace-nowrap shadow-sm {{ ($doubtful[$currentQuestion->id] ?? false) ? 'bg-yellow-100 text-yellow-800 border-yellow-300 hover:bg-yellow-200' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50' }}">
+                        <svg class="w-3.5 h-3.5 mr-2 shrink-0 {{ ($doubtful[$currentQuestion->id] ?? false) ? 'text-yellow-600' : 'text-gray-400' }}" fill="{{ ($doubtful[$currentQuestion->id] ?? false) ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
                         </svg>
                         {{ ($doubtful[$currentQuestion->id] ?? false) ? 'Ditandai Ragu-ragu' : 'Tandai Ragu-ragu' }}
