@@ -76,7 +76,7 @@
                     </div>
 
                     <!-- Poin Badge -->
-                    <span class="inline-flex items-center h-8 px-3.5 bg-gray-100 text-gray-700 text-xs font-semibold rounded-full border border-gray-200/80 whitespace-nowrap">
+                    <span class="inline-flex items-center justify-center h-8 px-5 bg-gray-100 text-gray-700 text-xs font-semibold rounded-full border border-gray-200/80 whitespace-nowrap">
                         {{ $currentQuestion->points }} Poin
                     </span>
                     
