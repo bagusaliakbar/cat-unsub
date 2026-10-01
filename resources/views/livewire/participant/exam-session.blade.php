@@ -19,6 +19,12 @@
     isAlerting: false,
     violationMessage: '',
     showViolationModal: false,
+    fontSize: localStorage.getItem('cat_font_size') || 'normal',
+    
+    setFontSize(size) {
+        this.fontSize = size;
+        localStorage.setItem('cat_font_size', size);
+    },
     
     // Add hidden div to hold the latest endTimeFormatted updated by Livewire
     
@@ -203,7 +209,33 @@
                     @endif
                 </div>
 
-                <div class="flex flex-row gap-2 sm:space-x-3 items-center shrink-0 mt-3 sm:mt-0">
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0 mt-3 sm:mt-0">
+                    <!-- Pengatur Ukuran Font Soal (A- / A / A+) -->
+                    <div class="inline-flex items-center bg-gray-100 p-1 rounded-xl border border-gray-200 shadow-inner" title="Ukuran Huruf Soal">
+                        <span class="text-xs font-bold text-gray-500 px-2 hidden sm:inline flex items-center">
+                            <svg class="w-3.5 h-3.5 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 5v14m6-6h6m-3-3v6"></path></svg>
+                            Ukuran:
+                        </span>
+                        <button type="button" @click="setFontSize('small')" 
+                            class="px-2.5 py-1 text-xs font-bold rounded-lg transition-all"
+                            :class="fontSize === 'small' ? 'bg-white text-blue-600 shadow-sm border border-gray-200 ring-1 ring-black/5 font-extrabold' : 'text-gray-600 hover:text-gray-900'"
+                            title="Font Lebih Kecil">
+                            A-
+                        </button>
+                        <button type="button" @click="setFontSize('normal')" 
+                            class="px-2.5 py-1 text-xs font-bold rounded-lg transition-all"
+                            :class="fontSize === 'normal' ? 'bg-white text-blue-600 shadow-sm border border-gray-200 ring-1 ring-black/5 font-extrabold' : 'text-gray-600 hover:text-gray-900'"
+                            title="Font Standar">
+                            A
+                        </button>
+                        <button type="button" @click="setFontSize('large')" 
+                            class="px-2.5 py-1 text-xs font-bold rounded-lg transition-all"
+                            :class="fontSize === 'large' ? 'bg-white text-blue-600 shadow-sm border border-gray-200 ring-1 ring-black/5 font-extrabold' : 'text-gray-600 hover:text-gray-900'"
+                            title="Font Lebih Besar">
+                            A+
+                        </button>
+                    </div>
+
                     <span class="bg-gray-100 text-gray-600 text-xs font-bold px-3 py-1.5 rounded-full whitespace-nowrap">{{ $currentQuestion->points }} Poin</span>
                     
                     <button wire:click="toggleDoubtful({{ $currentQuestion->id }})" class="flex items-center text-sm font-medium px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap {{ ($doubtful[$currentQuestion->id] ?? false) ? 'bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-200' : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50' }}">
@@ -213,7 +245,12 @@
                 </div>
             </div>
 
-            <div class="prose max-w-none text-gray-800 text-lg md:text-xl mb-8 leading-relaxed">
+            <div class="prose max-w-none text-gray-800 mb-8 leading-relaxed transition-all duration-150"
+                 :class="{
+                     'text-base md:text-lg': fontSize === 'small',
+                     'text-lg md:text-xl': fontSize === 'normal',
+                     'text-2xl md:text-3xl': fontSize === 'large'
+                 }">
                 {!! nl2br(e($currentQuestion->text)) !!}
             </div>
 
@@ -225,12 +262,22 @@
                                 <input type="radio" name="question_{{ $currentQuestion->id }}" id="opt_{{ $option->id }}" wire:model.live="answers.{{ $currentQuestion->id }}" value="{{ $option->id }}" class="w-5 h-5 text-blue-600 bg-white border-gray-300 focus:ring-blue-500 mt-0.5">
                             </div>
                             <div class="ml-4 flex-1">
-                                <span class="block text-gray-900 font-medium text-lg">{{ $option->text }}</span>
+                                <span class="block text-gray-900 font-medium transition-all duration-150"
+                                      :class="{
+                                          'text-base': fontSize === 'small',
+                                          'text-lg': fontSize === 'normal',
+                                          'text-xl md:text-2xl': fontSize === 'large'
+                                      }">{{ $option->text }}</span>
                             </div>
                         </label>
                     @endforeach
                 @else
-                    <textarea wire:model.live.debounce.1000ms="answers.{{ $currentQuestion->id }}" rows="6" class="w-full bg-white border border-gray-200 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-4 shadow-sm" placeholder="Ketik jawaban Anda di sini..."></textarea>
+                    <textarea wire:model.live.debounce.1000ms="answers.{{ $currentQuestion->id }}" rows="6" class="w-full bg-white border border-gray-200 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-4 shadow-sm transition-all duration-150"
+                              :class="{
+                                  'text-base': fontSize === 'small',
+                                  'text-lg': fontSize === 'normal',
+                                  'text-xl md:text-2xl': fontSize === 'large'
+                              }" placeholder="Ketik jawaban Anda di sini..."></textarea>
                 @endif
             </div>
 
