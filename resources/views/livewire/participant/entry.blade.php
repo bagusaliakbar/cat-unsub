@@ -301,9 +301,6 @@
                     <div class="px-6 py-6 sm:px-8 relative shrink-0 border-b border-blue-900" style="background: linear-gradient(135deg, #091a32 0%, #0f2b52 50%, #16244f 100%) !important; color: #ffffff !important;">
                         <div class="flex justify-between items-center gap-4">
                             <div class="flex-1">
-                                <span class="inline-block text-[11px] font-black px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm mb-2.5" style="background-color: #f59e0b !important; color: #0f172a !important;">
-                                    SELEKSI BERBASIS COMPUTER ASSISTED TEST (CAT)
-                                </span>
                                 <h3 class="text-2xl sm:text-3xl font-black tracking-tight uppercase" style="color: #ffffff !important;">
                                     TATA TERTIB PESERTA
                                 </h3>
@@ -313,13 +310,6 @@
                             </div>
                             
                             <div class="flex items-center gap-3 shrink-0">
-                                <div class="hidden md:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border border-white/20 text-right" style="background-color: rgba(255, 255, 255, 0.12) !important;">
-                                    <svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                    <div>
-                                        <div class="text-[11px] font-black text-amber-400 tracking-wider">CAT SYSTEM</div>
-                                        <div class="text-[10px]" style="color: #bfdbfe !important;">UNSUB</div>
-                                    </div>
-                                </div>
                                 <button wire:click="closeRules" type="button" class="p-2.5 rounded-xl transition-all hover:bg-white/20" style="color: #ffffff !important; background-color: rgba(255, 255, 255, 0.15) !important;">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                                 </button>
