@@ -298,30 +298,30 @@
                 <div class="relative w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden text-left my-6 sm:my-8 border border-slate-200">
                     
                     <!-- Header Infografis Modern (Deep Navy + Amber Badge) -->
-                    <div class="bg-gradient-to-r from-blue-950 via-blue-900 to-indigo-950 px-6 py-6 sm:px-8 text-white relative shrink-0 border-b border-blue-800">
+                    <div class="px-6 py-6 sm:px-8 relative shrink-0 border-b border-blue-900" style="background: linear-gradient(135deg, #091a32 0%, #0f2b52 50%, #16244f 100%) !important; color: #ffffff !important;">
                         <div class="flex justify-between items-center gap-4">
                             <div class="flex-1">
-                                <span class="inline-block bg-amber-500 text-slate-950 text-[11px] font-black px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm mb-2.5">
+                                <span class="inline-block text-[11px] font-black px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm mb-2.5" style="background-color: #f59e0b !important; color: #0f172a !important;">
                                     SELEKSI BERBASIS COMPUTER ASSISTED TEST (CAT)
                                 </span>
-                                <h3 class="text-2xl sm:text-3xl font-black tracking-tight text-white uppercase">
+                                <h3 class="text-2xl sm:text-3xl font-black tracking-tight uppercase" style="color: #ffffff !important;">
                                     TATA TERTIB PESERTA
                                 </h3>
-                                <p class="text-blue-200 text-xs sm:text-sm mt-1 font-medium">
+                                <p class="text-xs sm:text-sm mt-1 font-medium" style="color: #bfdbfe !important;">
                                     {{ $viewingRulesExam->title }} — Harap dibaca dan dipahami sebelum memulai ujian.
                                 </p>
                             </div>
                             
                             <div class="flex items-center gap-3 shrink-0">
-                                <div class="hidden md:flex items-center gap-2.5 bg-white/10 px-3.5 py-2 rounded-2xl border border-white/10 text-right">
+                                <div class="hidden md:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border border-white/20 text-right" style="background-color: rgba(255, 255, 255, 0.12) !important;">
                                     <svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                     <div>
                                         <div class="text-[11px] font-black text-amber-400 tracking-wider">CAT SYSTEM</div>
-                                        <div class="text-[10px] text-blue-200">UNSUB</div>
+                                        <div class="text-[10px]" style="color: #bfdbfe !important;">UNSUB</div>
                                     </div>
                                 </div>
-                                <button wire:click="closeRules" type="button" class="text-blue-200 hover:text-white bg-white/10 hover:bg-white/20 p-2.5 rounded-xl transition-all">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                <button wire:click="closeRules" type="button" class="p-2.5 rounded-xl transition-all hover:bg-white/20" style="color: #ffffff !important; background-color: rgba(255, 255, 255, 0.15) !important;">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                                 </button>
                             </div>
                         </div>
@@ -505,7 +505,7 @@
                             </div>
 
                             <!-- 9. Sanksi Pelanggaran (Full Width Banner) -->
-                            <div class="col-span-1 md:col-span-2 bg-gradient-to-r from-blue-950 via-blue-900 to-indigo-950 rounded-2xl border border-blue-800 shadow-md overflow-hidden text-white">
+                            <div class="col-span-1 md:col-span-2 rounded-2xl border border-blue-900 shadow-md overflow-hidden text-white" style="background: linear-gradient(135deg, #091a32 0%, #0f2b52 50%, #16244f 100%) !important; color: #ffffff !important;">
                                 <div class="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
                                     <div class="flex items-center space-x-3 shrink-0 sm:border-r sm:border-blue-800/80 sm:pr-5">
                                         <span class="w-8 h-8 rounded-full bg-amber-500 text-slate-950 font-black text-sm flex items-center justify-center shrink-0 shadow">9</span>
