@@ -415,18 +415,52 @@
                             @error('importFile') <span class="text-red-500 text-xs mt-1.5 block font-medium">{{ $message }}</span>@enderror
                         </div>
 
-                        <!-- Panduan Kolom -->
-                        <div class="bg-gray-50 rounded-xl p-3.5 border border-gray-200 text-xs text-gray-600 space-y-1.5">
-                            <div class="font-bold text-gray-800 flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                Petunjuk Kolom Data:
+                        <!-- Panduan Kolom Data -->
+                        <div class="bg-gray-50/80 rounded-2xl p-4 border border-gray-200/80 space-y-3">
+                            <div class="flex items-center space-x-2 text-xs font-bold text-gray-800">
+                                <div class="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                </div>
+                                <span>Petunjuk Format Kolom Excel:</span>
                             </div>
-                            <ul class="list-disc pl-5 space-y-1">
-                                <li><strong class="text-gray-800">nama_lengkap</strong>: Kolom wajib diisi.</li>
-                                <li><strong class="text-gray-800">nik</strong> & <strong class="text-gray-800">id_peserta</strong>: Bersifat opsional. Jika keduanya kosong, sistem otomatis membuatkan ID Peserta unik.</li>
-                                <li><strong class="text-gray-800">password</strong>: Opsional. Jika dikosongkan, password otomatis di-set <span class="font-mono bg-white px-1 py-0.5 rounded border border-gray-200 text-gray-900 font-bold">123456</span>.</li>
-                                <li><strong class="text-gray-800">gelombang</strong>: Nama gelombang (contoh: "Gelombang 1").</li>
-                            </ul>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                <!-- nama_lengkap -->
+                                <div class="bg-white p-2.5 rounded-xl border border-gray-200 shadow-xs">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <code class="text-xs font-bold font-mono text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">nama_lengkap</code>
+                                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-700">Wajib</span>
+                                    </div>
+                                    <p class="text-[11px] text-gray-500">Nama lengkap calon peserta ujian.</p>
+                                </div>
+
+                                <!-- nik & id_peserta -->
+                                <div class="bg-white p-2.5 rounded-xl border border-gray-200 shadow-xs">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <code class="text-xs font-bold font-mono text-gray-800 bg-gray-100 px-1.5 py-0.5 rounded">nik & id_peserta</code>
+                                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">Opsional</span>
+                                    </div>
+                                    <p class="text-[11px] text-gray-500">Jika kosong, ID unik dibuat otomatis.</p>
+                                </div>
+
+                                <!-- password -->
+                                <div class="bg-white p-2.5 rounded-xl border border-gray-200 shadow-xs">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <code class="text-xs font-bold font-mono text-gray-800 bg-gray-100 px-1.5 py-0.5 rounded">password</code>
+                                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">Opsional</span>
+                                    </div>
+                                    <p class="text-[11px] text-gray-500">Default: <span class="font-mono font-bold text-gray-700 bg-gray-100 px-1 rounded">123456</span> jika kosong.</p>
+                                </div>
+
+                                <!-- gelombang -->
+                                <div class="bg-white p-2.5 rounded-xl border border-gray-200 shadow-xs">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <code class="text-xs font-bold font-mono text-gray-800 bg-gray-100 px-1.5 py-0.5 rounded">gelombang</code>
+                                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">Opsional</span>
+                                    </div>
+                                    <p class="text-[11px] text-gray-500">Contoh: "Gelombang 1" atau nama sesi.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
