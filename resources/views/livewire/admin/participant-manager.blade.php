@@ -24,13 +24,21 @@
             </h2>
             <p class="text-blue-100 opacity-90 text-sm">Kelola data peserta, NIK, dan akses login ke sistem CAT.</p>
         </div>
-        <div class="mt-4 md:mt-0 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
-            <a href="{{ route('admin.participants.print_all', ['wave_id' => $filter_wave, 'search' => $search]) }}" target="_blank" class="bg-indigo-500 hover:bg-indigo-400 text-white focus:ring-4 focus:ring-indigo-300 font-bold py-2.5 px-5 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center justify-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+        <div class="mt-4 md:mt-0 flex flex-wrap gap-2.5">
+            <button wire:click="export" wire:loading.attr="disabled" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-4 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm disabled:opacity-50">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                Export Excel
+            </button>
+            <button wire:click="openImportModal" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2.5 px-4 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                Import Excel
+            </button>
+            <a href="{{ route('admin.participants.print_all', ['wave_id' => $filter_wave, 'search' => $search]) }}" target="_blank" class="bg-indigo-500 hover:bg-indigo-400 text-white font-bold py-2.5 px-4 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                 Cetak Semua Kartu
             </a>
-            <button wire:click="create()" class="bg-white text-blue-700 hover:bg-blue-50 focus:ring-4 focus:ring-blue-300 font-bold py-2.5 px-5 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center justify-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+            <button wire:click="create()" class="bg-white text-blue-700 hover:bg-blue-50 focus:ring-4 focus:ring-blue-300 font-bold py-2.5 px-5 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
                 Tambah Peserta
             </button>
         </div>
@@ -333,6 +341,107 @@
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Modal Import Peserta -->
+    @if($isImportModalOpen)
+        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" wire:click="closeImportModal"></div>
+
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full border border-gray-100">
+                    
+                    <!-- Modal Header -->
+                    <div class="bg-gradient-to-r from-blue-700 to-indigo-700 px-6 py-5 text-white flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 bg-white/10 rounded-xl">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold leading-6">Import Data Peserta</h3>
+                                <p class="text-xs text-blue-100 mt-0.5">Unggah file Excel atau CSV untuk mendaftarkan peserta secara massal.</p>
+                            </div>
+                        </div>
+                        <button wire:click="closeImportModal" class="text-white/80 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+
+                    <div class="p-6 space-y-5">
+                        <!-- Step 1: Download Template Box -->
+                        <div class="bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-sm">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-gray-900">Belum punya format file?</h4>
+                                    <p class="text-xs text-gray-600">Unduh contoh template Excel yang siap diisi.</p>
+                                </div>
+                            </div>
+                            <button wire:click="downloadTemplate" type="button" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow transition transform hover:-translate-y-0.5 shrink-0">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                Unduh Template
+                            </button>
+                        </div>
+
+                        <!-- Step 2: Upload File Zone -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Pilih File Excel / CSV (.xlsx, .xls, .csv)</label>
+                            <div class="border-2 border-dashed border-gray-300 hover:border-blue-500 rounded-2xl p-6 text-center transition-colors bg-gray-50/60 cursor-pointer relative">
+                                <input type="file" wire:model="importFile" accept=".xlsx,.xls,.csv" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                <div class="flex flex-col items-center justify-center space-y-2">
+                                    <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                    </div>
+                                    @if ($importFile)
+                                        <div class="text-sm font-bold text-blue-700">{{ $importFile->getClientOriginalName() }}</div>
+                                        <div class="text-xs text-gray-500">{{ number_format($importFile->getSize() / 1024, 1) }} KB</div>
+                                    @else
+                                        <div class="text-sm font-medium text-gray-700">Klik untuk memilih file atau seret file ke sini</div>
+                                        <div class="text-xs text-gray-500">Maksimal 10 MB (.xlsx, .xls, .csv)</div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div wire:loading wire:target="importFile" class="text-xs font-semibold text-blue-600 mt-2 flex items-center gap-1.5">
+                                <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                Mengunggah file...
+                            </div>
+                            @error('importFile') <span class="text-red-500 text-xs mt-1.5 block font-medium">{{ $message }}</span>@enderror
+                        </div>
+
+                        <!-- Panduan Kolom -->
+                        <div class="bg-gray-50 rounded-xl p-3.5 border border-gray-200 text-xs text-gray-600 space-y-1.5">
+                            <div class="font-bold text-gray-800 flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Petunjuk Kolom Data:
+                            </div>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong class="text-gray-800">nama_lengkap</strong>: Kolom wajib diisi.</li>
+                                <li><strong class="text-gray-800">nik</strong> & <strong class="text-gray-800">id_peserta</strong>: Bersifat opsional. Jika keduanya kosong, sistem otomatis membuatkan ID Peserta unik.</li>
+                                <li><strong class="text-gray-800">password</strong>: Opsional. Jika dikosongkan, password otomatis di-set <span class="font-mono bg-white px-1 py-0.5 rounded border border-gray-200 text-gray-900 font-bold">123456</span>.</li>
+                                <li><strong class="text-gray-800">gelombang</strong>: Nama gelombang (contoh: "Gelombang 1").</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex flex-row-reverse gap-3 rounded-b-2xl">
+                        <button wire:click="import" wire:loading.attr="disabled" type="button" class="w-full sm:w-auto inline-flex justify-center items-center rounded-xl px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm transition disabled:opacity-50">
+                            <span wire:loading wire:target="import" class="inline-flex items-center mr-2">
+                                <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            </span>
+                            Mulai Import
+                        </button>
+                        <button wire:click="closeImportModal" type="button" class="w-full sm:w-auto inline-flex justify-center rounded-xl px-5 py-2.5 bg-white text-gray-700 font-medium text-sm border border-gray-300 hover:bg-gray-100 transition">
+                            Batal
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

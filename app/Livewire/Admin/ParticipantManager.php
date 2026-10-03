@@ -3,6 +3,10 @@
 namespace App\Livewire\Admin;
 
 use App\Models\User;
+use App\Exports\ParticipantsExport;
+use App\Exports\ParticipantTemplateExport;
+use App\Imports\ParticipantsImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -16,6 +20,8 @@ class ParticipantManager extends Component
     use WithFileUploads;
 
     public $isModalOpen = false;
+    public $isImportModalOpen = false;
+    public $importFile;
     public $user_id, $name, $nik, $email, $password, $institution, $participant_number, $wave_id;
     public $birth_place, $birth_date, $latest_education, $address;
     public $photo; // For uploading new photo
@@ -197,5 +203,62 @@ class ParticipantManager extends Component
             $user->delete();
         }
         session()->flash('message', 'Peserta berhasil dihapus.');
+    }
+
+    public function export()
+    {
+        \App\Services\LogService::record('export_participants', 'Admin mengekspor data peserta ke Excel.');
+        $filename = 'data_peserta_cat_' . date('Ymd_His') . '.xlsx';
+        return Excel::download(new ParticipantsExport($this->filter_wave, $this->search), $filename);
+    }
+
+    public function downloadTemplate()
+    {
+        return Excel::download(new ParticipantTemplateExport, 'template_import_peserta.xlsx');
+    }
+
+    public function openImportModal()
+    {
+        $this->importFile = null;
+        $this->resetValidation('importFile');
+        $this->isImportModalOpen = true;
+    }
+
+    public function closeImportModal()
+    {
+        $this->isImportModalOpen = false;
+        $this->importFile = null;
+        $this->resetValidation('importFile');
+    }
+
+    public function import()
+    {
+        $this->validate([
+            'importFile' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+        ], [
+            'importFile.required' => 'Silakan pilih file Excel/CSV terlebih dahulu.',
+            'importFile.mimes' => 'Format file harus berupa .xlsx, .xls, atau .csv.',
+            'importFile.max' => 'Ukuran file maksimal adalah 10 MB.',
+        ]);
+
+        try {
+            $import = new ParticipantsImport();
+            Excel::import($import, $this->importFile);
+
+            \App\Services\LogService::record(
+                'import_participants',
+                "Admin mengimpor data peserta: {$import->importedCount} berhasil, {$import->skippedCount} dilewati."
+            );
+
+            $msg = "Berhasil mengimpor {$import->importedCount} data peserta.";
+            if ($import->skippedCount > 0) {
+                $msg .= " ({$import->skippedCount} baris dilewati karena NIK/Email/ID sudah terdaftar).";
+            }
+
+            session()->flash('message', $msg);
+            $this->closeImportModal();
+        } catch (\Exception $e) {
+            $this->addError('importFile', 'Gagal memproses file: ' . $e->getMessage());
+        }
     }
 }
