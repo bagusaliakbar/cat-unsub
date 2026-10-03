@@ -69,17 +69,20 @@ class ExamManager extends Component
             ? 0 
             : \App\Models\Question::whereIn('id', $this->selected_questions)->sum('points');
 
-        $participantQuery = \App\Models\User::where('role', 'participant')->orderBy('name');
+        $participantQuery = \App\Models\User::whereIn('role', ['peserta', 'participant'])->orderBy('name');
         
         if ($this->assigning_filter_wave) {
             $participantQuery->where('wave_id', $this->assigning_filter_wave);
         }
         
         $all_participants = $participantQuery->get();
+        $current_participant_ids = $all_participants->pluck('id')->map(fn($id) => (string)$id)->toArray();
+        $is_all_participants_selected = !empty($current_participant_ids) && 
+            count(array_intersect($current_participant_ids, $this->selected_participants)) === count($current_participant_ids);
         
         $waves = \App\Models\Wave::where('is_active', true)->get();
 
-        return view('livewire.admin.exam-manager', compact('exams', 'categories', 'bank_questions', 'total_points', 'all_participants', 'waves'))
+        return view('livewire.admin.exam-manager', compact('exams', 'categories', 'bank_questions', 'total_points', 'all_participants', 'waves', 'is_all_participants_selected'))
             ->layout('layouts.app'); // Assuming breeze layout
     }
 
@@ -234,6 +237,27 @@ class ExamManager extends Component
             $this->selected_participants = array_values(array_diff($this->selected_participants, [$id]));
         } else {
             $this->selected_participants[] = $id;
+        }
+    }
+
+    public function toggleSelectAllParticipants()
+    {
+        $participantQuery = \App\Models\User::whereIn('role', ['peserta', 'participant']);
+        if ($this->assigning_filter_wave) {
+            $participantQuery->where('wave_id', $this->assigning_filter_wave);
+        }
+        $currentIds = $participantQuery->pluck('id')->map(fn($id) => (string)$id)->toArray();
+
+        if (empty($currentIds)) {
+            return;
+        }
+
+        $allSelected = count(array_intersect($currentIds, $this->selected_participants)) === count($currentIds);
+
+        if ($allSelected) {
+            $this->selected_participants = array_values(array_diff($this->selected_participants, $currentIds));
+        } else {
+            $this->selected_participants = array_values(array_unique(array_merge($this->selected_participants, $currentIds)));
         }
     }
 

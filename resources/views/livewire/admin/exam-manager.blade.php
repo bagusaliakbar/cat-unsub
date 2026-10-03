@@ -519,23 +519,48 @@
                             </div>
                         </div>
 
-                        <!-- Wave Filter for Assignment -->
-                        <div class="mb-4 flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200">
-                            <div class="text-sm font-semibold text-gray-700">Filter Peserta:</div>
-                            <select wire:model.live="assigning_filter_wave" class="block w-full sm:w-64 rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-                                <option value="">Semua Gelombang</option>
-                                @foreach($waves as $w)
-                                    <option value="{{ $w->id }}">{{ $w->name }}</option>
-                                @endforeach
-                            </select>
+                        <!-- Wave Filter for Assignment & Action Toolbar -->
+                        <div class="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50 p-3 rounded-xl border border-gray-200">
+                            <div class="flex items-center space-x-2">
+                                <div class="text-sm font-semibold text-gray-700">Filter Peserta:</div>
+                                <select wire:model.live="assigning_filter_wave" class="block w-full sm:w-64 rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
+                                    <option value="">Semua Gelombang</option>
+                                    @foreach($waves as $w)
+                                        <option value="{{ $w->id }}">{{ $w->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="flex items-center space-x-2.5">
+                                <span class="text-xs font-medium text-gray-600 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 shadow-sm">
+                                    Terpilih: <strong class="text-blue-600 font-bold">{{ count($selected_participants) }}</strong> peserta
+                                </span>
+                                <button type="button" 
+                                        wire:click="toggleSelectAllParticipants" 
+                                        class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold transition shadow-sm {{ $is_all_participants_selected ? 'bg-red-50 text-red-700 hover:bg-red-100 border border-red-200' : 'bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200' }}">
+                                    @if($is_all_participants_selected)
+                                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        Batal Pilih Semua
+                                    @else
+                                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        Pilih Semua ({{ count($all_participants) }})
+                                    @endif
+                                </button>
+                            </div>
                         </div>
 
                         <div class="border rounded-lg border-gray-200 overflow-hidden shadow-inner bg-gray-50 max-h-[400px] overflow-y-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-100 sticky top-0 z-10 shadow-sm">
                                     <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12 text-center">
-                                            Pilih
+                                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-20">
+                                            <label class="inline-flex items-center justify-center space-x-1.5 cursor-pointer" title="{{ $is_all_participants_selected ? 'Batal pilih semua' : 'Pilih semua peserta' }}">
+                                                <input type="checkbox" 
+                                                       wire:click="toggleSelectAllParticipants" 
+                                                       {{ $is_all_participants_selected ? 'checked' : '' }} 
+                                                       class="focus:ring-blue-500 h-5 w-5 text-blue-600 border-gray-300 rounded shadow-sm cursor-pointer">
+                                                <span class="text-xs font-bold text-gray-600 select-none">PILIH</span>
+                                            </label>
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Nama Peserta
