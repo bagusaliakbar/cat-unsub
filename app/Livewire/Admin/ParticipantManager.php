@@ -252,7 +252,9 @@ class ParticipantManager extends Component
 
             $msg = "Berhasil mengimpor {$import->importedCount} data peserta.";
             if ($import->skippedCount > 0) {
-                $msg .= " ({$import->skippedCount} baris dilewati karena NIK/Email/ID sudah terdaftar).";
+                $previewSkips = implode('; ', array_slice($import->messages, 0, 3));
+                $more = count($import->messages) > 3 ? ' dan ' . (count($import->messages) - 3) . ' lainnya.' : '.';
+                $msg .= " ({$import->skippedCount} baris dilewati: {$previewSkips}{$more})";
             }
 
             session()->flash('message', $msg);

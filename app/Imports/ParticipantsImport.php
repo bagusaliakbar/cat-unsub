@@ -24,29 +24,38 @@ class ParticipantsImport implements ToCollection, WithHeadingRow
         foreach ($rows as $row) {
             $rowIndex++;
 
-            // Extract Name
-            $name = trim($row['nama_lengkap'] ?? $row['nama'] ?? $row['name'] ?? '');
+            // Extract Name (supports common variations)
+            $name = trim(
+                $row['nama_lengkap'] ?? 
+                $row['nama_peserta'] ?? 
+                $row['nama'] ?? 
+                $row['name'] ?? 
+                $row['peserta'] ?? 
+                $row['fullname'] ?? 
+                $row['full_name'] ?? 
+                $row['nama_siswa'] ?? ''
+            );
             if (empty($name)) {
                 continue; // Skip empty row
             }
 
             // Extract NIK
-            $rawNik = trim($row['nik'] ?? '');
+            $rawNik = trim($row['nik'] ?? $row['no_ktp'] ?? $row['nomor_ktp'] ?? $row['no_identitas'] ?? '');
             $nik = ltrim($rawNik, "'");
             $nik = !empty($nik) ? $nik : null;
 
             // Extract Email
-            $email = trim($row['email'] ?? '');
+            $email = trim($row['email'] ?? $row['e_mail'] ?? $row['surel'] ?? '');
             $email = !empty($email) ? strtolower($email) : null;
 
             // Extract Participant Number
-            $participantNumber = trim($row['id_peserta'] ?? $row['nomor_peserta'] ?? $row['participant_number'] ?? '');
+            $participantNumber = trim($row['id_peserta'] ?? $row['nomor_peserta'] ?? $row['no_peserta'] ?? $row['participant_number'] ?? $row['nopes'] ?? '');
             $participantNumber = !empty($participantNumber) ? $participantNumber : null;
 
             // Validate duplicate NIK
             if ($nik && User::where('nik', $nik)->exists()) {
                 $this->skippedCount++;
-                $this->messages[] = "Baris {$rowIndex}: NIK '{$nik}' sudah digunakan peserta lain (dilewati).";
+                $this->messages[] = "Baris {$rowIndex} ({$name}): NIK '{$nik}' sudah terdaftar";
                 continue;
             }
 
@@ -56,7 +65,7 @@ class ParticipantsImport implements ToCollection, WithHeadingRow
                     $email = null;
                 } elseif (User::where('email', $email)->exists()) {
                     $this->skippedCount++;
-                    $this->messages[] = "Baris {$rowIndex}: Email '{$email}' sudah digunakan peserta lain (dilewati).";
+                    $this->messages[] = "Baris {$rowIndex} ({$name}): Email '{$email}' sudah terdaftar";
                     continue;
                 }
             }
@@ -64,13 +73,15 @@ class ParticipantsImport implements ToCollection, WithHeadingRow
             // Validate duplicate Participant Number
             if ($participantNumber && User::where('participant_number', $participantNumber)->exists()) {
                 $this->skippedCount++;
-                $this->messages[] = "Baris {$rowIndex}: ID Peserta '{$participantNumber}' sudah ada (dilewati).";
+                $this->messages[] = "Baris {$rowIndex} ({$name}): ID Peserta '{$participantNumber}' sudah terdaftar";
                 continue;
             }
 
-            // Fallback unique participant number if neither NIK, Email, nor ID was specified
-            if (empty($nik) && empty($email) && empty($participantNumber)) {
-                $participantNumber = 'PST-' . date('ymd') . rand(100, 999);
+            // Always ensure a unique participant number is assigned
+            if (empty($participantNumber)) {
+                do {
+                    $participantNumber = 'PST-' . date('ymd') . rand(1000, 9999);
+                } while (User::where('participant_number', $participantNumber)->exists());
             }
 
             // Password
