@@ -41,7 +41,10 @@ class ParticipantManager extends Component
             $query->where(function ($q) {
                 $q->where('name', 'like', '%' . $this->search . '%')
                   ->orWhere('nik', 'like', '%' . $this->search . '%')
-                  ->orWhere('participant_number', 'like', '%' . $this->search . '%');
+                  ->orWhere('participant_number', 'like', '%' . $this->search . '%')
+                  ->orWhere('institution', 'like', '%' . $this->search . '%')
+                  ->orWhere('birth_place', 'like', '%' . $this->search . '%')
+                  ->orWhere('address', 'like', '%' . $this->search . '%');
             });
         }
 

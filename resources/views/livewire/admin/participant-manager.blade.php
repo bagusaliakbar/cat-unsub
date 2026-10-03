@@ -96,7 +96,8 @@
                     <tr>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nama Peserta</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">ID / NIK</th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Instansi</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Instansi & Pendidikan</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Alamat</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Gelombang</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Kontak</th>
                         <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider w-24">Aksi</th>
@@ -111,23 +112,51 @@
                                         @if($participant->profile_photo_path)
                                             <img class="h-10 w-10 rounded-full object-cover border border-gray-200" src="{{ $participant->profile_photo_url }}" alt="{{ $participant->name }}">
                                         @else
-                                            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-lg">
+                                            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-base">
                                                 {{ strtoupper(substr($participant->name, 0, 1)) }}
                                             </div>
                                         @endif
                                     </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-bold text-gray-900">{{ $participant->name }}</div>
-                                        <div class="text-xs text-gray-500 font-medium">Bergabung {{ $participant->created_at->format('d M Y') }}</div>
+                                    <div class="ml-3.5">
+                                        <div class="text-sm font-bold text-gray-900 tracking-tight">{{ $participant->name }}</div>
+                                        @if($participant->birth_place || $participant->birth_date)
+                                            <div class="text-xs text-gray-500 flex items-center mt-0.5">
+                                                <svg class="w-3.5 h-3.5 mr-1 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                                <span>
+                                                    {{ $participant->birth_place ? $participant->birth_place . ($participant->birth_date ? ', ' : '') : '' }}
+                                                    {{ $participant->birth_date ? $participant->birth_date->format('d M Y') : '' }}
+                                                </span>
+                                            </div>
+                                        @else
+                                            <div class="text-xs text-gray-400 mt-0.5">Bergabung {{ $participant->created_at->format('d M Y') }}</div>
+                                        @endif
                                     </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-bold text-gray-900">{{ $participant->participant_number ?: '-' }}</div>
-                                <div class="text-xs text-gray-500 font-mono">{{ $participant->nik ? 'NIK: ' . $participant->nik : 'NIK: -' }}</div>
+                                <div class="text-sm font-bold text-gray-900 font-mono">{{ $participant->participant_number ?: '-' }}</div>
+                                <div class="text-xs text-gray-500 font-mono mt-0.5">
+                                    {{ $participant->nik ? 'NIK: ' . $participant->nik : 'NIK: -' }}
+                                </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ $participant->institution ?: '-' }}</div>
+                                <div class="text-sm font-semibold text-gray-900">{{ $participant->institution ?: '-' }}</div>
+                                @if($participant->latest_education)
+                                    <div class="mt-1">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                                            {{ $participant->latest_education }}
+                                        </span>
+                                    </div>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4">
+                                @if($participant->address)
+                                    <div class="text-xs text-gray-600 max-w-[200px] line-clamp-2 leading-relaxed" title="{{ $participant->address }}">
+                                        {{ $participant->address }}
+                                    </div>
+                                @else
+                                    <span class="text-gray-400 text-xs">-</span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if($participant->wave)
@@ -139,7 +168,23 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ $participant->email ?: '-' }}</div>
+                                <div class="space-y-1">
+                                    @if($participant->email)
+                                        <div class="text-xs text-gray-700 flex items-center font-medium">
+                                            <svg class="w-3.5 h-3.5 mr-1.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                            <span>{{ $participant->email }}</span>
+                                        </div>
+                                    @endif
+                                    @if($participant->phone)
+                                        <div class="text-xs text-gray-600 flex items-center">
+                                            <svg class="w-3.5 h-3.5 mr-1.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                            <span>{{ $participant->phone }}</span>
+                                        </div>
+                                    @endif
+                                    @if(!$participant->email && !$participant->phone)
+                                        <span class="text-gray-400 text-xs">-</span>
+                                    @endif
+                                </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex justify-end space-x-2">
@@ -160,7 +205,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-10 text-center text-gray-500">
+                            <td colspan="7" class="px-6 py-10 text-center text-gray-500">
                                 <div class="flex flex-col items-center">
                                     <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                                     <p class="text-base font-medium">Tidak ada data peserta ditemukan.</p>
