@@ -42,36 +42,43 @@ class ParticipantsImport implements ToCollection, WithHeadingRow
             // Extract NIK
             $rawNik = trim($row['nik'] ?? $row['no_ktp'] ?? $row['nomor_ktp'] ?? $row['no_identitas'] ?? '');
             $nik = ltrim($rawNik, "'");
-            $nik = !empty($nik) ? $nik : null;
+            $nik = trim($nik);
+            // Convert dashes, placeholders, and empty strings to NULL
+            if (in_array(strtolower($nik), ['', '-', '--', '---', '0', 'null', 'n/a', 'none', 'tidak ada', 'tdk ada', 'kosong'], true)) {
+                $nik = null;
+            }
 
             // Extract Email
-            $email = trim($row['email'] ?? $row['e_mail'] ?? $row['surel'] ?? '');
-            $email = !empty($email) ? strtolower($email) : null;
+            $rawEmail = trim($row['email'] ?? $row['e_mail'] ?? $row['surel'] ?? '');
+            $email = strtolower($rawEmail);
+            if (in_array($email, ['', '-', '--', '---', 'null', 'n/a', 'none', 'tidak ada', 'tdk ada', 'kosong'], true) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $email = null;
+            }
 
             // Extract Participant Number
-            $participantNumber = trim($row['id_peserta'] ?? $row['nomor_peserta'] ?? $row['no_peserta'] ?? $row['participant_number'] ?? $row['nopes'] ?? '');
-            $participantNumber = !empty($participantNumber) ? $participantNumber : null;
+            $rawId = trim($row['id_peserta'] ?? $row['nomor_peserta'] ?? $row['no_peserta'] ?? $row['participant_number'] ?? $row['nopes'] ?? '');
+            if (in_array(strtolower($rawId), ['', '-', '--', '---', '0', 'null', 'n/a', 'none'], true)) {
+                $participantNumber = null;
+            } else {
+                $participantNumber = $rawId;
+            }
 
-            // Validate duplicate NIK
-            if ($nik && User::where('nik', $nik)->exists()) {
+            // Validate duplicate NIK (only for real, non-null NIK)
+            if ($nik !== null && User::where('nik', $nik)->exists()) {
                 $this->skippedCount++;
                 $this->messages[] = "Baris {$rowIndex} ({$name}): NIK '{$nik}' sudah terdaftar";
                 continue;
             }
 
-            // Validate duplicate Email
-            if ($email) {
-                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $email = null;
-                } elseif (User::where('email', $email)->exists()) {
-                    $this->skippedCount++;
-                    $this->messages[] = "Baris {$rowIndex} ({$name}): Email '{$email}' sudah terdaftar";
-                    continue;
-                }
+            // Validate duplicate Email (only for real, non-null Email)
+            if ($email !== null && User::where('email', $email)->exists()) {
+                $this->skippedCount++;
+                $this->messages[] = "Baris {$rowIndex} ({$name}): Email '{$email}' sudah terdaftar";
+                continue;
             }
 
-            // Validate duplicate Participant Number
-            if ($participantNumber && User::where('participant_number', $participantNumber)->exists()) {
+            // Validate duplicate Participant Number (only if provided in file)
+            if ($participantNumber !== null && User::where('participant_number', $participantNumber)->exists()) {
                 $this->skippedCount++;
                 $this->messages[] = "Baris {$rowIndex} ({$name}): ID Peserta '{$participantNumber}' sudah terdaftar";
                 continue;
