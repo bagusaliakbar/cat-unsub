@@ -374,17 +374,17 @@
 
                     <div class="p-6 space-y-5">
                         <!-- Step 1: Download Template Box -->
-                        <div class="bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+                        <div class="rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs border" style="background-color: #eff6ff !important; border-color: #bfdbfe !important;">
                             <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-sm">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm" style="background-color: #2563eb !important; color: #ffffff !important;">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-bold text-gray-900">Belum punya format file?</h4>
-                                    <p class="text-xs text-gray-600">Unduh contoh template Excel yang siap diisi.</p>
+                                    <p class="text-xs text-gray-600 mt-0.5">Unduh contoh template Excel yang siap diisi.</p>
                                 </div>
                             </div>
-                            <button wire:click="downloadTemplate" type="button" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow transition transform hover:-translate-y-0.5 shrink-0">
+                            <button wire:click="downloadTemplate" type="button" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2.5 text-xs font-bold rounded-xl shadow-sm transition transform hover:-translate-y-0.5 shrink-0" style="background-color: #2563eb !important; color: #ffffff !important;">
                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                 Unduh Template
                             </button>
@@ -396,7 +396,7 @@
                             <div class="border-2 border-dashed border-gray-300 hover:border-blue-500 rounded-2xl p-6 text-center transition-colors bg-gray-50/60 cursor-pointer relative">
                                 <input type="file" wire:model="importFile" accept=".xlsx,.xls,.csv" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
                                 <div class="flex flex-col items-center justify-center space-y-2">
-                                    <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                                    <div class="w-12 h-12 rounded-full flex items-center justify-center shadow-xs" style="background-color: #dbeafe !important; color: #2563eb !important;">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
                                     </div>
                                     @if ($importFile)
@@ -431,15 +431,15 @@
                     </div>
 
                     <!-- Modal Footer -->
-                    <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex flex-row-reverse gap-3 rounded-b-2xl">
-                        <button wire:click="import" wire:loading.attr="disabled" type="button" class="w-full sm:w-auto inline-flex justify-center items-center rounded-xl px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm transition disabled:opacity-50">
+                    <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 rounded-b-2xl">
+                        <button wire:click="closeImportModal" type="button" class="w-full sm:w-auto inline-flex justify-center rounded-xl px-5 py-2.5 bg-white text-gray-700 font-medium text-sm border border-gray-300 hover:bg-gray-100 transition shadow-xs">
+                            Batal
+                        </button>
+                        <button wire:click="import" wire:loading.attr="disabled" type="button" class="w-full sm:w-auto inline-flex justify-center items-center rounded-xl px-5 py-2.5 text-white font-bold text-sm shadow-sm transition transform hover:-translate-y-0.5 disabled:opacity-50" style="background-color: #2563eb !important; color: #ffffff !important;">
                             <span wire:loading wire:target="import" class="inline-flex items-center mr-2">
                                 <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                             </span>
                             Mulai Import
-                        </button>
-                        <button wire:click="closeImportModal" type="button" class="w-full sm:w-auto inline-flex justify-center rounded-xl px-5 py-2.5 bg-white text-gray-700 font-medium text-sm border border-gray-300 hover:bg-gray-100 transition">
-                            Batal
                         </button>
                     </div>
                 </div>
