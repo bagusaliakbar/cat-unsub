@@ -44,6 +44,7 @@ class ExamManager extends Component
     public $selected_participants = [];
     public $assigning_filter_wave = '';
     public $assigning_filter_institution = '';
+    public $assigning_search = '';
 
     public function render()
     {
@@ -78,6 +79,14 @@ class ExamManager extends Component
 
         if ($this->assigning_filter_institution) {
             $participantQuery->where('institution', $this->assigning_filter_institution);
+        }
+
+        if ($this->assigning_search) {
+            $participantQuery->where(function ($q) {
+                $q->where('name', 'like', '%' . $this->assigning_search . '%')
+                  ->orWhere('nik', 'like', '%' . $this->assigning_search . '%')
+                  ->orWhere('participant_number', 'like', '%' . $this->assigning_search . '%');
+            });
         }
         
         $all_participants = $participantQuery->get();
@@ -241,6 +250,7 @@ class ExamManager extends Component
         $this->selected_participants = $exam->participants->pluck('id')->map(fn($id) => (string)$id)->toArray();
         $this->assigning_filter_wave = '';
         $this->assigning_filter_institution = '';
+        $this->assigning_search = '';
         $this->isAssignModalOpen = true;
     }
 
@@ -263,6 +273,13 @@ class ExamManager extends Component
         if ($this->assigning_filter_institution) {
             $participantQuery->where('institution', $this->assigning_filter_institution);
         }
+        if ($this->assigning_search) {
+            $participantQuery->where(function ($q) {
+                $q->where('name', 'like', '%' . $this->assigning_search . '%')
+                  ->orWhere('nik', 'like', '%' . $this->assigning_search . '%')
+                  ->orWhere('participant_number', 'like', '%' . $this->assigning_search . '%');
+            });
+        }
         $currentIds = $participantQuery->pluck('id')->map(fn($id) => (string)$id)->toArray();
 
         if (empty($currentIds)) {
@@ -278,6 +295,13 @@ class ExamManager extends Component
         }
     }
 
+    public function resetAssigningFilters()
+    {
+        $this->assigning_filter_wave = '';
+        $this->assigning_filter_institution = '';
+        $this->assigning_search = '';
+    }
+
     public function closeAssignModal()
     {
         $this->isAssignModalOpen = false;
@@ -285,6 +309,7 @@ class ExamManager extends Component
         $this->selected_participants = [];
         $this->assigning_filter_wave = '';
         $this->assigning_filter_institution = '';
+        $this->assigning_search = '';
     }
 
     public function syncParticipants()
