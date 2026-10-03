@@ -116,10 +116,15 @@ class ParticipantManager extends Component
 
         $this->validate($rules);
 
+        $participantNumber = $this->participant_number ?: null;
+        if (!$this->user_id && empty($this->nik) && empty($this->email) && empty($participantNumber)) {
+            $participantNumber = 'PST-' . date('ymd') . rand(100, 999);
+        }
+
         $data = [
             'name' => $this->name,
             'nik' => $this->nik ?: null,
-            'participant_number' => $this->participant_number ?: null,
+            'participant_number' => $participantNumber,
             'institution' => $this->institution ?: null,
             'wave_id' => $this->wave_id ?: null,
             'email' => $this->email ?: null,

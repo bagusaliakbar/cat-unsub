@@ -34,14 +34,14 @@ new #[Layout('layouts.guest')] class extends Component
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <form wire:submit="login" class="space-y-6">
-        <!-- Email Address -->
+        <!-- Email / NIK / ID Peserta -->
         <div>
-            <label for="email" class="block text-sm font-bold text-gray-700 mb-1.5">Alamat Email / NIK</label>
+            <label for="email" class="block text-sm font-bold text-gray-700 mb-1.5">Alamat Email / NIK / ID Peserta</label>
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                 </div>
-                <input wire:model="form.email" id="email" class="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 transition-colors shadow-sm sm:text-sm font-medium" type="email" name="email" required autofocus autocomplete="username" placeholder="Masukkan email Anda" />
+                <input wire:model="form.email" id="email" class="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:ring-blue-500 focus:border-blue-500 transition-colors shadow-sm sm:text-sm font-medium" type="text" name="email" required autofocus autocomplete="username" placeholder="Masukkan Email, NIK, atau ID Peserta" />
             </div>
             <x-input-error :messages="$errors->get('form.email')" class="mt-2 text-sm text-red-600" />
         </div>

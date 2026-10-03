@@ -116,7 +116,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-bold text-gray-900">{{ $participant->participant_number ?: '-' }}</div>
-                                <div class="text-xs text-gray-500 font-mono">{{ $participant->nik ?: 'NIK Kosong' }}</div>
+                                <div class="text-xs text-gray-500 font-mono">{{ $participant->nik ? 'NIK: ' . $participant->nik : 'NIK: -' }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-gray-900">{{ $participant->institution ?: '-' }}</div>
@@ -230,9 +230,9 @@
                             </div>
                             
                             <div>
-                                <label for="nik" class="block text-gray-700 text-sm font-semibold mb-2">NIK / Username <span class="text-red-500">*</span></label>
-                                <input type="text" id="nik" wire:model="nik" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-colors shadow-sm font-mono" placeholder="Masukkan NIK atau Username">
-                                <p class="text-xs text-gray-500 mt-1">Gunakan NIK ini sebagai username saat login.</p>
+                                <label for="nik" class="block text-gray-700 text-sm font-semibold mb-2">NIK / Username (Opsional)</label>
+                                <input type="text" id="nik" wire:model="nik" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-colors shadow-sm font-mono" placeholder="Masukkan NIK atau Username (Opsional)">
+                                <p class="text-xs text-gray-500 mt-1">Dapat dikosongkan jika peserta login menggunakan Email atau ID Peserta.</p>
                                 @error('nik') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>@enderror
                             </div>
 
