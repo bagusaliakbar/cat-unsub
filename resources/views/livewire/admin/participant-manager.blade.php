@@ -357,18 +357,18 @@
                 <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full border border-gray-100">
                     
                     <!-- Modal Header -->
-                    <div class="bg-gradient-to-r from-blue-700 to-indigo-700 px-6 py-5 text-white flex justify-between items-center">
+                    <div class="bg-gradient-to-r from-gray-50 to-white px-6 py-4 border-b border-gray-100 flex justify-between items-center">
                         <div class="flex items-center space-x-3">
-                            <div class="p-2 bg-white/10 rounded-xl">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center border shadow-xs" style="background-color: #eff6ff !important; color: #2563eb !important; border-color: #dbeafe !important;">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold leading-6">Import Data Peserta</h3>
-                                <p class="text-xs text-blue-100 mt-0.5">Unggah file Excel atau CSV untuk mendaftarkan peserta secara massal.</p>
+                                <h3 class="text-lg font-bold text-gray-800 leading-tight" id="modal-title">Import Data Peserta</h3>
+                                <p class="text-xs text-gray-500 mt-0.5">Unggah file Excel atau CSV untuk mendaftarkan peserta secara massal.</p>
                             </div>
                         </div>
-                        <button wire:click="closeImportModal" class="text-white/80 hover:text-white transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <button wire:click="closeImportModal" type="button" class="text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full p-1.5 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
                     </div>
 
