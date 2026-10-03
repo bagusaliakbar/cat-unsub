@@ -519,19 +519,31 @@
                             </div>
                         </div>
 
-                        <!-- Wave Filter for Assignment & Action Toolbar -->
-                        <div class="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50 p-3 rounded-xl border border-gray-200">
-                            <div class="flex items-center space-x-2">
-                                <div class="text-sm font-semibold text-gray-700">Filter Peserta:</div>
-                                <select wire:model.live="assigning_filter_wave" class="block w-full sm:w-64 rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-                                    <option value="">Semua Gelombang</option>
-                                    @foreach($waves as $w)
-                                        <option value="{{ $w->id }}">{{ $w->name }}</option>
-                                    @endforeach
-                                </select>
+                        <!-- Filter & Action Toolbar -->
+                        <div class="mb-4 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-gray-50 p-3.5 rounded-xl border border-gray-200">
+                            <div class="flex flex-wrap items-center gap-3">
+                                <div class="flex items-center space-x-2">
+                                    <label class="text-xs font-bold text-gray-600 uppercase tracking-wide">Gelombang:</label>
+                                    <select wire:model.live="assigning_filter_wave" class="rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-xs py-1.5 pl-3 pr-8 bg-white font-medium text-gray-700">
+                                        <option value="">Semua Gelombang</option>
+                                        @foreach($waves as $w)
+                                            <option value="{{ $w->id }}">{{ $w->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="flex items-center space-x-2">
+                                    <label class="text-xs font-bold text-gray-600 uppercase tracking-wide">Instansi:</label>
+                                    <select wire:model.live="assigning_filter_institution" class="rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-xs py-1.5 pl-3 pr-8 bg-white font-medium text-gray-700 max-w-[200px]">
+                                        <option value="">Semua Instansi</option>
+                                        @foreach($institutions as $inst)
+                                            <option value="{{ $inst }}">{{ $inst }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="flex items-center space-x-2.5">
+                            <div class="flex items-center space-x-2.5 shrink-0 self-end md:self-auto">
                                 <span class="text-xs font-medium text-gray-600 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200 shadow-sm">
                                     Terpilih: <strong class="text-blue-600 font-bold">{{ count($selected_participants) }}</strong> peserta
                                 </span>
@@ -598,7 +610,7 @@
                                     @empty
                                         <tr>
                                             <td colspan="3" class="px-6 py-12 text-center text-gray-500">
-                                                <p class="text-lg font-medium">Tidak ada peserta terdaftar</p>
+                                                <p class="text-sm font-medium">Tidak ada peserta yang cocok dengan filter yang dipilih.</p>
                                             </td>
                                         </tr>
                                     @endforelse

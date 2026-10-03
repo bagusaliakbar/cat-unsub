@@ -43,6 +43,7 @@ class ExamManager extends Component
     public $assigning_exam_title = '';
     public $selected_participants = [];
     public $assigning_filter_wave = '';
+    public $assigning_filter_institution = '';
 
     public function render()
     {
@@ -74,6 +75,10 @@ class ExamManager extends Component
         if ($this->assigning_filter_wave) {
             $participantQuery->where('wave_id', $this->assigning_filter_wave);
         }
+
+        if ($this->assigning_filter_institution) {
+            $participantQuery->where('institution', $this->assigning_filter_institution);
+        }
         
         $all_participants = $participantQuery->get();
         $current_participant_ids = $all_participants->pluck('id')->map(fn($id) => (string)$id)->toArray();
@@ -82,7 +87,14 @@ class ExamManager extends Component
         
         $waves = \App\Models\Wave::where('is_active', true)->get();
 
-        return view('livewire.admin.exam-manager', compact('exams', 'categories', 'bank_questions', 'total_points', 'all_participants', 'waves', 'is_all_participants_selected'))
+        $institutions = \App\Models\User::whereIn('role', ['peserta', 'participant'])
+            ->whereNotNull('institution')
+            ->where('institution', '!=', '')
+            ->distinct()
+            ->orderBy('institution')
+            ->pluck('institution');
+
+        return view('livewire.admin.exam-manager', compact('exams', 'categories', 'bank_questions', 'total_points', 'all_participants', 'waves', 'institutions', 'is_all_participants_selected'))
             ->layout('layouts.app'); // Assuming breeze layout
     }
 
@@ -227,6 +239,8 @@ class ExamManager extends Component
         $this->assigning_exam_id = $exam->id;
         $this->assigning_exam_title = $exam->title;
         $this->selected_participants = $exam->participants->pluck('id')->map(fn($id) => (string)$id)->toArray();
+        $this->assigning_filter_wave = '';
+        $this->assigning_filter_institution = '';
         $this->isAssignModalOpen = true;
     }
 
@@ -245,6 +259,9 @@ class ExamManager extends Component
         $participantQuery = \App\Models\User::whereIn('role', ['peserta', 'participant']);
         if ($this->assigning_filter_wave) {
             $participantQuery->where('wave_id', $this->assigning_filter_wave);
+        }
+        if ($this->assigning_filter_institution) {
+            $participantQuery->where('institution', $this->assigning_filter_institution);
         }
         $currentIds = $participantQuery->pluck('id')->map(fn($id) => (string)$id)->toArray();
 
@@ -266,6 +283,8 @@ class ExamManager extends Component
         $this->isAssignModalOpen = false;
         $this->assigning_exam_id = null;
         $this->selected_participants = [];
+        $this->assigning_filter_wave = '';
+        $this->assigning_filter_institution = '';
     }
 
     public function syncParticipants()
