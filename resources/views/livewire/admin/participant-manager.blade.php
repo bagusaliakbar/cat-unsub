@@ -24,16 +24,16 @@
             </h2>
             <p class="text-blue-100 opacity-90 text-sm">Kelola data peserta, NIK, dan akses login ke sistem CAT.</p>
         </div>
-        <div class="mt-4 md:mt-0 flex flex-wrap items-center gap-2.5">
-            <button wire:click="export" wire:loading.attr="disabled" class="bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-sm font-semibold py-2.5 px-4 rounded-full shadow-sm transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm disabled:opacity-50">
+        <div class="mt-4 md:mt-0 flex flex-wrap items-center gap-3 sm:gap-3.5">
+            <button wire:click="export" wire:loading.attr="disabled" class="bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2.5 px-4 rounded-full shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm disabled:opacity-50">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 Export Excel
             </button>
-            <button wire:click="openImportModal" class="bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-sm font-semibold py-2.5 px-4 rounded-full shadow-sm transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+            <button wire:click="openImportModal" class="bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2.5 px-4 rounded-full shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                 Import Excel
             </button>
-            <a href="{{ route('admin.participants.print_all', ['wave_id' => $filter_wave, 'search' => $search]) }}" target="_blank" class="bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-sm font-semibold py-2.5 px-4 rounded-full shadow-sm transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+            <a href="{{ route('admin.participants.print_all', ['wave_id' => $filter_wave, 'search' => $search]) }}" target="_blank" class="bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2.5 px-4 rounded-full shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                 Cetak Semua Kartu
             </a>
