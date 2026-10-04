@@ -207,6 +207,11 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
     Route::get('/participants/print-all', function (Illuminate\Http\Request $request) {
         $query = \App\Models\User::with('wave')->whereIn('role', ['peserta', 'participant']);
         
+        if ($request->has('ids') && !empty($request->ids)) {
+            $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
+            $query->whereIn('id', $ids);
+        }
+
         if ($request->has('wave_id') && $request->wave_id != '') {
             $query->where('wave_id', $request->wave_id);
         }
@@ -223,6 +228,73 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         $participants = $query->orderByRaw('CASE WHEN no_meja IS NULL OR no_meja = "" THEN 1 ELSE 0 END, CAST(no_meja AS UNSIGNED) ASC, no_meja ASC, name ASC')->get();
         return view('print.participant-cards-all', compact('participants'));
     })->name('participants.print_all');
+
+    Route::get('/participants/{participantId}/print-desk-number', function ($participantId, Illuminate\Http\Request $request) {
+        $participant = \App\Models\User::with(['wave', 'assignedExams'])->findOrFail($participantId);
+        $participants = collect([$participant]);
+        $forcedTheme = $request->query('theme', 'auto');
+        $lab = $request->query('lab');
+        $session = $request->query('session');
+        $time = $request->query('time');
+        return view('print.desk-numbers-all', compact('participants', 'forcedTheme', 'lab', 'session', 'time'));
+    })->name('participants.print_desk_number');
+
+    Route::get('/participants/print-desk-numbers', function (Illuminate\Http\Request $request) {
+        $query = \App\Models\User::with(['wave', 'assignedExams'])->whereIn('role', ['peserta', 'participant']);
+        
+        if ($request->has('ids') && !empty($request->ids)) {
+            $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
+            $query->whereIn('id', $ids);
+        }
+
+        if ($request->has('wave_id') && $request->wave_id != '') {
+            $query->where('wave_id', $request->wave_id);
+        }
+
+        if ($request->has('desa') && $request->desa != '') {
+            $query->where('desa', $request->desa);
+        }
+
+        if ($request->has('kecamatan') && $request->kecamatan != '') {
+            $query->where('kecamatan', $request->kecamatan);
+        }
+        
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('nik', 'like', '%' . $search . '%')
+                  ->orWhere('participant_number', 'like', '%' . $search . '%')
+                  ->orWhere('desa', 'like', '%' . $search . '%')
+                  ->orWhere('kecamatan', 'like', '%' . $search . '%')
+                  ->orWhere('no_meja', 'like', '%' . $search . '%');
+            });
+        }
+        
+        $participants = $query->orderByRaw('CASE WHEN no_meja IS NULL OR no_meja = "" THEN 1 ELSE 0 END, CAST(no_meja AS UNSIGNED) ASC, no_meja ASC, name ASC')->get();
+        $forcedTheme = $request->query('theme', 'auto');
+        $lab = $request->query('lab');
+        $session = $request->query('session');
+        $time = $request->query('time');
+        return view('print.desk-numbers-all', compact('participants', 'forcedTheme', 'lab', 'session', 'time'));
+    })->name('participants.print_all_desk_numbers');
+
+    Route::get('/exams/{examId}/print-desk-numbers', function ($examId, Illuminate\Http\Request $request) {
+        $exam = \App\Models\Exam::with('wave')->findOrFail($examId);
+        $query = $exam->participants()->with(['wave', 'assignedExams']);
+
+        if ($request->has('ids') && !empty($request->ids)) {
+            $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
+            $query->whereIn('users.id', $ids);
+        }
+
+        $participants = $query->orderByRaw('CASE WHEN no_meja IS NULL OR no_meja = "" THEN 1 ELSE 0 END, CAST(no_meja AS UNSIGNED) ASC, no_meja ASC, name ASC')->get();
+        $forcedTheme = $request->query('theme', 'auto');
+        $lab = $request->query('lab', $exam->location);
+        $session = $request->query('session');
+        $time = $request->query('time');
+        return view('print.desk-numbers-all', compact('participants', 'exam', 'forcedTheme', 'lab', 'session', 'time'));
+    })->name('exams.print_desk_numbers');
     Route::get('/waves', \App\Livewire\Admin\WaveManager::class)->name('waves');
     Route::get('/activity-log', \App\Livewire\Admin\ActivityLog::class)->name('activity-log');
     Route::get('/backup-restore', \App\Livewire\Admin\BackupManager::class)->name('backup');
