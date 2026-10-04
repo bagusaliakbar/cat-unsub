@@ -132,20 +132,22 @@
                 </div>
             </div>
 
-            <div class="flex flex-wrap items-center gap-2 shrink-0 self-end sm:self-center">
-                <a href="{{ route('admin.participants.print_all', ['ids' => implode(',', $selected_participants)]) }}" target="_blank" class="inline-flex items-center px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition transform hover:-translate-y-0.5">
-                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                    Cetak Kartu ({{ count($selected_participants) }})
+            <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0 self-end sm:self-center">
+                <a href="{{ route('admin.participants.print_all', ['ids' => implode(',', $selected_participants)]) }}" target="_blank" class="inline-flex items-center px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition transform hover:-translate-y-0.5 whitespace-nowrap">
+                    <svg class="w-4 h-4 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                    <span>Cetak Kartu</span>
+                    <span class="ml-1.5 px-2 py-0.5 rounded-full bg-white/25 text-white text-[11px] font-extrabold leading-none">{{ count($selected_participants) }}</span>
                 </a>
-                <a href="{{ route('admin.participants.print_all_desk_numbers', ['ids' => implode(',', $selected_participants)]) }}" target="_blank" class="inline-flex items-center px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 shadow-sm transition transform hover:-translate-y-0.5">
-                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                    Cetak Meja ({{ count($selected_participants) }})
+                <a href="{{ route('admin.participants.print_all_desk_numbers', ['ids' => implode(',', $selected_participants)]) }}" target="_blank" class="inline-flex items-center px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 shadow-sm transition transform hover:-translate-y-0.5 whitespace-nowrap">
+                    <svg class="w-4 h-4 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    <span>Cetak Meja</span>
+                    <span class="ml-1.5 px-2 py-0.5 rounded-full bg-white/25 text-white text-[11px] font-extrabold leading-none">{{ count($selected_participants) }}</span>
                 </a>
-                <button wire:click="openDeleteBatchModal" type="button" class="inline-flex items-center px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-red-600 hover:bg-red-700 shadow-sm transition transform hover:-translate-y-0.5 cursor-pointer">
-                    <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                    Hapus
+                <button wire:click="openDeleteBatchModal" type="button" class="inline-flex items-center px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-red-600 hover:bg-red-700 shadow-sm transition transform hover:-translate-y-0.5 cursor-pointer whitespace-nowrap">
+                    <svg class="w-4 h-4 mr-1.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    <span>Hapus</span>
                 </button>
-                <button wire:click="deselectAll" type="button" class="px-2.5 py-2 text-xs font-semibold text-gray-500 hover:text-gray-800 hover:bg-red-100/60 rounded-xl transition cursor-pointer">
+                <button wire:click="deselectAll" type="button" class="inline-flex items-center px-3.5 py-2.5 rounded-xl text-xs font-semibold text-gray-700 bg-white hover:bg-gray-100 border border-gray-300 shadow-xs transition cursor-pointer whitespace-nowrap">
                     Batal
                 </button>
             </div>
