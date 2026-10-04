@@ -169,14 +169,12 @@
     <!-- Modern Modal Form -->
     @if($isModalOpen)
         <div class="fixed z-[100] inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                
-                <!-- Backdrop -->
-                <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" aria-hidden="true" wire:click="closeModal"></div>
-                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <!-- Backdrop -->
+            <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" aria-hidden="true" wire:click="closeModal"></div>
 
+            <div class="flex min-h-full items-center justify-center p-4">
                 <!-- Modal Panel -->
-                <div class="relative inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-gray-100">
+                <div class="relative w-full max-w-2xl bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all my-8 border border-gray-100">
                     
                     <div class="bg-gradient-to-r from-gray-50 to-white px-6 py-4 border-b border-gray-100 flex justify-between items-center">
                         <h3 class="text-xl font-bold text-gray-800" id="modal-title">
@@ -376,10 +374,11 @@
     <!-- Question Selection Modal for Exam -->
     @if($isQuestionModalOpen)
         <div class="fixed z-[100] inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" aria-hidden="true" wire:click="closeQuestionModal"></div>
-                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                <div class="relative inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-6xl sm:w-full border border-gray-100">
+            <!-- Backdrop -->
+            <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" aria-hidden="true" wire:click="closeQuestionModal"></div>
+
+            <div class="flex min-h-full items-center justify-center p-4">
+                <div class="relative w-full max-w-6xl bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all my-8 border border-gray-100">
                     
                     <div class="bg-gradient-to-r from-blue-800 to-blue-600 px-6 py-4 border-b border-gray-100 flex justify-between items-center shrink-0">
                         <div class="text-white">
@@ -490,10 +489,11 @@
     <!-- Participant Assignment Modal -->
     @if($isAssignModalOpen)
         <div class="fixed z-[100] inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" aria-hidden="true" wire:click="closeAssignModal"></div>
-                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                <div class="relative inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-5xl sm:w-full border border-gray-100">
+            <!-- Backdrop -->
+            <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" aria-hidden="true" wire:click="closeAssignModal"></div>
+
+            <div class="flex min-h-full items-center justify-center p-4">
+                <div class="relative w-full max-w-5xl bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all my-8 border border-gray-100">
                     
                     <div class="bg-gradient-to-r from-blue-800 to-blue-600 px-6 py-4 border-b border-gray-100 flex justify-between items-center shrink-0">
                         <div class="text-white">
