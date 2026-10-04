@@ -46,96 +46,88 @@
 
     <!-- Toolbar Card -->
     <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-6">
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-            <!-- Search & Filters -->
-            <div class="flex flex-wrap items-center gap-3 flex-1">
-                <!-- Search Box -->
-                <div class="relative w-full sm:w-64 lg:w-72">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </div>
-                    <input wire:model.live.debounce.300ms="search" type="text" placeholder="Cari nama, NIK, desa, no. meja..." class="block w-full pl-9 pr-3 py-2 border border-gray-200 rounded-xl leading-5 bg-gray-50/50 hover:bg-white focus:bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition">
+        <div class="flex flex-wrap items-center gap-3">
+            <!-- Search Box -->
+            <div class="relative w-full sm:w-64 lg:w-72">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
-
-                <!-- Gelombang Filter -->
-                <div class="w-full sm:w-auto">
-                    <select wire:model.live="filter_wave" class="w-full sm:w-44 rounded-xl border border-gray-200 text-sm py-2 px-3 bg-gray-50/50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-gray-700 cursor-pointer">
-                        <option value="">Semua Gelombang</option>
-                        @foreach($waves as $w)
-                            <option value="{{ $w->id }}">{{ $w->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- Desa Filter -->
-                <div class="w-full sm:w-auto">
-                    <select wire:model.live="filter_desa" class="w-full sm:w-44 rounded-xl border border-gray-200 text-sm py-2 px-3 bg-gray-50/50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-gray-700 cursor-pointer">
-                        <option value="">Semua Desa</option>
-                        @foreach($desas as $d)
-                            <option value="{{ $d }}">{{ $d }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- Kecamatan Filter -->
-                <div class="w-full sm:w-auto">
-                    <select wire:model.live="filter_kecamatan" class="w-full sm:w-44 rounded-xl border border-gray-200 text-sm py-2 px-3 bg-gray-50/50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-gray-700 cursor-pointer">
-                        <option value="">Semua Kecamatan</option>
-                        @foreach($kecamatans as $k)
-                            <option value="{{ $k }}">{{ $k }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- Reset Filter Button -->
-                @if($search || $filter_wave || $filter_desa || $filter_kecamatan)
-                    <button wire:click="resetFilters" type="button" class="inline-flex items-center px-3 py-2 text-xs font-semibold text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer" title="Reset semua filter">
-                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                        Reset Filter
-                    </button>
-                @endif
+                <input wire:model.live.debounce.300ms="search" type="text" placeholder="Cari nama, NIK, desa, no. meja..." class="block w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl leading-5 bg-gray-50/50 hover:bg-white focus:bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition">
             </div>
 
-            <!-- Right: Bulk Actions Badge (when items are selected) -->
-            @if(count($selected_participants) > 0)
-                <div class="flex items-center space-x-2 shrink-0 bg-red-50 border border-red-200 px-3.5 py-1.5 rounded-xl shadow-xs self-start lg:self-center animate-fadeIn">
-                    <span class="text-xs font-bold text-red-700 flex items-center">
-                        <span class="w-2 h-2 rounded-full bg-red-500 mr-2 animate-pulse"></span>
-                        {{ count($selected_participants) }} Dipilih
-                    </span>
-                    <span class="text-red-200">|</span>
-                    <button wire:click="openDeleteBatchModal" type="button" class="text-xs font-bold text-red-600 hover:text-red-800 flex items-center transition">
-                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                        Hapus Massal
-                    </button>
-                    <span class="text-red-200">|</span>
-                    <button wire:click="deselectAll" type="button" class="text-xs text-gray-500 hover:text-gray-700 transition">
-                        Batal
-                    </button>
-                </div>
+            <!-- Gelombang Filter -->
+            <div class="w-full sm:w-auto">
+                <select wire:model.live="filter_wave" class="w-full sm:w-auto min-w-[175px] rounded-xl border border-gray-200 text-sm py-2 pl-3.5 pr-9 bg-gray-50/50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-gray-700 cursor-pointer">
+                    <option value="">Semua Gelombang</option>
+                    @foreach($waves as $w)
+                        <option value="{{ $w->id }}">{{ $w->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Desa Filter -->
+            <div class="w-full sm:w-auto">
+                <select wire:model.live="filter_desa" class="w-full sm:w-auto min-w-[160px] rounded-xl border border-gray-200 text-sm py-2 pl-3.5 pr-9 bg-gray-50/50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-gray-700 cursor-pointer">
+                    <option value="">Semua Desa</option>
+                    @foreach($desas as $d)
+                        <option value="{{ $d }}">{{ $d }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Kecamatan Filter -->
+            <div class="w-full sm:w-auto">
+                <select wire:model.live="filter_kecamatan" class="w-full sm:w-auto min-w-[180px] rounded-xl border border-gray-200 text-sm py-2 pl-3.5 pr-9 bg-gray-50/50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-gray-700 cursor-pointer">
+                    <option value="">Semua Kecamatan</option>
+                    @foreach($kecamatans as $k)
+                        <option value="{{ $k }}">{{ $k }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Reset Filter Button -->
+            @if($search || $filter_wave || $filter_desa || $filter_kecamatan)
+                <button wire:click="resetFilters" type="button" class="inline-flex items-center px-3 py-2 text-xs font-semibold text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer" title="Reset semua filter">
+                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    Reset Filter
+                </button>
             @endif
         </div>
     </div>
 
-    @if($isAllSelected && $participants->total() > $participants->count())
-        <div class="bg-blue-50 border border-blue-200 p-3.5 mb-6 rounded-2xl text-xs text-blue-900 flex flex-col sm:flex-row items-start sm:items-center justify-between shadow-xs gap-2">
-            <div class="flex items-center space-x-2">
-                <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                @if(count($selected_participants) === $participants->total())
-                    <span>Semua <strong>{{ $participants->total() }}</strong> peserta terpilih di seluruh halaman.</span>
+    <!-- Unified Bulk Actions Banner (When Participants Are Selected) -->
+    @if(count($selected_participants) > 0)
+        <div class="bg-red-50/90 border border-red-200 p-3.5 mb-6 rounded-2xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs animate-fadeIn">
+            <div class="flex flex-wrap items-center gap-2.5">
+                <span class="inline-flex items-center px-3 py-1 rounded-xl text-xs font-bold bg-red-100 text-red-800 border border-red-200">
+                    <span class="w-2 h-2 rounded-full bg-red-500 mr-2 animate-pulse"></span>
+                    {{ count($selected_participants) }} Dipilih
+                </span>
+                @if($isAllSelected && $participants->total() > $participants->count())
+                    @if(count($selected_participants) === $participants->total())
+                        <span class="text-red-950 font-medium">Semua <strong>{{ $participants->total() }}</strong> peserta terpilih di seluruh halaman.</span>
+                    @else
+                        <span class="text-red-900">
+                            Semua <strong>{{ $participants->count() }}</strong> peserta di halaman ini dipilih.
+                            <button wire:click="selectAllFiltered" type="button" class="text-blue-700 font-bold hover:underline ml-1 cursor-pointer">
+                                Pilih semua {{ $participants->total() }} peserta yang sesuai filter?
+                            </button>
+                        </span>
+                    @endif
                 @else
-                    <span>Semua <strong>{{ $participants->count() }}</strong> peserta di halaman ini dipilih. Ingin memilih semua <strong>{{ $participants->total() }}</strong> peserta yang sesuai filter?</span>
+                    <span class="text-gray-600 font-medium">Peserta terpilih siap diproses.</span>
                 @endif
             </div>
-            @if(count($selected_participants) < $participants->total())
-                <button wire:click="selectAllFiltered" type="button" class="text-xs font-bold text-blue-700 hover:text-blue-900 underline sm:ml-3 shrink-0">
-                    Pilih Semua {{ $participants->total() }} Peserta
+
+            <div class="flex items-center space-x-2 shrink-0">
+                <button wire:click="openDeleteBatchModal" type="button" class="inline-flex items-center px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-red-600 hover:bg-red-700 shadow-sm transition transform hover:-translate-y-0.5 cursor-pointer">
+                    <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    Hapus Massal
                 </button>
-            @else
-                <button wire:click="deselectAll" type="button" class="text-xs font-bold text-blue-700 hover:text-blue-900 underline sm:ml-3 shrink-0">
-                    Batalkan Pilihan
+                <button wire:click="deselectAll" type="button" class="px-3 py-1.5 text-xs font-semibold text-gray-500 hover:text-gray-800 hover:bg-red-100/60 rounded-xl transition cursor-pointer">
+                    Batal
                 </button>
-            @endif
+            </div>
         </div>
     @endif
 
