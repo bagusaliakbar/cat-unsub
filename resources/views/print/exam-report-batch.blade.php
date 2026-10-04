@@ -203,8 +203,8 @@
                                 $report->witness_3 ?? 'Dr. Moh. Asep Suharna, S.H., S.Pd., M.H.',
                                 $report->witness_4 ?? 'Dr. Hj. Silvy Sondari Ghadzali, S.Psi., M.M.',
                                 $report->witness_5 ?? 'Kasda, S.T., M.T.',
-                                $report->witness_6 ?? '',
-                                $report->witness_7 ?? '',
+                                $report->witness_6 ?: 'Dr. Bety Miliyawati, S.Pd., M.Pd.',
+                                $report->witness_7 ?: 'Dody Wahyudi Purnama, S.Pd., M.Pd.',
                             ];
                             $witnesses = array_filter($witnesses);
                         @endphp

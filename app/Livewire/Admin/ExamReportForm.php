@@ -28,8 +28,8 @@ class ExamReportForm extends Component
     public $witness_3 = 'Dr. Moh. Asep Suharna, S.H., S.Pd., M.H.';
     public $witness_4 = 'Dr. Hj. Silvy Sondari Ghadzali, S.Psi., M.M.';
     public $witness_5 = 'Kasda, S.T., M.T.';
-    public $witness_6 = '';
-    public $witness_7 = '';
+    public $witness_6 = 'Dr. Bety Miliyawati, S.Pd., M.Pd.';
+    public $witness_7 = 'Dody Wahyudi Purnama, S.Pd., M.Pd.';
 
     public function mount($examId)
     {
@@ -61,13 +61,13 @@ class ExamReportForm extends Component
             $this->reference_number = $report->reference_number ?? $this->reference_number;
             $this->exam_materials = $report->exam_materials ?? $this->exam_materials;
             $this->committee_name = $report->committee_name ?? $this->committee_name;
-            $this->witness_1 = $report->witness_1 ?? $this->witness_1;
-            $this->witness_2 = $report->witness_2 ?? $this->witness_2;
-            $this->witness_3 = $report->witness_3 ?? $this->witness_3;
-            $this->witness_4 = $report->witness_4 ?? $this->witness_4;
-            $this->witness_5 = $report->witness_5 ?? $this->witness_5;
-            $this->witness_6 = $report->witness_6 ?? $this->witness_6;
-            $this->witness_7 = $report->witness_7 ?? $this->witness_7;
+            $this->witness_1 = !empty($report->witness_1) ? $report->witness_1 : $this->witness_1;
+            $this->witness_2 = !empty($report->witness_2) ? $report->witness_2 : $this->witness_2;
+            $this->witness_3 = !empty($report->witness_3) ? $report->witness_3 : $this->witness_3;
+            $this->witness_4 = !empty($report->witness_4) ? $report->witness_4 : $this->witness_4;
+            $this->witness_5 = !empty($report->witness_5) ? $report->witness_5 : $this->witness_5;
+            $this->witness_6 = !empty($report->witness_6) ? $report->witness_6 : $this->witness_6;
+            $this->witness_7 = !empty($report->witness_7) ? $report->witness_7 : $this->witness_7;
         }
 
         if ($this->selected_institution === 'all' && count($this->institutions) > 1) {

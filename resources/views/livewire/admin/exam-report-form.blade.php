@@ -247,12 +247,12 @@
                         </div>
                         <div>
                             <label for="witness_6" class="block text-xs font-semibold text-gray-700 mb-1">Saksi 6</label>
-                            <input type="text" id="witness_6" wire:model="witness_6" class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-2.5 text-sm" placeholder="Nama saksi 6...">
+                            <input type="text" id="witness_6" wire:model="witness_6" class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-2.5 text-sm" placeholder="Dr. Bety Miliyawati, S.Pd., M.Pd.">
                             @error('witness_6') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label for="witness_7" class="block text-xs font-semibold text-gray-700 mb-1">Saksi 7</label>
-                            <input type="text" id="witness_7" wire:model="witness_7" class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-2.5 text-sm" placeholder="Nama saksi 7...">
+                            <input type="text" id="witness_7" wire:model="witness_7" class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-2.5 text-sm" placeholder="Dody Wahyudi Purnama, S.Pd., M.Pd.">
                             @error('witness_7') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                         </div>
                     </div>
