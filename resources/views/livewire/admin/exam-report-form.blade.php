@@ -125,57 +125,59 @@
                         @error('reference_number') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <label for="village" class="block text-sm font-semibold text-gray-700">
-                                    Desa / Lingkup <span class="text-red-500">*</span>
-                                </label>
-                                @if($selected_institution && $selected_institution !== 'all' && $selected_institution !== 'all_separated')
-                                    <span class="text-[11px] font-bold text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded-md border border-blue-200">
-                                        Khusus {{ $selected_institution }}
-                                    </span>
-                                @elseif($selected_institution === 'all_separated')
-                                    <span class="text-[11px] font-bold text-indigo-700 bg-indigo-100/80 px-2 py-0.5 rounded-md border border-indigo-200">
-                                        Per Lembar Masing-Masing
-                                    </span>
-                                @else
-                                    <span class="text-[11px] font-bold text-gray-600 bg-gray-200 px-2 py-0.5 rounded-md">
-                                        Gabungan ({{ count($institutions) }} Desa)
-                                    </span>
-                                @endif
+                    @if($selected_institution === 'all')
+                        <!-- Mode Semua Instansi (Gabungan) -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Desa / Instansi</label>
+                                <div class="w-full bg-gray-100 border border-gray-200 text-gray-700 text-sm font-medium rounded-xl p-3 flex items-center justify-between">
+                                    <span>Semua Desa (Gabungan)</span>
+                                    <span class="text-xs bg-white text-gray-700 font-bold px-2 py-0.5 rounded border border-gray-200">{{ count($institutions) }} Desa</span>
+                                </div>
                             </div>
-                            <input type="text" id="village" wire:model="village" 
-                                @if($selected_institution === 'all_separated') readonly @endif
-                                class="w-full bg-white border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-3 {{ $selected_institution === 'all_separated' ? 'text-gray-500 cursor-not-allowed bg-gray-100' : '' }}" 
-                                placeholder="Masukkan desa atau lingkup...">
-                            <p class="text-xs text-gray-500 mt-1">
-                                @if($selected_institution === 'all')
-                                    *Untuk dokumen gabungan, nama desa tiap peserta otomatis tercantum di tabel rekap nilai.
-                                @elseif($selected_institution === 'all_separated')
-                                    *Nama desa akan terisi otomatis untuk tiap-tiap desa pada lembar cetak masing-masing.
-                                @else
-                                    *Tersinkronisasi otomatis dengan pilihan cetak Desa {{ $selected_institution }}.
-                                @endif
-                            </p>
-                            @error('village') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
-                        </div>
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <label for="district" class="block text-sm font-semibold text-gray-700">
-                                    Kecamatan
+                            <div>
+                                <label for="district" class="block text-sm font-semibold text-gray-700 mb-1.5">
+                                    Kecamatan <span class="text-xs font-normal text-gray-400">(Opsional)</span>
                                 </label>
-                                <span class="text-[11px] text-gray-400">
-                                    (Opsional jika lintas kecamatan)
-                                </span>
+                                <input type="text" id="district" wire:model="district" class="w-full bg-white border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-3 text-sm" placeholder="Kosongkan jika beda kecamatan">
                             </div>
-                            <input type="text" id="district" wire:model="district" class="w-full bg-white border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-3" placeholder="Contoh: Cibogo (atau kosongkan)">
-                            <p class="text-xs text-gray-500 mt-1">
-                                *Kosongkan jika peserta sesi ini berasal dari kecamatan yang berbeda.
-                            </p>
-                            @error('district') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                         </div>
-                    </div>
+                    @elseif($selected_institution === 'all_separated')
+                        <!-- Mode Cetak Semua Terpisah Per Lembar -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Desa / Instansi</label>
+                                <div class="w-full bg-indigo-50 border border-indigo-200 text-indigo-900 text-sm font-medium rounded-xl p-3 flex items-center justify-between">
+                                    <span>Otomatis Per Desa</span>
+                                    <span class="text-xs bg-white text-indigo-700 font-bold px-2 py-0.5 rounded border border-indigo-200">{{ count($institutions) }} Lembar</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="district" class="block text-sm font-semibold text-gray-700 mb-1.5">
+                                    Kecamatan <span class="text-xs font-normal text-gray-400">(Opsional)</span>
+                                </label>
+                                <input type="text" id="district" wire:model="district" class="w-full bg-white border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-3 text-sm" placeholder="Kosongkan jika beda kecamatan">
+                            </div>
+                        </div>
+                    @else
+                        <!-- Mode Khusus 1 Desa -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="village" class="block text-sm font-semibold text-gray-700 mb-1.5">
+                                    Desa <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" id="village" wire:model="village" class="w-full bg-white border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-3 text-sm" placeholder="Nama desa...">
+                                @error('village') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                            </div>
+                            <div>
+                                <label for="district" class="block text-sm font-semibold text-gray-700 mb-1.5">
+                                    Kecamatan <span class="text-xs font-normal text-gray-400">(Opsional)</span>
+                                </label>
+                                <input type="text" id="district" wire:model="district" class="w-full bg-white border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-3 text-sm" placeholder="Nama kecamatan...">
+                                @error('district') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+                    @endif
 
                     <div>
                         <label for="exam_materials" class="block text-sm font-semibold text-gray-700 mb-2">Materi Ujian</label>

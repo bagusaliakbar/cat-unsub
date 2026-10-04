@@ -116,14 +116,21 @@ class ExamReportForm extends Component
 
     public function saveAndPrint()
     {
+        $isSpecific = $this->selected_institution && $this->selected_institution !== 'all' && $this->selected_institution !== 'all_separated';
+
         $this->validate([
             'supervisor_name' => 'required|string|max:255',
-            'village' => 'required|string|max:255',
+            'village' => $isSpecific ? 'required|string|max:255' : 'nullable|string|max:255',
             'district' => 'nullable|string|max:255',
             'reference_number' => 'nullable|string|max:255',
             'exam_materials' => 'required|string|max:500',
             'committee_name' => 'required|string|max:255',
         ]);
+
+        $villageValue = $this->village;
+        if (!$isSpecific) {
+            $villageValue = ($this->selected_institution === 'all_separated') ? 'Otomatis' : 'Gabungan';
+        }
 
         $overallTotal = $this->exam->participants()->count();
         $overallPresent = \App\Models\ExamSession::where('exam_id', $this->exam->id)->whereNotNull('started_at')->count();
@@ -137,7 +144,7 @@ class ExamReportForm extends Component
                 'present_count' => $overallPresent,
                 'absent_count' => $overallAbsent,
                 'notes' => $this->notes,
-                'village' => $this->village,
+                'village' => $villageValue,
                 'district' => $this->district,
                 'reference_number' => $this->reference_number,
                 'exam_materials' => $this->exam_materials,
