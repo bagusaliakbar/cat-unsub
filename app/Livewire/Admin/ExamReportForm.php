@@ -70,7 +70,11 @@ class ExamReportForm extends Component
             $this->witness_7 = $report->witness_7 ?? $this->witness_7;
         }
 
-        if (empty($this->village) && count($this->institutions) === 1) {
+        if ($this->selected_institution === 'all' && count($this->institutions) > 1) {
+            $this->village = 'Gabungan (' . count($this->institutions) . ' Desa)';
+        } elseif ($this->selected_institution && $this->selected_institution !== 'all' && $this->selected_institution !== 'all_separated') {
+            $this->village = $this->selected_institution;
+        } elseif (empty($this->village) && count($this->institutions) === 1) {
             $this->village = $this->institutions[0];
         }
     }
@@ -78,10 +82,17 @@ class ExamReportForm extends Component
     public function updatedSelectedInstitution($value)
     {
         $this->recalculateAttendance();
+
         if ($value && $value !== 'all' && $value !== 'all_separated') {
-            if (empty($this->village) || in_array($this->village, $this->institutions)) {
-                $this->village = $value;
+            $this->village = $value;
+        } elseif ($value === 'all') {
+            if (count($this->institutions) > 1) {
+                $this->village = 'Gabungan (' . count($this->institutions) . ' Desa)';
+            } elseif (count($this->institutions) === 1) {
+                $this->village = $this->institutions[0];
             }
+        } elseif ($value === 'all_separated') {
+            $this->village = 'Otomatis Sesuai Masing-Masing Desa';
         }
     }
 
@@ -108,7 +119,7 @@ class ExamReportForm extends Component
         $this->validate([
             'supervisor_name' => 'required|string|max:255',
             'village' => 'required|string|max:255',
-            'district' => 'required|string|max:255',
+            'district' => 'nullable|string|max:255',
             'reference_number' => 'nullable|string|max:255',
             'exam_materials' => 'required|string|max:500',
             'committee_name' => 'required|string|max:255',

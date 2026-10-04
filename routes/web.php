@@ -143,7 +143,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         $totalRegistered = $exam->participants()->count();
         $presentCount = $sessions->count();
         $absentCount = max(0, $totalRegistered - $presentCount);
-        $targetVillage = $report->village;
+        $targetVillage = 'all';
 
         return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage'));
     })->name('exams.report.print');
@@ -187,7 +187,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
             $participantsQuery->where('institution', $institution);
         }
         $participants = $participantsQuery->get();
-        $targetVillage = ($institution && $institution !== 'all') ? $institution : ($report->village ?? '');
+        $targetVillage = ($institution && $institution !== 'all') ? $institution : 'all';
 
         return view('print.attendance', compact('exam', 'report', 'participants', 'institution', 'institutions', 'targetVillage'));
     })->name('exams.attendance');

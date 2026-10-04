@@ -96,14 +96,29 @@
     <!-- Title -->
     <div class="text-center mb-6">
         <h3 class="text-lg font-bold uppercase">BERITA ACARA HASIL SELEKSI TERTULIS BERBASIS CAT</h3>
-        <h3 class="text-lg font-bold uppercase">CALON KEPALA DESA ANTAR WAKTU (PAW) DESA {{ strtoupper($targetVillage ?? ($report->village ?? '[NAMA DESA]')) }}</h3>
-        <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district ?? '[NAMA KECAMATAN]') }} KABUPATEN SUBANG</h3>
+        @if(!empty($targetVillage) && $targetVillage !== 'all' && !str_starts_with(strtolower($targetVillage), 'gabungan'))
+            <h3 class="text-lg font-bold uppercase">CALON KEPALA DESA ANTAR WAKTU (PAW) DESA {{ strtoupper($targetVillage) }}</h3>
+        @else
+            <h3 class="text-lg font-bold uppercase">CALON KEPALA DESA ANTAR WAKTU (PAW)</h3>
+        @endif
+        @if(!empty($report->district))
+            <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }} KABUPATEN SUBANG</h3>
+        @else
+            <h3 class="text-lg font-bold uppercase">KABUPATEN SUBANG</h3>
+        @endif
         <p class="mt-1 font-bold">Nomor: {{ $report->reference_number ?? '[Nomor Surat]' }}</p>
     </div>
 
     <!-- Content -->
     <div class="text-justify mb-4">
-        <p class="indent-10">Pada hari ini, <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l') }}</strong> tanggal <strong>{{ \Carbon\Carbon::now()->translatedFormat('d') }}</strong> bulan <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('F') }}</strong> tahun <strong>{{ ucwords(\NumberFormatter::create('id_ID', \NumberFormatter::SPELLOUT)->format(\Carbon\Carbon::now()->year)) }}</strong>, bertempat di Laboratorium Komputer Universitas Subang, telah dilaksanakan Ujian Penyaringan Seleksi Tertulis berbasis Computer Assisted Test (CAT) bagi Calon Kepala Desa Antar Waktu (PAW) Desa {{ ucwords(strtolower($targetVillage ?? ($report->village ?? '[Nama Desa]'))) }} Kecamatan {{ ucwords(strtolower($report->district ?? '[Nama Kecamatan]')) }} Kabupaten Subang oleh Lembaga Penelitian dan Pengabdian kepada Masyarakat (LPPM) Universitas Subang.</p>
+        <p class="indent-10">Pada hari ini, <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l') }}</strong> tanggal <strong>{{ \Carbon\Carbon::now()->translatedFormat('d') }}</strong> bulan <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('F') }}</strong> tahun <strong>{{ ucwords(\NumberFormatter::create('id_ID', \NumberFormatter::SPELLOUT)->format(\Carbon\Carbon::now()->year)) }}</strong>, bertempat di Laboratorium Komputer Universitas Subang, telah dilaksanakan Ujian Penyaringan Seleksi Tertulis berbasis Computer Assisted Test (CAT) bagi Calon Kepala Desa Antar Waktu (PAW)
+        @if(!empty($targetVillage) && $targetVillage !== 'all' && !str_starts_with(strtolower($targetVillage), 'gabungan'))
+            Desa {{ ucwords(strtolower($targetVillage)) }}
+        @elseif(!empty($institutions) && count($institutions) > 1)
+            pada {{ count($institutions) }} Desa ({{ implode(', ', array_map(fn($v) => ucwords(strtolower($v)), $institutions)) }})
+        @endif
+        @if(!empty($report->district)) Kecamatan {{ ucwords(strtolower($report->district)) }} @endif
+        Kabupaten Subang oleh Lembaga Penelitian dan Pengabdian kepada Masyarakat (LPPM) Universitas Subang.</p>
     </div>
 
     <table class="w-full mb-4 text-left align-top">
