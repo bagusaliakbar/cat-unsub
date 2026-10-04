@@ -97,34 +97,34 @@
 
     <!-- Unified Bulk Actions Banner (When Participants Are Selected) -->
     @if(count($selected_participants) > 0)
-        <div class="bg-red-50/90 border border-red-200 p-3.5 mb-6 rounded-2xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs animate-fadeIn">
-            <div class="flex flex-wrap items-center gap-2.5">
-                <span class="inline-flex items-center px-3 py-1 rounded-xl text-xs font-bold bg-red-100 text-red-800 border border-red-200">
+        <div class="bg-red-50/70 border border-red-200/80 px-5 py-3 mb-6 rounded-2xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs animate-fadeIn">
+            <div class="flex flex-wrap items-center gap-3">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white text-red-700 border border-red-200 shadow-xs shrink-0">
                     <span class="w-2 h-2 rounded-full bg-red-500 mr-2 animate-pulse"></span>
                     {{ count($selected_participants) }} Dipilih
                 </span>
-                @if($isAllSelected && $participants->total() > $participants->count())
-                    @if(count($selected_participants) === $participants->total())
-                        <span class="text-red-950 font-medium">Semua <strong>{{ $participants->total() }}</strong> peserta terpilih di seluruh halaman.</span>
-                    @else
-                        <span class="text-red-900">
-                            Semua <strong>{{ $participants->count() }}</strong> peserta di halaman ini dipilih.
-                            <button wire:click="selectAllFiltered" type="button" class="text-blue-700 font-bold hover:underline ml-1 cursor-pointer">
+                <div class="text-gray-700 flex flex-wrap items-center gap-1.5">
+                    @if($isAllSelected && $participants->total() > $participants->count())
+                        @if(count($selected_participants) === $participants->total())
+                            <span class="font-medium text-red-950">Semua <strong>{{ $participants->total() }}</strong> peserta terpilih di seluruh halaman.</span>
+                        @else
+                            <span>Semua <strong>{{ $participants->count() }}</strong> peserta di halaman ini dipilih.</span>
+                            <button wire:click="selectAllFiltered" type="button" class="text-blue-700 font-bold hover:underline cursor-pointer">
                                 Pilih semua {{ $participants->total() }} peserta yang sesuai filter?
                             </button>
-                        </span>
+                        @endif
+                    @else
+                        <span class="font-medium text-gray-600">Peserta terpilih siap diproses.</span>
                     @endif
-                @else
-                    <span class="text-gray-600 font-medium">Peserta terpilih siap diproses.</span>
-                @endif
+                </div>
             </div>
 
-            <div class="flex items-center space-x-2 shrink-0">
-                <button wire:click="openDeleteBatchModal" type="button" class="inline-flex items-center px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-red-600 hover:bg-red-700 shadow-sm transition transform hover:-translate-y-0.5 cursor-pointer">
+            <div class="flex items-center space-x-3 shrink-0 self-end sm:self-center">
+                <button wire:click="openDeleteBatchModal" type="button" class="inline-flex items-center px-4 py-2 rounded-xl text-xs font-bold text-white bg-red-600 hover:bg-red-700 shadow-sm transition transform hover:-translate-y-0.5 cursor-pointer">
                     <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                     Hapus Massal
                 </button>
-                <button wire:click="deselectAll" type="button" class="px-3 py-1.5 text-xs font-semibold text-gray-500 hover:text-gray-800 hover:bg-red-100/60 rounded-xl transition cursor-pointer">
+                <button wire:click="deselectAll" type="button" class="px-3 py-2 text-xs font-semibold text-gray-500 hover:text-gray-800 hover:bg-red-100/60 rounded-xl transition cursor-pointer">
                     Batal
                 </button>
             </div>
