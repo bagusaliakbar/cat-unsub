@@ -371,7 +371,7 @@
                                 {{ $participant->name }}
                             </div>
                             <div class="text-[9.5px] sm:text-[10px] font-bold text-gray-600 uppercase tracking-normal mt-0.5 leading-tight">
-                                {{ $participant->desa ? 'Desa ' . $participant->desa : '' }} {{ $participant->kecamatan ? '• Kec. ' . $participant->kecamatan : '' }}
+                                {{ $participant->desa ? 'Desa ' . $participant->desa : '' }} {{ $participant->kecamatan ? '• Kecamatan ' . $participant->kecamatan : '' }}
                             </div>
                         </div>
                     </div>
