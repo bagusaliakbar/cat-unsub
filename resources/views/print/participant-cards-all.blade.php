@@ -111,9 +111,9 @@
                                 <td class="font-medium text-gray-900">{{ $participant->desa ?: ($participant->institution ?: '-') }}{{ $participant->kecamatan ? ', Kec. ' . $participant->kecamatan : '' }}</td>
                             </tr>
                             <tr class="h-9">
-                                <td class="text-gray-700 font-semibold text-blue-900">No. Meja</td>
+                                <td class="text-gray-700 text-blue-900">No. Meja</td>
                                 <td class="text-center">:</td>
-                                <td class="font-bold text-blue-900 font-mono">{{ $participant->no_meja ?? '-' }}</td>
+                                <td class="text-blue-900 font-mono">{{ $participant->no_meja ?? '-' }}</td>
                             </tr>
                             <tr class="h-9">
                                 <td class="text-gray-700">Tanggal Ujian</td>
