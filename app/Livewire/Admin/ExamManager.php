@@ -71,7 +71,7 @@ class ExamManager extends Component
             ? 0 
             : \App\Models\Question::whereIn('id', $this->selected_questions)->sum('points');
 
-        $participantQuery = \App\Models\User::whereIn('role', ['peserta', 'participant'])->orderBy('name');
+        $participantQuery = \App\Models\User::whereIn('role', ['peserta', 'participant'])->with('wave')->orderBy('name');
         
         if ($this->assigning_filter_wave) {
             $participantQuery->where('wave_id', $this->assigning_filter_wave);
@@ -115,6 +115,8 @@ class ExamManager extends Component
 
     public function openModal()
     {
+        $this->isQuestionModalOpen = false;
+        $this->isAssignModalOpen = false;
         $this->isModalOpen = true;
     }
 
@@ -197,6 +199,8 @@ class ExamManager extends Component
 
     public function manageQuestions($id)
     {
+        $this->isModalOpen = false;
+        $this->isAssignModalOpen = false;
         \Log::info("manageQuestions called for ID: " . $id);
         $exam = Exam::with('questions')->findOrFail($id);
         $this->managing_exam_id = $exam->id;
@@ -244,6 +248,8 @@ class ExamManager extends Component
 
     public function manageParticipants($id)
     {
+        $this->isModalOpen = false;
+        $this->isQuestionModalOpen = false;
         $exam = Exam::with('participants')->findOrFail($id);
         $this->assigning_exam_id = $exam->id;
         $this->assigning_exam_title = $exam->title;
