@@ -25,6 +25,7 @@ class Entry extends Component
             $this->participant_number = $this->participant->nik ?? $this->participant->participant_number;
             $this->assignedExams = $this->participant->assignedExams()
                 ->where('is_active', true)
+                ->where('is_archived', false)
                 ->with(['sessions' => function($q) {
                     $q->where('user_id', $this->participant->id);
                 }])
@@ -54,6 +55,7 @@ class Entry extends Component
         // Get assigned active exams
         $this->assignedExams = $this->participant->assignedExams()
             ->where('is_active', true)
+            ->where('is_archived', false)
             ->with(['sessions' => function($q) {
                 $q->where('user_id', $this->participant->id);
             }])

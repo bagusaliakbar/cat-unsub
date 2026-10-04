@@ -15,7 +15,13 @@ class Exam extends Model
         'randomize_options' => 'boolean',
         'is_active' => 'boolean',
         'is_simulation' => 'boolean',
+        'is_archived' => 'boolean',
     ];
+
+    public function isCompleted(): bool
+    {
+        return $this->end_time ? now()->gt($this->end_time) : false;
+    }
 
     public function questions()
     {

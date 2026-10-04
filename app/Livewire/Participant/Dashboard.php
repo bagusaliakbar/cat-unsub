@@ -14,6 +14,7 @@ class Dashboard extends Component
     public function render()
     {
         $exams = Exam::where('is_active', true)
+            ->where('is_archived', false)
             ->where(function ($query) {
                 $query->whereNull('start_time')
                       ->orWhere('start_time', '<=', now());

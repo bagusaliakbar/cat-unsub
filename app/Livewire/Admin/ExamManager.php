@@ -48,9 +48,76 @@ class ExamManager extends Component
     public $assigning_filter_kecamatan = '';
     public $assigning_search = '';
 
+    // Archive and Filter Tabs
+    public $tab = 'active'; // 'active', 'archived', 'all'
+    public $search_exam = '';
+    public $filter_wave_exam = '';
+
+    public function setTab($tab)
+    {
+        $this->tab = $tab;
+        $this->resetPage();
+    }
+
+    public function archiveExam($examId)
+    {
+        $exam = Exam::findOrFail($examId);
+        $exam->update([
+            'is_archived' => true,
+            'is_active' => false,
+        ]);
+        \App\Services\LogService::record('archive_exam', 'Admin mengarsipkan ujian: ' . $exam->title);
+        session()->flash('message', 'Ujian "' . $exam->title . '" berhasil diarsipkan.');
+    }
+
+    public function unarchiveExam($examId)
+    {
+        $exam = Exam::findOrFail($examId);
+        $exam->update([
+            'is_archived' => false,
+        ]);
+        \App\Services\LogService::record('unarchive_exam', 'Admin mengembalikan ujian dari arsip: ' . $exam->title);
+        session()->flash('message', 'Ujian "' . $exam->title . '" berhasil dikeluarkan dari arsip.');
+    }
+
+    public function toggleActive($examId)
+    {
+        $exam = Exam::findOrFail($examId);
+        $exam->update([
+            'is_active' => !$exam->is_active,
+        ]);
+        \App\Services\LogService::record('toggle_exam_status', 'Admin mengubah status aktif ujian: ' . $exam->title);
+        session()->flash('message', 'Status ujian "' . $exam->title . '" berhasil diubah.');
+    }
+
     public function render()
     {
-        $exams = Exam::with('wave')->orderBy('created_at', 'desc')->paginate(10);
+        $countActive = Exam::where('is_archived', false)->count();
+        $countArchived = Exam::where('is_archived', true)->count();
+        $countAll = Exam::count();
+
+        $examQuery = Exam::with('wave')->orderBy('created_at', 'desc');
+
+        if ($this->tab === 'active') {
+            $examQuery->where('is_archived', false);
+        } elseif ($this->tab === 'archived') {
+            $examQuery->where('is_archived', true);
+        }
+
+        if ($this->search_exam) {
+            $search = $this->search_exam;
+            $examQuery->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('location', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($this->filter_wave_exam) {
+            $examQuery->where('wave_id', $this->filter_wave_exam);
+        }
+
+        $exams = $examQuery->paginate(10);
         
         $categories = \App\Models\QuestionCategory::all();
         $query = \App\Models\Question::with('category');
@@ -124,7 +191,7 @@ class ExamManager extends Component
 
         $institutions = $desas;
 
-        return view('livewire.admin.exam-manager', compact('exams', 'categories', 'bank_questions', 'total_points', 'all_participants', 'waves', 'institutions', 'desas', 'kecamatans', 'is_all_participants_selected'))
+        return view('livewire.admin.exam-manager', compact('exams', 'countActive', 'countArchived', 'countAll', 'categories', 'bank_questions', 'total_points', 'all_participants', 'waves', 'institutions', 'desas', 'kecamatans', 'is_all_participants_selected'))
             ->layout('layouts.app'); // Assuming breeze layout
     }
 

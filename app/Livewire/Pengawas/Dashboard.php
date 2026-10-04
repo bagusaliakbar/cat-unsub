@@ -11,6 +11,7 @@ class Dashboard extends Component
     {
         // Get active exams that are currently running or upcoming
         $exams = Exam::where('is_active', true)
+            ->where('is_archived', false)
             ->with('wave')
             ->withCount(['participants', 'sessions', 'sessions as active_sessions_count' => function ($query) {
                 $query->where('status', 'started');
