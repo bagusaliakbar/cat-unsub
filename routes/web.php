@@ -215,13 +215,36 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         if ($request->has('wave_id') && $request->wave_id != '') {
             $query->where('wave_id', $request->wave_id);
         }
+
+        if ($request->has('desa') && $request->desa != '') {
+            $query->where('desa', $request->desa);
+        }
+
+        if ($request->has('kecamatan') && $request->kecamatan != '') {
+            $query->where('kecamatan', $request->kecamatan);
+        }
+
+        if ($request->has('exam_status') && $request->exam_status != '') {
+            if ($request->exam_status === 'belum_ujian') {
+                $query->whereDoesntHave('examSessions', function ($q) {
+                    $q->where('status', 'completed')->orWhereNotNull('completed_at');
+                });
+            } elseif ($request->exam_status === 'sudah_ujian') {
+                $query->whereHas('examSessions', function ($q) {
+                    $q->where('status', 'completed')->orWhereNotNull('completed_at');
+                });
+            }
+        }
         
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
                   ->orWhere('nik', 'like', '%' . $search . '%')
-                  ->orWhere('participant_number', 'like', '%' . $search . '%');
+                  ->orWhere('participant_number', 'like', '%' . $search . '%')
+                  ->orWhere('desa', 'like', '%' . $search . '%')
+                  ->orWhere('kecamatan', 'like', '%' . $search . '%')
+                  ->orWhere('no_meja', 'like', '%' . $search . '%');
             });
         }
         
@@ -257,6 +280,18 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
 
         if ($request->has('kecamatan') && $request->kecamatan != '') {
             $query->where('kecamatan', $request->kecamatan);
+        }
+
+        if ($request->has('exam_status') && $request->exam_status != '') {
+            if ($request->exam_status === 'belum_ujian') {
+                $query->whereDoesntHave('examSessions', function ($q) {
+                    $q->where('status', 'completed')->orWhereNotNull('completed_at');
+                });
+            } elseif ($request->exam_status === 'sudah_ujian') {
+                $query->whereHas('examSessions', function ($q) {
+                    $q->where('status', 'completed')->orWhereNotNull('completed_at');
+                });
+            }
         }
         
         if ($request->has('search') && $request->search != '') {

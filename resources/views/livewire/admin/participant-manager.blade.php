@@ -33,11 +33,11 @@
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                 Import Excel
             </button>
-            <a href="{{ route('admin.participants.print_all', ['wave_id' => $filter_wave, 'search' => $search]) }}" target="_blank" class="bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2.5 px-4 rounded-full shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+            <a href="{{ route('admin.participants.print_all', ['wave_id' => $filter_wave, 'search' => $search, 'desa' => $filter_desa, 'kecamatan' => $filter_kecamatan, 'exam_status' => $filter_exam_status]) }}" target="_blank" class="bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2.5 px-4 rounded-full shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                 Cetak Semua Kartu
             </a>
-            <a href="{{ route('admin.participants.print_all_desk_numbers', ['wave_id' => $filter_wave, 'search' => $search, 'desa' => $filter_desa, 'kecamatan' => $filter_kecamatan]) }}" target="_blank" class="bg-amber-500 hover:bg-amber-400 text-white font-semibold py-2.5 px-4 rounded-full shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+            <a href="{{ route('admin.participants.print_all_desk_numbers', ['wave_id' => $filter_wave, 'search' => $search, 'desa' => $filter_desa, 'kecamatan' => $filter_kecamatan, 'exam_status' => $filter_exam_status]) }}" target="_blank" class="bg-amber-500 hover:bg-amber-400 text-white font-semibold py-2.5 px-4 rounded-full shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 Cetak Nomor Meja
             </a>
@@ -89,8 +89,17 @@
                 </select>
             </div>
 
+            <!-- Status Ujian Filter -->
+            <div class="w-full sm:w-auto">
+                <select wire:model.live="filter_exam_status" class="w-full sm:w-auto min-w-[170px] rounded-xl border border-gray-200 text-sm py-2 pl-3.5 pr-9 bg-gray-50/50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-gray-700 cursor-pointer font-medium">
+                    <option value="">Semua Status Ujian</option>
+                    <option value="belum_ujian">⏳ Belum Ujian</option>
+                    <option value="sudah_ujian">✅ Sudah Ujian</option>
+                </select>
+            </div>
+
             <!-- Reset Filter Button -->
-            @if($search || $filter_wave || $filter_desa || $filter_kecamatan)
+            @if($search || $filter_wave || $filter_desa || $filter_kecamatan || $filter_exam_status)
                 <button wire:click="resetFilters" type="button" class="inline-flex items-center px-3 py-2 text-xs font-semibold text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer" title="Reset semua filter">
                     <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     Reset Filter
@@ -181,6 +190,7 @@
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">ID / NIK</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Desa & Kecamatan</th>
                         <th scope="col" class="px-4 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">No. Meja</th>
+                        <th scope="col" class="px-4 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Status Ujian</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Alamat</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Gelombang</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Kontak</th>
@@ -240,6 +250,19 @@
                                     </span>
                                 @else
                                     <span class="text-gray-400 text-xs">-</span>
+                                @endif
+                            </td>
+                            <td class="px-4 py-4 whitespace-nowrap text-center">
+                                @if($participant->examSessions && $participant->examSessions->count() > 0)
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-xs" title="Peserta telah menyelesaikan ujian">
+                                        <svg class="w-3.5 h-3.5 mr-1 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                        Sudah Ujian
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200" title="Peserta belum menyelesaikan ujian">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 mr-1.5"></span>
+                                        Belum Ujian
+                                    </span>
                                 @endif
                             </td>
                             <td class="px-6 py-4">
@@ -302,7 +325,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="px-6 py-10 text-center text-gray-500">
+                            <td colspan="10" class="px-6 py-10 text-center text-gray-500">
                                 <div class="flex flex-col items-center">
                                     <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                                     <p class="text-base font-medium">Tidak ada data peserta ditemukan.</p>

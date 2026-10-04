@@ -31,6 +31,7 @@ class ParticipantManager extends Component
     public $filter_desa = '';
     public $filter_kecamatan = '';
     public $filter_institution = ''; // Backward compatibility
+    public $filter_exam_status = ''; // '', 'belum_ujian', 'sudah_ujian'
     public $search = '';
 
     // Batch Deletion
@@ -52,6 +53,11 @@ class ParticipantManager extends Component
         $this->resetPage();
     }
 
+    public function updatedFilterExamStatus()
+    {
+        $this->resetPage();
+    }
+
     public function updatedFilterInstitution()
     {
         $this->filter_desa = $this->filter_institution;
@@ -69,13 +75,19 @@ class ParticipantManager extends Component
         $this->filter_desa = '';
         $this->filter_kecamatan = '';
         $this->filter_institution = '';
+        $this->filter_exam_status = '';
         $this->search = '';
         $this->resetPage();
     }
 
     public function render()
     {
-        $query = User::with('wave')->whereIn('role', ['peserta', 'participant']);
+        $query = User::with([
+            'wave',
+            'examSessions' => function ($q) {
+                $q->where('status', 'completed')->orWhereNotNull('completed_at');
+            }
+        ])->whereIn('role', ['peserta', 'participant']);
 
         if ($this->filter_wave) {
             $query->where('wave_id', $this->filter_wave);
@@ -88,6 +100,16 @@ class ParticipantManager extends Component
 
         if ($this->filter_kecamatan) {
             $query->where('kecamatan', $this->filter_kecamatan);
+        }
+
+        if ($this->filter_exam_status === 'belum_ujian') {
+            $query->whereDoesntHave('examSessions', function ($q) {
+                $q->where('status', 'completed')->orWhereNotNull('completed_at');
+            });
+        } elseif ($this->filter_exam_status === 'sudah_ujian') {
+            $query->whereHas('examSessions', function ($q) {
+                $q->where('status', 'completed')->orWhereNotNull('completed_at');
+            });
         }
 
         if ($this->search) {
@@ -366,6 +388,15 @@ class ParticipantManager extends Component
         }
         if ($this->filter_kecamatan) {
             $query->where('kecamatan', $this->filter_kecamatan);
+        }
+        if ($this->filter_exam_status === 'belum_ujian') {
+            $query->whereDoesntHave('examSessions', function ($q) {
+                $q->where('status', 'completed')->orWhereNotNull('completed_at');
+            });
+        } elseif ($this->filter_exam_status === 'sudah_ujian') {
+            $query->whereHas('examSessions', function ($q) {
+                $q->where('status', 'completed')->orWhereNotNull('completed_at');
+            });
         }
         if ($this->search) {
             $query->where(function ($q) {
