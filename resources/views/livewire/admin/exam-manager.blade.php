@@ -125,6 +125,26 @@
                                             Simulasi
                                         </span>
                                     @endif
+
+                                    <!-- Badge Peserta (Interaktif: Klik untuk Kelola/Assign Peserta) -->
+                                    <button type="button" wire:click="manageParticipants({{ $exam->id }})" 
+                                        class="px-2 py-0.5 rounded text-[10px] font-bold transition-all shrink-0 inline-flex items-center gap-1 cursor-pointer shadow-2xs hover:shadow-xs {{ $exam->participants_count > 0 ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 border-dashed' }}" 
+                                        title="Klik untuk kelola peserta ujian ini">
+                                        <svg class="w-3 h-3 {{ $exam->participants_count > 0 ? 'text-emerald-600' : 'text-amber-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                        </svg>
+                                        @if($exam->participants_count > 0)
+                                            <span>{{ $exam->participants_count }} Peserta</span>
+                                            @if($exam->completed_sessions_count > 0)
+                                                <span class="text-[9px] font-semibold text-emerald-700 bg-white/90 px-1 py-0.2 rounded border border-emerald-200">
+                                                    {{ $exam->completed_sessions_count }} Selesai
+                                                </span>
+                                            @endif
+                                        @else
+                                            <span>0 Peserta</span>
+                                            <span class="text-[9px] font-normal text-amber-600">(Belum di-assign)</span>
+                                        @endif
+                                    </button>
                                 </div>
                                 <div class="text-sm text-gray-500 mt-1 line-clamp-2">{{ $exam->description ?: 'Tidak ada deskripsi' }}</div>
                             </td>
@@ -193,7 +213,7 @@
                                     <button type="button" wire:click="manageQuestions({{ $exam->id }})" class="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 p-1.5 rounded-lg transition-colors flex items-center" title="Kelola Soal Ujian">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                                     </button>
-                                    <button type="button" wire:click="manageParticipants({{ $exam->id }})" class="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 p-1.5 rounded-lg transition-colors flex items-center" title="Assign Peserta">
+                                    <button type="button" wire:click="manageParticipants({{ $exam->id }})" class="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 p-1.5 rounded-lg transition-colors flex items-center" title="Assign Peserta ({{ $exam->participants_count }} Peserta)">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                                     </button>
 

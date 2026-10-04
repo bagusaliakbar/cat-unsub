@@ -96,7 +96,14 @@ class ExamManager extends Component
         $countArchived = Exam::where('is_archived', true)->count();
         $countAll = Exam::count();
 
-        $examQuery = Exam::with('wave')->orderBy('created_at', 'desc');
+        $examQuery = Exam::with('wave')
+            ->withCount([
+                'participants',
+                'sessions as completed_sessions_count' => function ($q) {
+                    $q->where('status', 'completed')->orWhereNotNull('completed_at');
+                }
+            ])
+            ->orderBy('created_at', 'desc');
 
         if ($this->tab === 'active') {
             $examQuery->where('is_archived', false);
