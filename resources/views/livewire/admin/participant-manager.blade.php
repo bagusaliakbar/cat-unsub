@@ -46,11 +46,18 @@
 
     <!-- Toolbar -->
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 space-y-4 md:space-y-0">
-        <div class="flex items-center space-x-4">
+        <div class="flex flex-wrap items-center gap-3">
             <select wire:model.live="filter_wave" class="block w-full sm:w-48 rounded-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-1.5 px-4 bg-white">
                 <option value="">Semua Gelombang</option>
                 @foreach($waves as $w)
                     <option value="{{ $w->id }}">{{ $w->name }}</option>
+                @endforeach
+            </select>
+
+            <select wire:model.live="filter_institution" class="block w-full sm:w-48 rounded-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-1.5 px-4 bg-white">
+                <option value="">Semua Instansi</option>
+                @foreach($institutions as $inst)
+                    <option value="{{ $inst }}">{{ $inst }}</option>
                 @endforeach
             </select>
 
@@ -61,7 +68,46 @@
                 <input wire:model.live.debounce.300ms="search" type="text" placeholder="Cari nama, nik, id..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-full leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out">
             </div>
         </div>
+
+        @if(count($selected_participants) > 0)
+            <div class="flex items-center space-x-3 bg-red-50 border border-red-200 px-4 py-1.5 rounded-full shadow-sm animate-fadeIn">
+                <span class="text-xs font-bold text-red-700 flex items-center">
+                    <span class="w-2 h-2 rounded-full bg-red-500 mr-2 animate-pulse"></span>
+                    {{ count($selected_participants) }} Dipilih
+                </span>
+                <span class="text-gray-300">|</span>
+                <button wire:click="openDeleteBatchModal" type="button" class="text-xs font-bold text-red-600 hover:text-red-800 flex items-center transition">
+                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    Hapus Massal
+                </button>
+                <button wire:click="deselectAll" type="button" class="text-xs text-gray-500 hover:text-gray-700 transition">
+                    Batal
+                </button>
+            </div>
+        @endif
     </div>
+
+    @if($isAllSelected && $participants->total() > $participants->count())
+        <div class="bg-blue-50 border border-blue-200 p-3 mb-4 rounded-xl text-xs text-blue-900 flex items-center justify-between shadow-xs">
+            <div class="flex items-center space-x-2">
+                <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                @if(count($selected_participants) === $participants->total())
+                    <span>Semua <strong>{{ $participants->total() }}</strong> peserta terpilih di seluruh halaman.</span>
+                @else
+                    <span>Semua <strong>{{ $participants->count() }}</strong> peserta di halaman ini dipilih. Ingin memilih semua <strong>{{ $participants->total() }}</strong> peserta yang sesuai filter?</span>
+                @endif
+            </div>
+            @if(count($selected_participants) < $participants->total())
+                <button wire:click="selectAllFiltered" type="button" class="text-xs font-bold text-blue-700 hover:text-blue-900 underline ml-3 shrink-0">
+                    Pilih Semua {{ $participants->total() }} Peserta
+                </button>
+            @else
+                <button wire:click="deselectAll" type="button" class="text-xs font-bold text-blue-700 hover:text-blue-900 underline ml-3 shrink-0">
+                    Batalkan Pilihan
+                </button>
+            @endif
+        </div>
+    @endif
 
     @if (session()->has('message'))
         <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded-r-xl shadow-sm" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
@@ -94,6 +140,9 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
+                        <th scope="col" class="px-4 py-4 text-center w-12">
+                            <input type="checkbox" wire:click="toggleSelectAll" {{ $isAllSelected ? 'checked' : '' }} class="w-4 h-4 rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500 cursor-pointer">
+                        </th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nama Peserta</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">ID / NIK</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Instansi & Pendidikan</th>
@@ -105,7 +154,10 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
                     @forelse($participants as $participant)
-                        <tr class="hover:bg-gray-50 transition-colors duration-200">
+                        <tr class="{{ in_array((string)$participant->id, $selected_participants) ? 'bg-blue-50/70' : 'hover:bg-gray-50' }} transition-colors duration-200">
+                            <td class="px-4 py-4 text-center">
+                                <input type="checkbox" wire:click="toggleParticipant({{ $participant->id }})" {{ in_array((string)$participant->id, $selected_participants) ? 'checked' : '' }} class="w-4 h-4 rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500 cursor-pointer">
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
@@ -205,7 +257,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-10 text-center text-gray-500">
+                            <td colspan="8" class="px-6 py-10 text-center text-gray-500">
                                 <div class="flex flex-col items-center">
                                     <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                                     <p class="text-base font-medium">Tidak ada data peserta ditemukan.</p>
@@ -519,6 +571,95 @@
                                 <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                             </span>
                             Mulai Import
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Modal Konfirmasi Hapus Massal -->
+    @if($isDeleteBatchModalOpen)
+        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" wire:click="closeDeleteBatchModal"></div>
+
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-gray-100">
+                    
+                    <!-- Modal Header -->
+                    <div class="bg-gradient-to-r from-red-50 to-white px-6 py-4 border-b border-red-100 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-red-100 text-red-600 border border-red-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900 leading-tight">Konfirmasi Hapus Massal</h3>
+                                <p class="text-xs text-gray-500 mt-0.5">Penghapusan data peserta yang dipilih</p>
+                            </div>
+                        </div>
+                        <button wire:click="closeDeleteBatchModal" type="button" class="text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full p-1.5 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="p-6 space-y-4">
+                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200 divide-y divide-gray-200">
+                            <div class="flex justify-between items-center pb-2.5">
+                                <span class="text-xs font-semibold text-gray-600">Total Peserta Dipilih</span>
+                                <span class="text-sm font-bold text-gray-900 font-mono">{{ $selectedCount }} orang</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2.5">
+                                <span class="text-xs font-semibold text-green-700 flex items-center">
+                                    <svg class="w-3.5 h-3.5 mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    Aman Dihapus
+                                </span>
+                                <span class="text-sm font-bold text-green-700 font-mono">{{ $safeCount }} orang</span>
+                            </div>
+                            @if($withExamsCount > 0)
+                                <div class="flex justify-between items-center pt-2.5">
+                                    <span class="text-xs font-semibold text-amber-700 flex items-center">
+                                        <svg class="w-3.5 h-3.5 mr-1 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                        Memiliki Nilai / Riwayat Ujian
+                                    </span>
+                                    <span class="text-sm font-bold text-amber-700 font-mono">{{ $withExamsCount }} orang</span>
+                                </div>
+                            @endif
+                        </div>
+
+                        @if($withExamsCount > 0)
+                            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800 space-y-1">
+                                <div class="font-bold flex items-center text-amber-900">
+                                    <svg class="w-4 h-4 mr-1.5 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Perlindungan Nilai Ujian Aktif:
+                                </div>
+                                <p class="leading-relaxed">
+                                    Sebanyak <strong>{{ $withExamsCount }} peserta</strong> yang telah memiliki riwayat ujian/nilai akan <strong>dilewati secara otomatis</strong> dan tidak akan dihapus demi menjaga integritas nilai CAT dan berita acara.
+                                </p>
+                            </div>
+                        @endif
+
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            @if($safeCount > 0)
+                                Tindakan ini akan menghapus permanen <strong>{{ $safeCount }} peserta</strong> beserta foto profil dan penugasan ujian mereka. Tindakan ini tidak dapat dibatalkan.
+                            @else
+                                Seluruh peserta yang dipilih memiliki riwayat ujian, sehingga tidak ada peserta yang akan dihapus.
+                            @endif
+                        </p>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3 rounded-b-2xl">
+                        <button wire:click="closeDeleteBatchModal" type="button" class="w-full sm:w-auto inline-flex justify-center rounded-xl px-5 py-2.5 bg-white text-gray-700 font-medium text-sm border border-gray-300 hover:bg-gray-100 transition shadow-xs">
+                            Batal
+                        </button>
+                        <button wire:click="deleteBatch" wire:loading.attr="disabled" type="button" @if($safeCount === 0) disabled @endif class="w-full sm:w-auto inline-flex justify-center items-center rounded-xl px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-sm shadow-sm transition transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span wire:loading wire:target="deleteBatch" class="inline-flex items-center mr-2">
+                                <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            </span>
+                            Ya, Hapus ({{ $safeCount }}) Peserta
                         </button>
                     </div>
                 </div>

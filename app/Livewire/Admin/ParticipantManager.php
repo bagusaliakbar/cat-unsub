@@ -27,7 +27,27 @@ class ParticipantManager extends Component
     public $photo; // For uploading new photo
     public $existing_photo_url; // To show existing photo
     public $filter_wave = '';
+    public $filter_institution = '';
     public $search = '';
+
+    // Batch Deletion
+    public $selected_participants = [];
+    public $isDeleteBatchModalOpen = false;
+
+    public function updatedFilterWave()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedFilterInstitution()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedSearch()
+    {
+        $this->resetPage();
+    }
 
     public function render()
     {
@@ -35,6 +55,10 @@ class ParticipantManager extends Component
 
         if ($this->filter_wave) {
             $query->where('wave_id', $this->filter_wave);
+        }
+
+        if ($this->filter_institution) {
+            $query->where('institution', $this->filter_institution);
         }
 
         if ($this->search) {
@@ -52,8 +76,35 @@ class ParticipantManager extends Component
         
         $waves = \App\Models\Wave::where('is_active', true)->get();
 
-        return view('livewire.admin.participant-manager', compact('participants', 'waves'))
-            ->layout('layouts.app');
+        $institutions = User::whereIn('role', ['peserta', 'participant'])
+            ->whereNotNull('institution')
+            ->where('institution', '!=', '')
+            ->distinct()
+            ->orderBy('institution')
+            ->pluck('institution')
+            ->toArray();
+
+        $currentPageIds = $participants->pluck('id')->map(fn($id) => (string)$id)->toArray();
+        $isAllSelected = !empty($currentPageIds) && count(array_intersect($currentPageIds, $this->selected_participants)) === count($currentPageIds);
+
+        // Stats for batch delete modal
+        $selectedCount = count($this->selected_participants);
+        $withExamsCount = 0;
+        $safeCount = 0;
+        if ($this->isDeleteBatchModalOpen && $selectedCount > 0) {
+            $withExamsCount = \App\Models\ExamSession::whereIn('user_id', $this->selected_participants)->distinct('user_id')->count('user_id');
+            $safeCount = max(0, $selectedCount - $withExamsCount);
+        }
+
+        return view('livewire.admin.participant-manager', compact(
+            'participants',
+            'waves',
+            'institutions',
+            'isAllSelected',
+            'selectedCount',
+            'withExamsCount',
+            'safeCount'
+        ))->layout('layouts.app');
     }
 
     public function create()
@@ -196,15 +247,156 @@ class ParticipantManager extends Component
         $this->openModal();
     }
 
+    public function toggleParticipant($id)
+    {
+        $id = (string) $id;
+        if (in_array($id, $this->selected_participants)) {
+            $this->selected_participants = array_values(array_diff($this->selected_participants, [$id]));
+        } else {
+            $this->selected_participants[] = $id;
+        }
+    }
+
+    public function toggleSelectAll()
+    {
+        $query = User::whereIn('role', ['peserta', 'participant']);
+        if ($this->filter_wave) {
+            $query->where('wave_id', $this->filter_wave);
+        }
+        if ($this->filter_institution) {
+            $query->where('institution', $this->filter_institution);
+        }
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('name', 'like', '%' . $this->search . '%')
+                  ->orWhere('nik', 'like', '%' . $this->search . '%')
+                  ->orWhere('participant_number', 'like', '%' . $this->search . '%')
+                  ->orWhere('institution', 'like', '%' . $this->search . '%')
+                  ->orWhere('birth_place', 'like', '%' . $this->search . '%')
+                  ->orWhere('address', 'like', '%' . $this->search . '%');
+            });
+        }
+
+        $currentPageIds = $query->orderBy('created_at', 'desc')->paginate(10)->pluck('id')->map(fn($id) => (string)$id)->toArray();
+
+        if (empty($currentPageIds)) {
+            return;
+        }
+
+        $allSelected = count(array_intersect($currentPageIds, $this->selected_participants)) === count($currentPageIds);
+
+        if ($allSelected) {
+            $this->selected_participants = array_values(array_diff($this->selected_participants, $currentPageIds));
+        } else {
+            $this->selected_participants = array_values(array_unique(array_merge($this->selected_participants, $currentPageIds)));
+        }
+    }
+
+    public function selectAllFiltered()
+    {
+        $query = User::whereIn('role', ['peserta', 'participant']);
+        if ($this->filter_wave) {
+            $query->where('wave_id', $this->filter_wave);
+        }
+        if ($this->filter_institution) {
+            $query->where('institution', $this->filter_institution);
+        }
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('name', 'like', '%' . $this->search . '%')
+                  ->orWhere('nik', 'like', '%' . $this->search . '%')
+                  ->orWhere('participant_number', 'like', '%' . $this->search . '%')
+                  ->orWhere('institution', 'like', '%' . $this->search . '%')
+                  ->orWhere('birth_place', 'like', '%' . $this->search . '%')
+                  ->orWhere('address', 'like', '%' . $this->search . '%');
+            });
+        }
+
+        $this->selected_participants = $query->pluck('id')->map(fn($id) => (string)$id)->toArray();
+    }
+
+    public function deselectAll()
+    {
+        $this->selected_participants = [];
+    }
+
+    public function openDeleteBatchModal()
+    {
+        if (empty($this->selected_participants)) {
+            return;
+        }
+        $this->isDeleteBatchModalOpen = true;
+    }
+
+    public function closeDeleteBatchModal()
+    {
+        $this->isDeleteBatchModalOpen = false;
+    }
+
+    public function deleteBatch()
+    {
+        if (empty($this->selected_participants)) {
+            $this->closeDeleteBatchModal();
+            return;
+        }
+
+        $users = User::whereIn('id', $this->selected_participants)->get();
+        $deletedCount = 0;
+        $skippedCount = 0;
+
+        foreach ($users as $user) {
+            // Check if user has an exam session (nilai / riwayat ujian)
+            $hasExamSessions = \App\Models\ExamSession::where('user_id', $user->id)->exists();
+            if ($hasExamSessions) {
+                $skippedCount++;
+                continue; // Protect participants with exam results!
+            }
+
+            // Delete profile photo
+            if ($user->profile_photo_path) {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            }
+
+            // Detach from exams if assigned
+            $user->exams()->detach();
+
+            // Delete user
+            $user->delete();
+            $deletedCount++;
+        }
+
+        \App\Services\LogService::record(
+            'delete_batch_participants',
+            "Admin menghapus massal peserta: {$deletedCount} berhasil dihapus, {$skippedCount} dilewati (karena memiliki riwayat ujian)."
+        );
+
+        $msg = "Berhasil menghapus {$deletedCount} data peserta.";
+        if ($skippedCount > 0) {
+            $msg .= " ({$skippedCount} peserta dilewati karena sudah memiliki riwayat ujian/nilai).";
+        }
+
+        session()->flash('message', $msg);
+        $this->selected_participants = [];
+        $this->closeDeleteBatchModal();
+    }
+
     public function delete($id)
     {
         $user = User::find($id);
         if ($user) {
+            $hasExamSessions = \App\Models\ExamSession::where('user_id', $user->id)->exists();
+            if ($hasExamSessions) {
+                session()->flash('error', "Peserta '{$user->name}' tidak dapat dihapus karena sudah memiliki riwayat ujian/nilai.");
+                return;
+            }
+
             if ($user->profile_photo_path) {
                 Storage::disk('public')->delete($user->profile_photo_path);
             }
+            $user->exams()->detach();
             $user->delete();
         }
+        $this->selected_participants = array_values(array_diff($this->selected_participants, [(string)$id]));
         session()->flash('message', 'Peserta berhasil dihapus.');
     }
 
