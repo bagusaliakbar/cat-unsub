@@ -51,9 +51,30 @@
             border: 2.5px solid #0284c7;
             box-shadow: 0 4px 14px rgba(2, 132, 199, 0.15);
         }
-        .theme-blue .banner-box {
-            background: linear-gradient(135deg, #0f2b5c 0%, #1d4ed8 100%);
+        .theme-blue .divider-line {
+            background-color: #0284c7;
+        }
+        .theme-blue .lab-banner {
+            background: linear-gradient(135deg, #0b2559 0%, #123e86 50%, #0d2b67 100%);
             color: #ffffff;
+        }
+        .theme-blue .lab-divider {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+        .theme-blue .lab-icon {
+            stroke: #ffffff;
+        }
+        .theme-blue .lab-title {
+            color: #ffffff;
+        }
+        .theme-blue .lab-sub {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .theme-blue .lab-dot {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        .theme-blue .session-card {
+            background-color: #dbeafe;
         }
         .theme-blue .session-title {
             color: #0f2b5c;
@@ -63,9 +84,6 @@
         }
         .theme-blue .number-box {
             border: 2.5px solid #0284c7;
-        }
-        .theme-blue .divider-line {
-            background-color: #38bdf8;
         }
         .theme-blue .wave-blue {
             display: block !important;
@@ -79,21 +97,39 @@
             border: 2.5px solid #f59e0b;
             box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15);
         }
-        .theme-orange .banner-box {
-            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-            color: #111827;
+        .theme-orange .divider-line {
+            background-color: #f59e0b;
+        }
+        .theme-orange .lab-banner {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #f59e0b 100%);
+            color: #0f172a;
+        }
+        .theme-orange .lab-divider {
+            background-color: rgba(15, 23, 42, 0.35);
+        }
+        .theme-orange .lab-icon {
+            stroke: #0f172a;
+        }
+        .theme-orange .lab-title {
+            color: #0f172a;
+        }
+        .theme-orange .lab-sub {
+            color: rgba(15, 23, 42, 0.9);
+        }
+        .theme-orange .lab-dot {
+            background-color: rgba(15, 23, 42, 0.25);
+        }
+        .theme-orange .session-card {
+            background-color: #fef3c7;
         }
         .theme-orange .session-title {
-            color: #111827;
+            color: #0f2b5c;
         }
         .theme-orange .session-time {
-            color: #111827;
+            color: #0f2b5c;
         }
         .theme-orange .number-box {
             border: 2.5px solid #f59e0b;
-        }
-        .theme-orange .divider-line {
-            background-color: #fbbf24;
         }
         .theme-orange .wave-blue {
             display: none !important;
@@ -233,12 +269,12 @@
                     
                     <!-- Top Section: Header & Wave -->
                     <div class="relative w-full">
-                        <!-- Logo & Title Bar -->
-                        <div class="pt-3 px-3.5 pb-1 flex items-center justify-between relative z-10">
+                        <!-- Logo & Title Bar (White Header) -->
+                        <div class="pt-2.5 px-3.5 pb-2 flex items-center justify-between bg-white relative z-10">
                             <!-- Left: Logo & UNSUB -->
                             <div class="flex items-center space-x-2">
                                 <img src="{{ asset('images/logo.png') }}" alt="Logo UNSUB" class="h-9 w-auto object-contain shrink-0">
-                                <div class="font-extrabold text-[#0f2b5c] text-[11px] leading-[1.15] tracking-tight">
+                                <div class="font-extrabold text-[#0f2b5c] text-[10.5px] leading-[1.15] tracking-tight">
                                     UNIVERSITAS<br>SUBANG
                                 </div>
                             </div>
@@ -255,102 +291,89 @@
                             </div>
                         </div>
 
-                        <!-- Top Wave Graphic (SVG) -->
-                        <div class="w-full -mt-0.5 relative z-0">
+                        <!-- Top Wave Transition into Lab Banner (ZERO GAP) -->
+                        <div class="w-full -mt-1 relative z-0">
                             <!-- Blue Wave -->
-                            <svg viewBox="0 0 360 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto wave-blue wave-svg">
-                                <path d="M0 0C60 22 140 32 220 18C280 8 330 16 360 24V48H0V0Z" fill="url(#blue_grad_back_{{ $index }})" opacity="0.35"/>
-                                <path d="M0 8C70 30 150 36 240 18C290 8 330 14 360 20V0H0V8Z" fill="url(#blue_grad_front_{{ $index }})"/>
+                            <svg viewBox="0 0 360 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto block wave-blue wave-svg">
+                                <path d="M0,0 C60,18 140,24 220,12 C280,4 330,10 360,16 V36 H0 Z" fill="#38bdf8" opacity="0.6"/>
+                                <path d="M0,6 C70,24 150,28 240,12 C290,4 330,8 360,14 V36 H0 Z" fill="url(#top_blue_wave_{{ $index }})"/>
                                 <defs>
-                                    <linearGradient id="blue_grad_front_{{ $index }}" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" stop-color="#38bdf8"/>
-                                        <stop offset="50%" stop-color="#0284c7"/>
-                                        <stop offset="100%" stop-color="#1d4ed8"/>
-                                    </linearGradient>
-                                    <linearGradient id="blue_grad_back_{{ $index }}" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" stop-color="#bae6fd"/>
-                                        <stop offset="100%" stop-color="#0284c7"/>
+                                    <linearGradient id="top_blue_wave_{{ $index }}" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#0b2559"/>
+                                        <stop offset="50%" stop-color="#123e86"/>
+                                        <stop offset="100%" stop-color="#0d2b67"/>
                                     </linearGradient>
                                 </defs>
                             </svg>
                             <!-- Orange Wave -->
-                            <svg viewBox="0 0 360 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto wave-orange wave-svg">
-                                <path d="M0 0C60 22 140 32 220 18C280 8 330 16 360 24V48H0V0Z" fill="url(#orange_grad_back_{{ $index }})" opacity="0.45"/>
-                                <path d="M0 8C70 30 150 36 240 18C290 8 330 14 360 20V0H0V8Z" fill="url(#orange_grad_front_{{ $index }})"/>
+                            <svg viewBox="0 0 360 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto block wave-orange wave-svg">
+                                <path d="M0,0 C60,18 140,24 220,12 C280,4 330,10 360,16 V36 H0 Z" fill="#fef08a" opacity="0.8"/>
+                                <path d="M0,6 C70,24 150,28 240,12 C290,4 330,8 360,14 V36 H0 Z" fill="url(#top_orange_wave_{{ $index }})"/>
                                 <defs>
-                                    <linearGradient id="orange_grad_front_{{ $index }}" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" stop-color="#fde047"/>
-                                        <stop offset="50%" stop-color="#f59e0b"/>
-                                        <stop offset="100%" stop-color="#d97706"/>
-                                    </linearGradient>
-                                    <linearGradient id="orange_grad_back_{{ $index }}" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" stop-color="#fef08a"/>
+                                    <linearGradient id="top_orange_wave_{{ $index }}" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#f59e0b"/>
+                                        <stop offset="50%" stop-color="#fbbf24"/>
                                         <stop offset="100%" stop-color="#f59e0b"/>
                                     </linearGradient>
                                 </defs>
                             </svg>
                         </div>
-                    </div>
 
-                    <!-- Middle Content Section -->
-                    <div class="px-3.5 flex-1 flex flex-col justify-around -mt-2">
-                        
-                        <!-- Lab CAT Banner -->
-                        <div class="banner-box rounded-xl px-3 py-2 flex items-center justify-between shadow-xs">
-                            <!-- Left: Computer Icon -->
+                        <!-- Full-Width Lab CAT Banner (Directly attached to wave) -->
+                        <div class="lab-banner w-full px-4 pt-0.5 pb-2.5 flex items-center justify-between -mt-0.5 shadow-xs">
+                            <!-- Left: Computer Icon + Divider + Lab Name -->
                             <div class="flex items-center space-x-2.5">
-                                <svg class="w-7 h-7 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                <svg class="w-7 h-7 shrink-0 lab-icon" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
                                     <rect x="2" y="3" width="20" height="14" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 21h8m-4-4v4"/>
                                 </svg>
-                                <div class="h-6 w-[1.5px] bg-current opacity-40"></div>
+                                <div class="h-6 w-[1.5px] lab-divider"></div>
                                 <div class="leading-none">
-                                    <div class="font-black text-sm tracking-wider uppercase">{{ $cardLab }}</div>
-                                    <div class="text-[7.5px] font-bold tracking-[0.2em] uppercase opacity-90 mt-0.5">LABORATORIUM KOMPUTER</div>
+                                    <div class="font-black text-[14px] tracking-wider uppercase lab-title">{{ $cardLab }}</div>
+                                    <div class="text-[7.5px] font-bold tracking-[0.2em] uppercase lab-sub mt-0.5">LABORATORIUM KOMPUTER</div>
                                 </div>
                             </div>
 
-                            <!-- Right: Modern Dot Grid Accent -->
-                            <div class="grid grid-cols-4 gap-1 opacity-50 shrink-0">
+                            <!-- Right: Modern Dot Grid Accent (4 cols x 3 rows) -->
+                            <div class="grid grid-cols-4 gap-1 shrink-0">
                                 @for($d = 0; $d < 12; $d++)
-                                    <div class="w-1 h-1 rounded-full bg-current"></div>
+                                    <div class="w-1 h-1 rounded-full lab-dot"></div>
                                 @endfor
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Session Title & Time -->
-                        <div class="text-center py-1">
-                            <h2 class="session-title font-black text-2xl sm:text-[26px] tracking-tight uppercase leading-none">
-                                {{ $cardSession }}
-                            </h2>
-                            <p class="session-time font-bold text-xs sm:text-[13px] tracking-normal mt-1">
-                                ({{ $cardTime }})
-                            </p>
+                    <!-- Session Title & Time (Rounded Pastel Card) -->
+                    <div class="session-card mx-3.5 mt-2.5 rounded-2xl py-2 px-3 text-center">
+                        <h2 class="session-title font-black text-2xl tracking-tight uppercase leading-none">
+                            {{ $cardSession }}
+                        </h2>
+                        <p class="session-time font-bold text-xs tracking-normal mt-1 leading-none">
+                            ({{ $cardTime }})
+                        </p>
+                    </div>
+
+                    <!-- Nomor Urut Peserta & Number Box -->
+                    <div class="px-3.5 mt-2 flex-1 flex flex-col justify-center">
+                        <div class="text-center font-black text-[10.5px] tracking-[0.16em] text-[#0066cc] uppercase mb-1">
+                            NOMOR URUT PESERTA
                         </div>
 
-                        <!-- Nomor Urut Peserta & Big Box -->
-                        <div class="w-full">
-                            <div class="text-center font-black text-[10.5px] tracking-[0.16em] text-[#1d4ed8] uppercase mb-1">
-                                NOMOR URUT PESERTA
-                            </div>
-
-                            <div class="number-box mx-4 rounded-2xl bg-white py-1 flex items-center justify-center shadow-xs">
-                                <span class="font-black text-5xl sm:text-[52px] leading-none text-black tracking-tight select-none">
-                                    {{ $displayNoMeja }}
-                                </span>
-                            </div>
-
-                            <!-- Participant Identity Info (Toggleable) -->
-                            <div class="participant-name-container text-center mt-1.5 px-2">
-                                <div class="text-[10px] font-bold text-gray-800 uppercase tracking-tight truncate">
-                                    {{ $participant->name }}
-                                </div>
-                                <div class="text-[8px] font-semibold text-gray-500 uppercase tracking-tight truncate">
-                                    {{ $participant->desa ? 'Desa ' . $participant->desa : '' }} {{ $participant->kecamatan ? '• Kec. ' . $participant->kecamatan : '' }}
-                                </div>
-                            </div>
+                        <div class="number-box mx-3 rounded-2xl bg-white py-1 flex items-center justify-center">
+                            <span class="font-black text-[48px] sm:text-[50px] leading-none text-black tracking-tight select-none">
+                                {{ $displayNoMeja }}
+                            </span>
                         </div>
 
+                        <!-- Participant Identity Info (Toggleable) -->
+                        <div class="participant-name-container text-center mt-1 px-1">
+                            <div class="text-[9.5px] font-bold text-gray-800 uppercase tracking-tight truncate">
+                                {{ $participant->name }}
+                            </div>
+                            <div class="text-[7.5px] font-semibold text-gray-500 uppercase tracking-tight truncate">
+                                {{ $participant->desa ? 'Desa ' . $participant->desa : '' }} {{ $participant->kecamatan ? '• Kec. ' . $participant->kecamatan : '' }}
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Bottom Wave Section (SVG) -->
