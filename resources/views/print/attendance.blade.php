@@ -189,7 +189,7 @@
                         <p>Mengetahui</p>
                         <p>Panitia Seleksi</p>
                         <div class="h-24"></div>
-                        <p class="font-bold"><u>{{ $report->committee_name ?? 'Dr. Ujang Charda S., S.H., M.H., M.I.P., M.A.P.' }}</u></p>
+                        <p class="font-bold"><u>{{ $report->committee_name ?? 'Kasda, S.T., M.T.' }}</u></p>
                     </div>
                     <div class="text-center w-1/2">
                         <p>Subang, {{ $exam->start_time ? \Carbon\Carbon::parse($exam->start_time)->locale('id')->translatedFormat('d F Y') : \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</p>
@@ -302,7 +302,7 @@
                     <p>Mengetahui</p>
                     <p>Panitia Seleksi</p>
                     <div class="h-24"></div>
-                    <p class="font-bold"><u>{{ $report->committee_name ?? 'Dr. Ujang Charda S., S.H., M.H., M.I.P., M.A.P.' }}</u></p>
+                    <p class="font-bold"><u>{{ $report->committee_name ?? 'Kasda, S.T., M.T.' }}</u></p>
                 </div>
                 <div class="text-center w-1/2">
                     <p>Subang, {{ $exam->start_time ? \Carbon\Carbon::parse($exam->start_time)->locale('id')->translatedFormat('d F Y') : \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</p>

@@ -188,7 +188,7 @@
                     <p>Subang, {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</p>
                     <p>Panitia Seleksi</p>
                     <div class="h-20"></div>
-                    <p class="font-bold"><u>{{ $report->committee_name ?? 'Dr. Ujang Charda S., S.H., M.H., M.I.P., M.A.P.' }}</u></p>
+                    <p class="font-bold"><u>{{ $report->committee_name ?? 'Kasda, S.T., M.T.' }}</u></p>
                 </div>
             </div>
 

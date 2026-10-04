@@ -208,7 +208,7 @@
 
                     <div>
                         <label for="committee_name" class="block text-sm font-semibold text-gray-700 mb-2">Ketua Panitia Seleksi <span class="text-red-500">*</span></label>
-                        <input type="text" id="committee_name" wire:model="committee_name" class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-3" placeholder="Masukkan nama ketua panitia...">
+                        <input type="text" id="committee_name" wire:model="committee_name" class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-3" placeholder="Kasda, S.T., M.T.">
                         @error('committee_name') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
                 </div>

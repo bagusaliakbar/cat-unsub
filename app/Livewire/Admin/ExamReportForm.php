@@ -22,7 +22,7 @@ class ExamReportForm extends Component
     public $district = '';
     public $reference_number = '';
     public $exam_materials = 'Kebangsaan, Pancasila, UUD 1945, Pemerintahan Desa, dan Perundang-undangan Desa';
-    public $committee_name = 'Dr. Ujang Charda S., S.H., M.H., M.I.P., M.A.P.';
+    public $committee_name = 'Kasda, S.T., M.T.';
     public $witness_1 = 'Dr. Drs. H. Komir Bastaman, S.H., M.Si.';
     public $witness_2 = 'Dr. Ujang Charda S., S.H., M.H., M.I.P., M.A.P.';
     public $witness_3 = 'Dr. Moh. Asep Suharna, S.H., S.Pd., M.H.';
@@ -60,7 +60,7 @@ class ExamReportForm extends Component
             $this->district = $report->district ?? $this->district;
             $this->reference_number = $report->reference_number ?? $this->reference_number;
             $this->exam_materials = $report->exam_materials ?? $this->exam_materials;
-            $this->committee_name = $report->committee_name ?? $this->committee_name;
+            $this->committee_name = (!empty($report->committee_name) && !str_contains($report->committee_name, 'Ujang Charda')) ? $report->committee_name : $this->committee_name;
             $this->witness_1 = !empty($report->witness_1) ? $report->witness_1 : $this->witness_1;
             $this->witness_2 = !empty($report->witness_2) ? $report->witness_2 : $this->witness_2;
             $this->witness_3 = !empty($report->witness_3) ? $report->witness_3 : $this->witness_3;
