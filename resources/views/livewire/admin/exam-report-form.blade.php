@@ -18,12 +18,60 @@
 
         <form wire:submit.prevent="saveAndPrint" class="p-6 md:p-8 space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Data Otomatis -->
+                <!-- Pilihan Lingkup Berita Acara (Instansi) -->
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50/70 p-5 rounded-2xl border border-blue-200/80 md:col-span-2 space-y-3 shadow-sm">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <h4 class="text-sm font-bold text-blue-900 uppercase tracking-wider flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                Pilihan Lingkup & Format Berita Acara
+                            </h4>
+                            <p class="text-xs text-blue-700 mt-1">
+                                Pada sesi ini terdapat <strong class="font-bold text-blue-900">{{ count($institutions) }} instansi/desa</strong>. Anda dapat mencetak berita acara gabungan, per instansi, atau cetak semua sekaligus terpisah per lembar.
+                            </p>
+                        </div>
+                        <div class="w-full md:w-80 shrink-0">
+                            <label for="selected_institution" class="block text-xs font-bold text-blue-900 uppercase mb-1">Cetak Untuk:</label>
+                            <select id="selected_institution" wire:model.live="selected_institution" class="w-full bg-white border border-blue-300 text-gray-800 text-sm font-semibold rounded-xl focus:ring-blue-500 focus:border-blue-500 p-2.5 shadow-sm">
+                                <option value="all">Semua Instansi (1 Dokumen Gabungan)</option>
+                                @if(count($institutions) > 1)
+                                    <option value="all_separated">Cetak Semua (Pisah Lembar Per Instansi)</option>
+                                @endif
+                                @if(count($institutions) > 0)
+                                    <optgroup label="Cetak Khusus Per Instansi:">
+                                        @foreach($institutions as $inst)
+                                            <option value="{{ $inst }}">Desa / Instansi: {{ $inst }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    
+                    @if($selected_institution && $selected_institution !== 'all' && $selected_institution !== 'all_separated')
+                        <div class="text-xs text-blue-800 bg-blue-100/70 p-3 rounded-xl flex items-center border border-blue-200">
+                            <svg class="w-4 h-4 mr-2 shrink-0 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                            <span>Sedang menampilkan Berita Acara khusus instansi <strong>{{ $selected_institution }}</strong>. Angka kehadiran & daftar nilai otomatis difilter khusus untuk peserta dari instansi ini.</span>
+                        </div>
+                    @elseif($selected_institution === 'all_separated')
+                        <div class="text-xs text-indigo-900 bg-indigo-100/70 p-3 rounded-xl flex items-center border border-indigo-200">
+                            <svg class="w-4 h-4 mr-2 shrink-0 text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                            <span><strong>Mode Batch Print (Multi-Halaman):</strong> Sistem akan menghasilkan Berita Acara resmi untuk setiap instansi secara otomatis terpisah per halaman (page break) dalam satu kali proses cetak.</span>
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Data Otomatis Rekap Kehadiran -->
                 <div class="bg-gray-50 p-5 rounded-xl border border-gray-100 space-y-4 md:col-span-2">
-                    <h4 class="text-sm font-bold text-gray-700 uppercase tracking-wider mb-2 flex items-center">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Rekap Kehadiran (Otomatis)
-                    </h4>
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Rekap Kehadiran ({{ $selected_institution && $selected_institution !== 'all' && $selected_institution !== 'all_separated' ? $selected_institution : 'Semua Peserta' }})
+                        </h4>
+                        <span class="text-xs font-semibold text-gray-500">
+                            Total Terdaftar: <strong class="text-gray-900">{{ $present_count + $absent_count }}</strong>
+                        </span>
+                    </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 text-center">
                             <span class="block text-3xl font-extrabold text-green-600">{{ $present_count }}</span>
@@ -34,7 +82,7 @@
                             <span class="block text-sm font-medium text-gray-500 mt-1">Peserta Tidak Hadir</span>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500 italic mt-2">*Jumlah kehadiran dihitung otomatis berdasarkan jumlah peserta yang memulai ujian pada sistem.</p>
+                    <p class="text-xs text-gray-500 italic">*Jumlah kehadiran dihitung otomatis berdasarkan jumlah peserta yang memulai ujian pada sistem.</p>
                 </div>
 
                 <!-- Detail Pelaksanaan -->

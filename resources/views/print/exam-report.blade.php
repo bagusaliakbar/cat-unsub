@@ -55,6 +55,39 @@
 </head>
 <body class="p-4 sm:p-8 max-w-4xl mx-auto text-black text-[11pt]" onload="window.print()">
 
+    <!-- Floating Toolbar (Hidden on Print) -->
+    <div class="fixed top-4 left-1/2 transform -translate-x-1/2 no-print bg-white/95 backdrop-blur-md shadow-xl border border-gray-200 px-5 py-2.5 rounded-2xl flex items-center space-x-3 z-50">
+        <a href="{{ route('admin.exams.report', $exam->id) }}" class="text-xs font-semibold text-gray-700 hover:text-blue-600 flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Kembali ke Form
+        </a>
+        <span class="text-gray-300">|</span>
+        <div class="flex items-center space-x-2">
+            <label class="text-xs font-bold text-gray-700">Filter Cetak:</label>
+            <select onchange="window.location.href = this.value" class="text-xs font-medium border-gray-300 rounded-lg py-1 px-2.5 bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+                <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => 'all']) }}" {{ ($institution ?? 'all') === 'all' ? 'selected' : '' }}>
+                    Semua Instansi (Gabungan)
+                </option>
+                @if(isset($institutions) && count($institutions) > 1)
+                    <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => 'all_separated']) }}" {{ ($institution ?? '') === 'all_separated' ? 'selected' : '' }}>
+                        Cetak Semua (Pisah Lembar)
+                    </option>
+                @endif
+                @if(isset($institutions))
+                    @foreach($institutions as $inst)
+                        <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => $inst]) }}" {{ ($institution ?? '') === $inst ? 'selected' : '' }}>
+                            Desa: {{ $inst }}
+                        </option>
+                    @endforeach
+                @endif
+            </select>
+        </div>
+        <button onclick="window.print()" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-xs flex items-center shadow-sm">
+            <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+            Print
+        </button>
+    </div>
+
     <!-- Header / Kop Surat -->
     <div class="mb-4 text-center">
         <img src="{{ asset('images/kop-unsub.jpg') }}" alt="Kop Universitas Subang" class="w-full mx-auto h-auto object-contain">
@@ -63,14 +96,14 @@
     <!-- Title -->
     <div class="text-center mb-6">
         <h3 class="text-lg font-bold uppercase">BERITA ACARA HASIL SELEKSI TERTULIS BERBASIS CAT</h3>
-        <h3 class="text-lg font-bold uppercase">CALON KEPALA DESA ANTAR WAKTU (PAW) DESA {{ strtoupper($report->village ?? '[NAMA DESA]') }}</h3>
+        <h3 class="text-lg font-bold uppercase">CALON KEPALA DESA ANTAR WAKTU (PAW) DESA {{ strtoupper($targetVillage ?? ($report->village ?? '[NAMA DESA]')) }}</h3>
         <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district ?? '[NAMA KECAMATAN]') }} KABUPATEN SUBANG</h3>
         <p class="mt-1 font-bold">Nomor: {{ $report->reference_number ?? '[Nomor Surat]' }}</p>
     </div>
 
     <!-- Content -->
     <div class="text-justify mb-4">
-        <p class="indent-10">Pada hari ini, <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l') }}</strong> tanggal <strong>{{ \Carbon\Carbon::now()->translatedFormat('d') }}</strong> bulan <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('F') }}</strong> tahun <strong>{{ ucwords(\NumberFormatter::create('id_ID', \NumberFormatter::SPELLOUT)->format(\Carbon\Carbon::now()->year)) }}</strong>, bertempat di Laboratorium Komputer Universitas Subang, telah dilaksanakan Ujian Penyaringan Seleksi Tertulis berbasis Computer Assisted Test (CAT) bagi Calon Kepala Desa Antar Waktu (PAW) Desa {{ ucwords(strtolower($report->village ?? '[Nama Desa]')) }} Kecamatan {{ ucwords(strtolower($report->district ?? '[Nama Kecamatan]')) }} Kabupaten Subang oleh Lembaga Penelitian dan Pengabdian kepada Masyarakat (LPPM) Universitas Subang.</p>
+        <p class="indent-10">Pada hari ini, <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l') }}</strong> tanggal <strong>{{ \Carbon\Carbon::now()->translatedFormat('d') }}</strong> bulan <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('F') }}</strong> tahun <strong>{{ ucwords(\NumberFormatter::create('id_ID', \NumberFormatter::SPELLOUT)->format(\Carbon\Carbon::now()->year)) }}</strong>, bertempat di Laboratorium Komputer Universitas Subang, telah dilaksanakan Ujian Penyaringan Seleksi Tertulis berbasis Computer Assisted Test (CAT) bagi Calon Kepala Desa Antar Waktu (PAW) Desa {{ ucwords(strtolower($targetVillage ?? ($report->village ?? '[Nama Desa]'))) }} Kecamatan {{ ucwords(strtolower($report->district ?? '[Nama Kecamatan]')) }} Kabupaten Subang oleh Lembaga Penelitian dan Pengabdian kepada Masyarakat (LPPM) Universitas Subang.</p>
     </div>
 
     <table class="w-full mb-4 text-left align-top">
@@ -84,19 +117,19 @@
             <td class="w-6 align-top">2.</td>
             <td class="w-56 align-top">Jumlah Peserta Terdaftar</td>
             <td class="w-4 text-center align-top">:</td>
-            <td class="align-top">{{ $report->present_count + $report->absent_count }} Orang</td>
+            <td class="align-top">{{ ($presentCount ?? $report->present_count) + ($absentCount ?? $report->absent_count) }} Orang</td>
         </tr>
         <tr>
             <td class="w-6 align-top">3.</td>
             <td class="w-56 align-top">Jumlah Peserta Hadir</td>
             <td class="w-4 text-center align-top">:</td>
-            <td class="align-top">{{ $report->present_count }} Orang</td>
+            <td class="align-top">{{ $presentCount ?? $report->present_count }} Orang</td>
         </tr>
         <tr>
             <td class="w-6 align-top">4.</td>
             <td class="w-56 align-top">Jumlah Peserta Tidak Hadir</td>
             <td class="w-4 text-center align-top">:</td>
-            <td class="align-top">{{ $report->absent_count }} Orang</td>
+            <td class="align-top">{{ $absentCount ?? $report->absent_count }} Orang</td>
         </tr>
     </table>
 
@@ -108,7 +141,7 @@
                 <th class="w-10">No</th>
                 <th class="w-32">Nomor Peserta</th>
                 <th>Nama Lengkap Calon</th>
-                <th class="w-40">Desa</th>
+                <th class="w-40">Desa / Instansi</th>
                 <th class="w-24">Nilai CAT</th>
             </tr>
         </thead>
@@ -118,17 +151,18 @@
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $session->user->participant_number ?? $session->user->nik }}</td>
                 <td class="text-left px-2">{{ $session->user->name }}</td>
-                <td class="text-left px-2">{{ ucwords(strtolower($report->village ?? '')) }}</td>
+                <td class="text-left px-2">{{ ucwords(strtolower($session->user->institution ?? ($targetVillage ?? ($report->village ?? '-')))) }}</td>
                 <td>{{ rtrim(rtrim(number_format($session->score, 2), '0'), '.') }}</td>
             </tr>
             @endforeach
             @if($sessions->count() == 0)
             <tr>
-                <td colspan="5" class="py-4">Belum ada data nilai peserta.</td>
+                <td colspan="5" class="py-4">Belum ada data nilai peserta untuk pilihan ini.</td>
             </tr>
             @endif
         </tbody>
     </table>
+
 
     <p class="mb-10 text-justify indent-10">Demikian Berita Acara ini dibuat dengan sebenarnya dalam rangkap secukupnya, ditandatangani oleh pihak penyelenggara dan saksi-saksi untuk dipergunakan sebagaimana mestinya.</p>
 

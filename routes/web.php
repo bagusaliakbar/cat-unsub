@@ -79,15 +79,73 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
 
     Route::get('/exams/{examId}/preview', \App\Livewire\Admin\ExamPreview::class)->name('exams.preview');
     Route::get('/exams/{examId}/report', \App\Livewire\Admin\ExamReportForm::class)->name('exams.report');
-    Route::get('/exams/{examId}/report/print', function ($examId) {
-        $exam = \App\Models\Exam::findOrFail($examId);
+    Route::get('/exams/{examId}/report/print', function ($examId, \Illuminate\Http\Request $request) {
+        $exam = \App\Models\Exam::with('participants')->findOrFail($examId);
         $report = \App\Models\ExamReport::where('exam_id', $examId)->firstOrFail();
-        $sessions = \App\Models\ExamSession::with('user')
+        $institution = $request->query('institution', 'all');
+
+        $institutions = $exam->participants()
+            ->whereNotNull('institution')
+            ->where('institution', '!=', '')
+            ->distinct()
+            ->orderBy('institution')
+            ->pluck('institution')
+            ->toArray();
+
+        $baseSessionsQuery = \App\Models\ExamSession::with('user')
             ->where('exam_id', $examId)
             ->whereNotNull('started_at')
-            ->orderByDesc('score')
-            ->get();
-        return view('print.exam-report', compact('exam', 'report', 'sessions'));
+            ->orderByDesc('score');
+
+        // Mode: 'all_separated' -> Batch Print / Multi-Page Per Institution
+        if ($institution === 'all_separated' && !empty($institutions)) {
+            $reportsData = [];
+            foreach ($institutions as $inst) {
+                $sessQuery = clone $baseSessionsQuery;
+                $sessQuery->whereHas('user', function($q) use ($inst) {
+                    $q->where('institution', $inst);
+                });
+                $sessions = $sessQuery->get();
+                $partCount = $exam->participants()->where('institution', $inst)->count();
+                $presentCount = $sessions->count();
+                $absentCount = max(0, $partCount - $presentCount);
+
+                $reportsData[] = [
+                    'institution' => $inst,
+                    'village' => $inst,
+                    'district' => $report->district,
+                    'present_count' => $presentCount,
+                    'absent_count' => $absentCount,
+                    'total_count' => $partCount,
+                    'sessions' => $sessions,
+                ];
+            }
+            return view('print.exam-report-batch', compact('exam', 'report', 'reportsData', 'institutions', 'institution'));
+        }
+
+        // Mode: Specific single institution
+        if ($institution && $institution !== 'all') {
+            $sessQuery = clone $baseSessionsQuery;
+            $sessQuery->whereHas('user', function($q) use ($institution) {
+                $q->where('institution', $institution);
+            });
+            $sessions = $sessQuery->get();
+            $partCount = $exam->participants()->where('institution', $institution)->count();
+            $presentCount = $sessions->count();
+            $absentCount = max(0, $partCount - $presentCount);
+            $targetVillage = $institution;
+
+            return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage'));
+        }
+
+        // Mode: All combined
+        $sessions = $baseSessionsQuery->get();
+        $totalRegistered = $exam->participants()->count();
+        $presentCount = $sessions->count();
+        $absentCount = max(0, $totalRegistered - $presentCount);
+        $targetVillage = $report->village;
+
+        return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage'));
     })->name('exams.report.print');
     
     Route::get('/exams/{examId}/incident-report', function ($examId) {
@@ -96,14 +154,44 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         return view('print.incident-report', compact('exam', 'report'));
     })->name('exams.incident-report');
 
-    Route::get('/exams/{examId}/attendance', function ($examId) {
+    Route::get('/exams/{examId}/attendance', function ($examId, \Illuminate\Http\Request $request) {
         $exam = \App\Models\Exam::with(['participants' => function($q) {
             $q->orderBy('name');
         }])->findOrFail($examId);
-        // We might need report to get village/district details if they want it on the header
         $report = \App\Models\ExamReport::where('exam_id', $examId)->first();
-        return view('print.attendance', compact('exam', 'report'));
+        $institution = $request->query('institution', 'all');
+
+        $institutions = $exam->participants()
+            ->whereNotNull('institution')
+            ->where('institution', '!=', '')
+            ->distinct()
+            ->orderBy('institution')
+            ->pluck('institution')
+            ->toArray();
+
+        if ($institution === 'all_separated' && !empty($institutions)) {
+            $attendanceData = [];
+            foreach ($institutions as $inst) {
+                $parts = $exam->participants()->where('institution', $inst)->orderBy('name')->get();
+                $attendanceData[] = [
+                    'institution' => $inst,
+                    'village' => $inst,
+                    'participants' => $parts,
+                ];
+            }
+            return view('print.attendance', compact('exam', 'report', 'institutions', 'institution', 'attendanceData'));
+        }
+
+        $participantsQuery = $exam->participants()->orderBy('name');
+        if ($institution && $institution !== 'all') {
+            $participantsQuery->where('institution', $institution);
+        }
+        $participants = $participantsQuery->get();
+        $targetVillage = ($institution && $institution !== 'all') ? $institution : ($report->village ?? '');
+
+        return view('print.attendance', compact('exam', 'report', 'participants', 'institution', 'institutions', 'targetVillage'));
     })->name('exams.attendance');
+
     Route::get('/questions', \App\Livewire\Admin\QuestionManager::class)->name('questions');
     Route::get('/categories', \App\Livewire\Admin\CategoryManager::class)->name('categories');
     Route::get('/participants', \App\Livewire\Admin\ParticipantManager::class)->name('participants');
