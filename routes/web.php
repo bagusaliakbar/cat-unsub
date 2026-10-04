@@ -156,7 +156,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
 
     Route::get('/exams/{examId}/attendance', function ($examId, \Illuminate\Http\Request $request) {
         $exam = \App\Models\Exam::with(['participants' => function($q) {
-            $q->orderBy('name');
+            $q->orderByRaw('CASE WHEN no_meja IS NULL OR no_meja = "" THEN 1 ELSE 0 END, CAST(no_meja AS UNSIGNED) ASC, no_meja ASC, name ASC');
         }])->findOrFail($examId);
         $report = \App\Models\ExamReport::where('exam_id', $examId)->first();
         $institution = $request->query('institution', 'all');
@@ -172,7 +172,10 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         if ($institution === 'all_separated' && !empty($institutions)) {
             $attendanceData = [];
             foreach ($institutions as $inst) {
-                $parts = $exam->participants()->where('desa', $inst)->orderBy('name')->get();
+                $parts = $exam->participants()
+                    ->where('desa', $inst)
+                    ->orderByRaw('CASE WHEN no_meja IS NULL OR no_meja = "" THEN 1 ELSE 0 END, CAST(no_meja AS UNSIGNED) ASC, no_meja ASC, name ASC')
+                    ->get();
                 $attendanceData[] = [
                     'institution' => $inst,
                     'village' => $inst,
@@ -182,7 +185,8 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
             return view('print.attendance', compact('exam', 'report', 'institutions', 'institution', 'attendanceData'));
         }
 
-        $participantsQuery = $exam->participants()->orderBy('name');
+        $participantsQuery = $exam->participants()
+            ->orderByRaw('CASE WHEN no_meja IS NULL OR no_meja = "" THEN 1 ELSE 0 END, CAST(no_meja AS UNSIGNED) ASC, no_meja ASC, name ASC');
         if ($institution && $institution !== 'all') {
             $participantsQuery->where('desa', $institution);
         }
@@ -216,7 +220,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
             });
         }
         
-        $participants = $query->orderBy('created_at', 'desc')->get();
+        $participants = $query->orderByRaw('CASE WHEN no_meja IS NULL OR no_meja = "" THEN 1 ELSE 0 END, CAST(no_meja AS UNSIGNED) ASC, no_meja ASC, name ASC')->get();
         return view('print.participant-cards-all', compact('participants'));
     })->name('participants.print_all');
     Route::get('/waves', \App\Livewire\Admin\WaveManager::class)->name('waves');
