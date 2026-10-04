@@ -22,12 +22,15 @@ class ParticipantManager extends Component
     public $isModalOpen = false;
     public $isImportModalOpen = false;
     public $importFile;
-    public $user_id, $name, $nik, $email, $password, $institution, $participant_number, $wave_id;
+    public $user_id, $name, $nik, $email, $password, $desa, $kecamatan, $no_meja, $participant_number, $wave_id;
+    public $institution; // Backward compatibility alias
     public $birth_place, $birth_date, $latest_education, $address;
     public $photo; // For uploading new photo
     public $existing_photo_url; // To show existing photo
     public $filter_wave = '';
-    public $filter_institution = '';
+    public $filter_desa = '';
+    public $filter_kecamatan = '';
+    public $filter_institution = ''; // Backward compatibility
     public $search = '';
 
     // Batch Deletion
@@ -39,8 +42,19 @@ class ParticipantManager extends Component
         $this->resetPage();
     }
 
+    public function updatedFilterDesa()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedFilterKecamatan()
+    {
+        $this->resetPage();
+    }
+
     public function updatedFilterInstitution()
     {
+        $this->filter_desa = $this->filter_institution;
         $this->resetPage();
     }
 
@@ -57,8 +71,13 @@ class ParticipantManager extends Component
             $query->where('wave_id', $this->filter_wave);
         }
 
-        if ($this->filter_institution) {
-            $query->where('institution', $this->filter_institution);
+        $effectiveDesa = $this->filter_desa ?: $this->filter_institution;
+        if ($effectiveDesa) {
+            $query->where('desa', $effectiveDesa);
+        }
+
+        if ($this->filter_kecamatan) {
+            $query->where('kecamatan', $this->filter_kecamatan);
         }
 
         if ($this->search) {
@@ -66,7 +85,9 @@ class ParticipantManager extends Component
                 $q->where('name', 'like', '%' . $this->search . '%')
                   ->orWhere('nik', 'like', '%' . $this->search . '%')
                   ->orWhere('participant_number', 'like', '%' . $this->search . '%')
-                  ->orWhere('institution', 'like', '%' . $this->search . '%')
+                  ->orWhere('desa', 'like', '%' . $this->search . '%')
+                  ->orWhere('kecamatan', 'like', '%' . $this->search . '%')
+                  ->orWhere('no_meja', 'like', '%' . $this->search . '%')
                   ->orWhere('birth_place', 'like', '%' . $this->search . '%')
                   ->orWhere('address', 'like', '%' . $this->search . '%');
             });
@@ -76,13 +97,23 @@ class ParticipantManager extends Component
         
         $waves = \App\Models\Wave::where('is_active', true)->get();
 
-        $institutions = User::whereIn('role', ['peserta', 'participant'])
-            ->whereNotNull('institution')
-            ->where('institution', '!=', '')
+        $desas = User::whereIn('role', ['peserta', 'participant'])
+            ->whereNotNull('desa')
+            ->where('desa', '!=', '')
             ->distinct()
-            ->orderBy('institution')
-            ->pluck('institution')
+            ->orderBy('desa')
+            ->pluck('desa')
             ->toArray();
+
+        $kecamatans = User::whereIn('role', ['peserta', 'participant'])
+            ->whereNotNull('kecamatan')
+            ->where('kecamatan', '!=', '')
+            ->distinct()
+            ->orderBy('kecamatan')
+            ->pluck('kecamatan')
+            ->toArray();
+
+        $institutions = $desas; // Backwards compatibility for view
 
         $currentPageIds = $participants->pluck('id')->map(fn($id) => (string)$id)->toArray();
         $isAllSelected = !empty($currentPageIds) && count(array_intersect($currentPageIds, $this->selected_participants)) === count($currentPageIds);
@@ -99,6 +130,8 @@ class ParticipantManager extends Component
         return view('livewire.admin.participant-manager', compact(
             'participants',
             'waves',
+            'desas',
+            'kecamatans',
             'institutions',
             'isAllSelected',
             'selectedCount',
@@ -131,6 +164,9 @@ class ParticipantManager extends Component
         $this->nik = '';
         $this->email = '';
         $this->password = '';
+        $this->desa = '';
+        $this->kecamatan = '';
+        $this->no_meja = '';
         $this->institution = '';
         $this->participant_number = '';
         $this->wave_id = null;
@@ -154,6 +190,9 @@ class ParticipantManager extends Component
                 'nullable', 'string', 'max:50',
                 Rule::unique('users')->ignore($this->user_id),
             ],
+            'desa' => 'nullable|string|max:255',
+            'kecamatan' => 'nullable|string|max:255',
+            'no_meja' => 'nullable|string|max:50',
             'institution' => 'nullable|string|max:255',
             'wave_id' => 'nullable|exists:waves,id',
             'email' => [
@@ -181,11 +220,15 @@ class ParticipantManager extends Component
             $participantNumber = 'PST-' . date('ymd') . rand(100, 999);
         }
 
+        $villageValue = $this->desa ?: ($this->institution ?: null);
+
         $data = [
             'name' => $this->name,
             'nik' => $this->nik ?: null,
             'participant_number' => $participantNumber,
-            'institution' => $this->institution ?: null,
+            'desa' => $villageValue,
+            'kecamatan' => $this->kecamatan ?: null,
+            'no_meja' => $this->no_meja ?: null,
             'wave_id' => $this->wave_id ?: null,
             'email' => $this->email ?: null,
             'birth_place' => $this->birth_place ?: null,
@@ -232,7 +275,10 @@ class ParticipantManager extends Component
         $this->name = $user->name;
         $this->nik = $user->nik;
         $this->participant_number = $user->participant_number;
-        $this->institution = $user->institution;
+        $this->desa = $user->desa ?: $user->institution;
+        $this->kecamatan = $user->kecamatan;
+        $this->no_meja = $user->no_meja;
+        $this->institution = $this->desa;
         $this->wave_id = $user->wave_id;
         $this->email = $user->email;
         $this->birth_place = $user->birth_place;
@@ -263,15 +309,21 @@ class ParticipantManager extends Component
         if ($this->filter_wave) {
             $query->where('wave_id', $this->filter_wave);
         }
-        if ($this->filter_institution) {
-            $query->where('institution', $this->filter_institution);
+        $effectiveDesa = $this->filter_desa ?: $this->filter_institution;
+        if ($effectiveDesa) {
+            $query->where('desa', $effectiveDesa);
+        }
+        if ($this->filter_kecamatan) {
+            $query->where('kecamatan', $this->filter_kecamatan);
         }
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('name', 'like', '%' . $this->search . '%')
                   ->orWhere('nik', 'like', '%' . $this->search . '%')
                   ->orWhere('participant_number', 'like', '%' . $this->search . '%')
-                  ->orWhere('institution', 'like', '%' . $this->search . '%')
+                  ->orWhere('desa', 'like', '%' . $this->search . '%')
+                  ->orWhere('kecamatan', 'like', '%' . $this->search . '%')
+                  ->orWhere('no_meja', 'like', '%' . $this->search . '%')
                   ->orWhere('birth_place', 'like', '%' . $this->search . '%')
                   ->orWhere('address', 'like', '%' . $this->search . '%');
             });
@@ -298,15 +350,21 @@ class ParticipantManager extends Component
         if ($this->filter_wave) {
             $query->where('wave_id', $this->filter_wave);
         }
-        if ($this->filter_institution) {
-            $query->where('institution', $this->filter_institution);
+        $effectiveDesa = $this->filter_desa ?: $this->filter_institution;
+        if ($effectiveDesa) {
+            $query->where('desa', $effectiveDesa);
+        }
+        if ($this->filter_kecamatan) {
+            $query->where('kecamatan', $this->filter_kecamatan);
         }
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('name', 'like', '%' . $this->search . '%')
                   ->orWhere('nik', 'like', '%' . $this->search . '%')
                   ->orWhere('participant_number', 'like', '%' . $this->search . '%')
-                  ->orWhere('institution', 'like', '%' . $this->search . '%')
+                  ->orWhere('desa', 'like', '%' . $this->search . '%')
+                  ->orWhere('kecamatan', 'like', '%' . $this->search . '%')
+                  ->orWhere('no_meja', 'like', '%' . $this->search . '%')
                   ->orWhere('birth_place', 'like', '%' . $this->search . '%')
                   ->orWhere('address', 'like', '%' . $this->search . '%');
             });

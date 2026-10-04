@@ -78,14 +78,16 @@ class ExamManager extends Component
         }
 
         if ($this->assigning_filter_institution) {
-            $participantQuery->where('institution', $this->assigning_filter_institution);
+            $participantQuery->where('desa', $this->assigning_filter_institution);
         }
 
         if ($this->assigning_search) {
             $participantQuery->where(function ($q) {
                 $q->where('name', 'like', '%' . $this->assigning_search . '%')
                   ->orWhere('nik', 'like', '%' . $this->assigning_search . '%')
-                  ->orWhere('participant_number', 'like', '%' . $this->assigning_search . '%');
+                  ->orWhere('participant_number', 'like', '%' . $this->assigning_search . '%')
+                  ->orWhere('desa', 'like', '%' . $this->assigning_search . '%')
+                  ->orWhere('no_meja', 'like', '%' . $this->assigning_search . '%');
             });
         }
         
@@ -97,11 +99,11 @@ class ExamManager extends Component
         $waves = \App\Models\Wave::where('is_active', true)->get();
 
         $institutions = \App\Models\User::whereIn('role', ['peserta', 'participant'])
-            ->whereNotNull('institution')
-            ->where('institution', '!=', '')
+            ->whereNotNull('desa')
+            ->where('desa', '!=', '')
             ->distinct()
-            ->orderBy('institution')
-            ->pluck('institution');
+            ->orderBy('desa')
+            ->pluck('desa');
 
         return view('livewire.admin.exam-manager', compact('exams', 'categories', 'bank_questions', 'total_points', 'all_participants', 'waves', 'institutions', 'is_all_participants_selected'))
             ->layout('layouts.app'); // Assuming breeze layout
@@ -277,13 +279,15 @@ class ExamManager extends Component
             $participantQuery->where('wave_id', $this->assigning_filter_wave);
         }
         if ($this->assigning_filter_institution) {
-            $participantQuery->where('institution', $this->assigning_filter_institution);
+            $participantQuery->where('desa', $this->assigning_filter_institution);
         }
         if ($this->assigning_search) {
             $participantQuery->where(function ($q) {
                 $q->where('name', 'like', '%' . $this->assigning_search . '%')
                   ->orWhere('nik', 'like', '%' . $this->assigning_search . '%')
-                  ->orWhere('participant_number', 'like', '%' . $this->assigning_search . '%');
+                  ->orWhere('participant_number', 'like', '%' . $this->assigning_search . '%')
+                  ->orWhere('desa', 'like', '%' . $this->assigning_search . '%')
+                  ->orWhere('no_meja', 'like', '%' . $this->assigning_search . '%');
             });
         }
         $currentIds = $participantQuery->pluck('id')->map(fn($id) => (string)$id)->toArray();

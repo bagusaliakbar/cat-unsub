@@ -119,7 +119,9 @@ class ParticipantsImport implements ToCollection, WithHeadingRow
             }
 
             // Other fields
-            $institution = trim($row['instansi'] ?? $row['sekolah'] ?? $row['institution'] ?? '') ?: null;
+            $desa = trim($row['desa'] ?? $row['kelurahan'] ?? $row['instansi'] ?? $row['sekolah'] ?? $row['institution'] ?? '') ?: null;
+            $kecamatan = trim($row['kecamatan'] ?? $row['kec'] ?? '') ?: null;
+            $noMeja = trim($row['no_meja'] ?? $row['nomor_meja'] ?? $row['meja'] ?? '') ?: null;
             $birthPlace = trim($row['tempat_lahir'] ?? $row['birth_place'] ?? '') ?: null;
             $latestEducation = trim($row['pendidikan_terakhir'] ?? $row['pendidikan'] ?? $row['latest_education'] ?? '') ?: null;
             $address = trim($row['alamat'] ?? $row['address'] ?? '') ?: null;
@@ -130,7 +132,9 @@ class ParticipantsImport implements ToCollection, WithHeadingRow
                 'participant_number' => $participantNumber,
                 'email' => $email,
                 'password' => $password,
-                'institution' => $institution,
+                'desa' => $desa,
+                'kecamatan' => $kecamatan,
+                'no_meja' => $noMeja,
                 'wave_id' => $waveId,
                 'birth_place' => $birthPlace,
                 'birth_date' => $birthDate,

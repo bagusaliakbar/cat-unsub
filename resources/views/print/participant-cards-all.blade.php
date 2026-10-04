@@ -95,41 +95,51 @@
                 <div class="flex-1">
                     <table class="w-full text-sm">
                         <tbody>
-                            <tr class="h-10">
+                            <tr class="h-9">
                                 <td class="w-32 text-gray-700">Nama Peserta</td>
                                 <td class="w-4 text-center">:</td>
                                 <td class="font-bold text-gray-900">{{ strtoupper($participant->name) }}</td>
                             </tr>
-                            <tr class="h-10">
+                            <tr class="h-9">
                                 <td class="text-gray-700">NIK</td>
                                 <td class="text-center">:</td>
                                 <td class="font-medium text-gray-900">{{ $participant->nik ?? '-' }}</td>
                             </tr>
-                            <tr class="h-10">
+                            <tr class="h-9">
+                                <td class="text-gray-700">Desa / Kec.</td>
+                                <td class="text-center">:</td>
+                                <td class="font-medium text-gray-900">{{ $participant->desa ?: ($participant->institution ?: '-') }}{{ $participant->kecamatan ? ', Kec. ' . $participant->kecamatan : '' }}</td>
+                            </tr>
+                            <tr class="h-9">
+                                <td class="text-gray-700 font-semibold text-blue-900">No. Meja</td>
+                                <td class="text-center">:</td>
+                                <td class="font-bold text-blue-900 font-mono">{{ $participant->no_meja ?? '-' }}</td>
+                            </tr>
+                            <tr class="h-9">
                                 <td class="text-gray-700">Tanggal Ujian</td>
                                 <td class="text-center">:</td>
                                 <td class="font-medium text-gray-900">
                                     {{ $exam && $exam->start_time ? \Carbon\Carbon::parse($exam->start_time)->locale('id')->isoFormat('dddd, D MMMM Y') : '-' }}
                                 </td>
                             </tr>
-                            <tr class="h-10">
+                            <tr class="h-9">
                                 <td class="text-gray-700">Waktu Ujian</td>
                                 <td class="text-center">:</td>
                                 <td class="font-medium text-gray-900">
                                     {{ $exam && $exam->start_time ? \Carbon\Carbon::parse($exam->start_time)->format('H.i') . ' - ' . \Carbon\Carbon::parse($exam->end_time)->format('H.i') . ' WIB' : '-' }}
                                 </td>
                             </tr>
-                            <tr class="h-10">
+                            <tr class="h-9">
                                 <td class="text-gray-700">Lokasi Ujian</td>
                                 <td class="text-center">:</td>
                                 <td class="font-medium text-gray-900">Universitas Subang</td>
                             </tr>
-                            <tr class="h-10">
+                            <tr class="h-9">
                                 <td class="text-gray-700">Ruang</td>
                                 <td class="text-center">:</td>
                                 <td class="font-medium text-gray-900">{{ $exam ? $exam->location : '-' }}</td>
                             </tr>
-                            <tr class="h-10">
+                            <tr class="h-9">
                                 <td class="text-gray-700">Sesi</td>
                                 <td class="text-center">:</td>
                                 <td class="font-medium text-gray-900">{{ $participant->wave ? $participant->wave->name : '-' }}</td>

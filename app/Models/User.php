@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role', 'nik', 'participant_number', 'phone', 'gender', 'birth_place', 'birth_date', 'address', 'institution', 'latest_education', 'profile_photo_path', 'wave_id'])]
+#[Fillable(['name', 'email', 'password', 'role', 'nik', 'participant_number', 'phone', 'gender', 'birth_place', 'birth_date', 'address', 'desa', 'kecamatan', 'no_meja', 'institution', 'latest_education', 'profile_photo_path', 'wave_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -29,6 +29,19 @@ class User extends Authenticatable
             'password' => 'hashed',
             'birth_date' => 'date',
         ];
+    }
+
+    /**
+     * Backward compatibility for institution attribute
+     */
+    public function getInstitutionAttribute()
+    {
+        return $this->attributes['desa'] ?? null;
+    }
+
+    public function setInstitutionAttribute($value)
+    {
+        $this->attributes['desa'] = $value;
     }
 
     /**

@@ -176,8 +176,8 @@ new class extends Component
             </div>
 
             <div>
-                <x-input-label for="institution" :value="__('Asal Sekolah / Instansi')" />
-                <x-text-input wire:model="institution" id="institution" name="institution" type="text" class="mt-1 block w-full bg-gray-50 border-gray-200" />
+                <x-input-label for="institution" :value="__('Asal Desa / Instansi')" />
+                <x-text-input wire:model="institution" id="institution" name="institution" type="text" class="mt-1 block w-full bg-gray-50 border-gray-200" placeholder="Nama Desa" />
                 <x-input-error class="mt-2" :messages="$errors->get('institution')" />
             </div>
         </div>

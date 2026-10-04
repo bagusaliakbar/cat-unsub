@@ -35,13 +35,13 @@ class ExamReportForm extends Component
     {
         $this->exam = \App\Models\Exam::with('participants')->findOrFail($examId);
         
-        // Distinct institutions from assigned participants
+        // Distinct institutions/desas from assigned participants
         $this->institutions = $this->exam->participants()
-            ->whereNotNull('institution')
-            ->where('institution', '!=', '')
+            ->whereNotNull('desa')
+            ->where('desa', '!=', '')
             ->distinct()
-            ->orderBy('institution')
-            ->pluck('institution')
+            ->orderBy('desa')
+            ->pluck('desa')
             ->toArray();
 
         $this->recalculateAttendance();
@@ -103,9 +103,9 @@ class ExamReportForm extends Component
 
         if ($this->selected_institution && $this->selected_institution !== 'all' && $this->selected_institution !== 'all_separated') {
             $inst = $this->selected_institution;
-            $participantQuery->where('institution', $inst);
+            $participantQuery->where('desa', $inst);
             $sessionQuery->whereHas('user', function($q) use ($inst) {
-                $q->where('institution', $inst);
+                $q->where('desa', $inst);
             });
         }
 

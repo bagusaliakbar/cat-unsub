@@ -52,9 +52,18 @@
                 </div>
 
                 <div>
-                    <p class="text-xs text-gray-500 font-semibold uppercase">Asal Instansi</p>
-                    <p class="text-base font-semibold text-gray-700">{{ $participant->institution ?? '-' }}</p>
+                    <p class="text-xs text-gray-500 font-semibold uppercase">Desa / Kecamatan</p>
+                    <p class="text-base font-semibold text-gray-700">
+                        {{ $participant->desa ?: ($participant->institution ?: '-') }}{{ $participant->kecamatan ? ', Kec. ' . $participant->kecamatan : '' }}
+                    </p>
                 </div>
+
+                @if($participant->no_meja)
+                <div>
+                    <p class="text-xs text-gray-500 font-semibold uppercase">No. Meja</p>
+                    <p class="text-base font-bold text-blue-700 font-mono">{{ $participant->no_meja }}</p>
+                </div>
+                @endif
                 
             </div>
         </div>

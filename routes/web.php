@@ -85,11 +85,11 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         $institution = $request->query('institution', 'all');
 
         $institutions = $exam->participants()
-            ->whereNotNull('institution')
-            ->where('institution', '!=', '')
+            ->whereNotNull('desa')
+            ->where('desa', '!=', '')
             ->distinct()
-            ->orderBy('institution')
-            ->pluck('institution')
+            ->orderBy('desa')
+            ->pluck('desa')
             ->toArray();
 
         $baseSessionsQuery = \App\Models\ExamSession::with('user')
@@ -103,10 +103,10 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
             foreach ($institutions as $inst) {
                 $sessQuery = clone $baseSessionsQuery;
                 $sessQuery->whereHas('user', function($q) use ($inst) {
-                    $q->where('institution', $inst);
+                    $q->where('desa', $inst);
                 });
                 $sessions = $sessQuery->get();
-                $partCount = $exam->participants()->where('institution', $inst)->count();
+                $partCount = $exam->participants()->where('desa', $inst)->count();
                 $presentCount = $sessions->count();
                 $absentCount = max(0, $partCount - $presentCount);
 
@@ -127,10 +127,10 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         if ($institution && $institution !== 'all') {
             $sessQuery = clone $baseSessionsQuery;
             $sessQuery->whereHas('user', function($q) use ($institution) {
-                $q->where('institution', $institution);
+                $q->where('desa', $institution);
             });
             $sessions = $sessQuery->get();
-            $partCount = $exam->participants()->where('institution', $institution)->count();
+            $partCount = $exam->participants()->where('desa', $institution)->count();
             $presentCount = $sessions->count();
             $absentCount = max(0, $partCount - $presentCount);
             $targetVillage = $institution;
@@ -162,17 +162,17 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         $institution = $request->query('institution', 'all');
 
         $institutions = $exam->participants()
-            ->whereNotNull('institution')
-            ->where('institution', '!=', '')
+            ->whereNotNull('desa')
+            ->where('desa', '!=', '')
             ->distinct()
-            ->orderBy('institution')
-            ->pluck('institution')
+            ->orderBy('desa')
+            ->pluck('desa')
             ->toArray();
 
         if ($institution === 'all_separated' && !empty($institutions)) {
             $attendanceData = [];
             foreach ($institutions as $inst) {
-                $parts = $exam->participants()->where('institution', $inst)->orderBy('name')->get();
+                $parts = $exam->participants()->where('desa', $inst)->orderBy('name')->get();
                 $attendanceData[] = [
                     'institution' => $inst,
                     'village' => $inst,
@@ -184,7 +184,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
 
         $participantsQuery = $exam->participants()->orderBy('name');
         if ($institution && $institution !== 'all') {
-            $participantsQuery->where('institution', $institution);
+            $participantsQuery->where('desa', $institution);
         }
         $participants = $participantsQuery->get();
         $targetVillage = ($institution && $institution !== 'all') ? $institution : 'all';

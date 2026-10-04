@@ -47,17 +47,24 @@
     <!-- Toolbar -->
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 space-y-4 md:space-y-0">
         <div class="flex flex-wrap items-center gap-3">
-            <select wire:model.live="filter_wave" class="block w-full sm:w-48 rounded-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-1.5 px-4 bg-white">
+            <select wire:model.live="filter_wave" class="block w-full sm:w-44 rounded-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-1.5 px-4 bg-white">
                 <option value="">Semua Gelombang</option>
                 @foreach($waves as $w)
                     <option value="{{ $w->id }}">{{ $w->name }}</option>
                 @endforeach
             </select>
 
-            <select wire:model.live="filter_institution" class="block w-full sm:w-48 rounded-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-1.5 px-4 bg-white">
-                <option value="">Semua Instansi</option>
-                @foreach($institutions as $inst)
-                    <option value="{{ $inst }}">{{ $inst }}</option>
+            <select wire:model.live="filter_desa" class="block w-full sm:w-44 rounded-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-1.5 px-4 bg-white">
+                <option value="">Semua Desa</option>
+                @foreach($desas as $d)
+                    <option value="{{ $d }}">{{ $d }}</option>
+                @endforeach
+            </select>
+
+            <select wire:model.live="filter_kecamatan" class="block w-full sm:w-44 rounded-full border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-1.5 px-4 bg-white">
+                <option value="">Semua Kecamatan</option>
+                @foreach($kecamatans as $k)
+                    <option value="{{ $k }}">{{ $k }}</option>
                 @endforeach
             </select>
 
@@ -65,7 +72,7 @@
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
-                <input wire:model.live.debounce.300ms="search" type="text" placeholder="Cari nama, nik, id..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-full leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out">
+                <input wire:model.live.debounce.300ms="search" type="text" placeholder="Cari nama, nik, desa, no. meja..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-full leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out">
             </div>
         </div>
 
@@ -145,7 +152,8 @@
                         </th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nama Peserta</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">ID / NIK</th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Instansi & Pendidikan</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Desa & Kecamatan</th>
+                        <th scope="col" class="px-4 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">No. Meja</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Alamat</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Gelombang</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Kontak</th>
@@ -192,13 +200,25 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-semibold text-gray-900">{{ $participant->institution ?: '-' }}</div>
-                                @if($participant->latest_education)
-                                    <div class="mt-1">
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                                <div class="text-sm font-bold text-gray-900">{{ $participant->desa ?: ($participant->institution ?: '-') }}</div>
+                                <div class="text-xs text-gray-500 mt-1 flex flex-wrap items-center gap-1">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-gray-100 text-gray-700 border border-gray-200">
+                                        {{ $participant->kecamatan ? 'Kec. ' . $participant->kecamatan : 'Kec. -' }}
+                                    </span>
+                                    @if($participant->latest_education)
+                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
                                             {{ $participant->latest_education }}
                                         </span>
-                                    </div>
+                                    @endif
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 whitespace-nowrap text-center">
+                                @if($participant->no_meja)
+                                    <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-bold font-mono rounded-lg bg-blue-50 text-blue-800 border border-blue-200 shadow-xs">
+                                        {{ $participant->no_meja }}
+                                    </span>
+                                @else
+                                    <span class="text-gray-400 text-xs">-</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4">
@@ -257,7 +277,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="px-6 py-10 text-center text-gray-500">
+                            <td colspan="9" class="px-6 py-10 text-center text-gray-500">
                                 <div class="flex flex-col items-center">
                                     <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                                     <p class="text-base font-medium">Tidak ada data peserta ditemukan.</p>
@@ -348,9 +368,22 @@
                                     @error('participant_number') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>@enderror
                                 </div>
                                 <div>
-                                    <label for="institution" class="block text-gray-700 text-sm font-semibold mb-2">Instansi (Opsional)</label>
-                                    <input type="text" id="institution" wire:model="institution" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-colors shadow-sm" placeholder="Asal instansi / sekolah">
-                                    @error('institution') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>@enderror
+                                    <label for="no_meja" class="block text-gray-700 text-sm font-semibold mb-2">No. Meja (Opsional)</label>
+                                    <input type="text" id="no_meja" wire:model="no_meja" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-colors shadow-sm font-mono" placeholder="Misal: 01, Meja 12">
+                                    @error('no_meja') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>@enderror
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="desa" class="block text-gray-700 text-sm font-semibold mb-2">Desa / Kelurahan (Opsional)</label>
+                                    <input type="text" id="desa" wire:model="desa" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-colors shadow-sm" placeholder="Nama desa asal">
+                                    @error('desa') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>@enderror
+                                </div>
+                                <div>
+                                    <label for="kecamatan" class="block text-gray-700 text-sm font-semibold mb-2">Kecamatan (Opsional)</label>
+                                    <input type="text" id="kecamatan" wire:model="kecamatan" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-colors shadow-sm" placeholder="Nama kecamatan asal">
+                                    @error('kecamatan') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>@enderror
                                 </div>
                             </div>
 
@@ -549,8 +582,21 @@
                                     <p class="text-[11px] text-gray-500">Default: <span class="font-mono font-bold text-gray-700 bg-gray-100 px-1 rounded">123456</span> jika kosong.</p>
                                 </div>
 
+                                <!-- desa, kecamatan, no_meja -->
+                                <div class="bg-white p-2.5 rounded-xl border border-gray-200 shadow-xs sm:col-span-2">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <div class="flex gap-1.5 flex-wrap">
+                                            <code class="text-xs font-bold font-mono text-gray-800 bg-gray-100 px-1.5 py-0.5 rounded">desa</code>
+                                            <code class="text-xs font-bold font-mono text-gray-800 bg-gray-100 px-1.5 py-0.5 rounded">kecamatan</code>
+                                            <code class="text-xs font-bold font-mono text-gray-800 bg-gray-100 px-1.5 py-0.5 rounded">no_meja</code>
+                                        </div>
+                                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">Opsional</span>
+                                    </div>
+                                    <p class="text-[11px] text-gray-500">Asal desa, kecamatan, dan nomor meja ujian peserta.</p>
+                                </div>
+
                                 <!-- gelombang -->
-                                <div class="bg-white p-2.5 rounded-xl border border-gray-200 shadow-xs">
+                                <div class="bg-white p-2.5 rounded-xl border border-gray-200 shadow-xs sm:col-span-2">
                                     <div class="flex items-center justify-between mb-1">
                                         <code class="text-xs font-bold font-mono text-gray-800 bg-gray-100 px-1.5 py-0.5 rounded">gelombang</code>
                                         <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">Opsional</span>

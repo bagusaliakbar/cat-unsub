@@ -66,14 +66,14 @@
         </a>
         <span class="text-gray-300">|</span>
         <div class="flex items-center space-x-2">
-            <label class="text-xs font-bold text-gray-700">Filter Instansi:</label>
+            <label class="text-xs font-bold text-gray-700">Filter Desa:</label>
             <select onchange="window.location.href = this.value" class="text-xs font-medium border-gray-300 rounded-lg py-1 px-2.5 bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
                 <option value="{{ route('admin.exams.attendance', ['examId' => $exam->id, 'institution' => 'all']) }}" {{ ($institution ?? 'all') === 'all' ? 'selected' : '' }}>
-                    Semua Instansi (Gabungan)
+                    Semua Desa (Gabungan)
                 </option>
                 @if(isset($institutions) && count($institutions) > 1)
                     <option value="{{ route('admin.exams.attendance', ['examId' => $exam->id, 'institution' => 'all_separated']) }}" {{ ($institution ?? '') === 'all_separated' ? 'selected' : '' }}>
-                        Cetak Semua (Pisah Lembar Per Instansi)
+                        Cetak Semua (Pisah Lembar Per Desa)
                     </option>
                 @endif
                 @if(isset($institutions))
@@ -145,20 +145,24 @@
             <table class="w-full table-bordered mb-8">
                 <thead>
                     <tr>
-                        <th class="w-12 text-center">No</th>
-                        <th class="w-32 text-center">Nomor Peserta</th>
+                        <th class="w-10 text-center">No</th>
+                        <th class="w-20 text-center">No. Meja</th>
+                        <th class="w-28 text-center">Nomor Peserta</th>
                         <th class="text-center">Nama Peserta</th>
-                        <th class="w-40 text-center">Desa / Instansi</th>
-                        <th class="w-48 text-center">Tanda Tangan</th>
+                        <th class="w-32 text-center">Desa</th>
+                        <th class="w-32 text-center">Kecamatan</th>
+                        <th class="w-44 text-center">Tanda Tangan</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($attItem['participants'] as $index => $participant)
                     <tr>
                         <td class="text-center align-middle">{{ $index + 1 }}</td>
-                        <td class="text-center align-middle">{{ $participant->participant_number ?? $participant->nik }}</td>
+                        <td class="text-center align-middle font-bold font-mono">{{ $participant->no_meja ?? '-' }}</td>
+                        <td class="text-center align-middle font-mono">{{ $participant->participant_number ?? $participant->nik }}</td>
                         <td class="px-3 align-middle">{{ $participant->name }}</td>
-                        <td class="px-3 align-middle text-center">{{ $participant->institution ?? '-' }}</td>
+                        <td class="px-3 align-middle text-center">{{ $participant->desa ?: ($participant->institution ?: '-') }}</td>
+                        <td class="px-3 align-middle text-center">{{ $participant->kecamatan ?: '-' }}</td>
                         <td class="align-middle px-3">
                             <div class="h-8 relative">
                                 @if(($index + 1) % 2 != 0)
@@ -172,7 +176,7 @@
                     @endforeach
                     @if(count($attItem['participants']) == 0)
                     <tr>
-                        <td colspan="5" class="text-center py-4 text-gray-500">Belum ada peserta dari desa {{ $attItem['village'] }}.</td>
+                        <td colspan="7" class="text-center py-4 text-gray-500">Belum ada peserta dari desa {{ $attItem['village'] }}.</td>
                     </tr>
                     @endif
                 </tbody>
@@ -254,20 +258,24 @@
         <table class="w-full table-bordered mb-8">
             <thead>
                 <tr>
-                    <th class="w-12 text-center">No</th>
-                    <th class="w-32 text-center">Nomor Peserta</th>
+                    <th class="w-10 text-center">No</th>
+                    <th class="w-20 text-center">No. Meja</th>
+                    <th class="w-28 text-center">Nomor Peserta</th>
                     <th class="text-center">Nama Peserta</th>
-                    <th class="w-40 text-center">Desa / Instansi</th>
-                    <th class="w-48 text-center">Tanda Tangan</th>
+                    <th class="w-32 text-center">Desa</th>
+                    <th class="w-32 text-center">Kecamatan</th>
+                    <th class="w-44 text-center">Tanda Tangan</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($participants as $index => $participant)
                 <tr>
                     <td class="text-center align-middle">{{ $index + 1 }}</td>
-                    <td class="text-center align-middle">{{ $participant->participant_number ?? $participant->nik }}</td>
+                    <td class="text-center align-middle font-bold font-mono">{{ $participant->no_meja ?? '-' }}</td>
+                    <td class="text-center align-middle font-mono">{{ $participant->participant_number ?? $participant->nik }}</td>
                     <td class="px-3 align-middle">{{ $participant->name }}</td>
-                    <td class="px-3 align-middle text-center">{{ $participant->institution ?? '-' }}</td>
+                    <td class="px-3 align-middle text-center">{{ $participant->desa ?: ($participant->institution ?: '-') }}</td>
+                    <td class="px-3 align-middle text-center">{{ $participant->kecamatan ?: '-' }}</td>
                     <td class="align-middle px-3">
                         <div class="h-8 relative">
                             @if(($index + 1) % 2 != 0)
@@ -281,7 +289,7 @@
                 @endforeach
                 @if(count($participants) == 0)
                 <tr>
-                    <td colspan="5" class="text-center py-4 text-gray-500">Belum ada peserta yang sesuai dengan pilihan ini.</td>
+                    <td colspan="7" class="text-center py-4 text-gray-500">Belum ada peserta yang sesuai dengan pilihan ini.</td>
                 </tr>
                 @endif
             </tbody>
