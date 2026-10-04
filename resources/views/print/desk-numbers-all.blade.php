@@ -182,6 +182,19 @@
 
             <!-- Toolbar Controls -->
             <div class="flex flex-wrap items-center gap-2.5">
+                <!-- Status Ujian Selector -->
+                <div class="flex items-center space-x-1 bg-gray-100 p-1 rounded-xl text-xs font-semibold">
+                    <a href="{{ request()->fullUrlWithQuery(['exam_status' => 'belum_ujian']) }}" class="px-2.5 py-1 rounded-lg transition {{ request('exam_status', 'belum_ujian') === 'belum_ujian' ? 'bg-white shadow-xs text-blue-700 font-bold' : 'text-gray-600 hover:text-gray-900' }}" title="Hanya cetak peserta yang belum menyelesaikan ujian">
+                        ⏳ Belum Ujian
+                    </a>
+                    <a href="{{ request()->fullUrlWithQuery(['exam_status' => 'all']) }}" class="px-2.5 py-1 rounded-lg transition {{ request('exam_status') === 'all' ? 'bg-white shadow-xs text-blue-700 font-bold' : 'text-gray-600 hover:text-gray-900' }}" title="Cetak semua peserta">
+                        Semua
+                    </a>
+                    <a href="{{ request()->fullUrlWithQuery(['exam_status' => 'sudah_ujian']) }}" class="px-2.5 py-1 rounded-lg transition {{ request('exam_status') === 'sudah_ujian' ? 'bg-white shadow-xs text-blue-700 font-bold' : 'text-gray-600 hover:text-gray-900' }}" title="Hanya cetak peserta yang sudah menyelesaikan ujian">
+                        ✅ Sudah Ujian
+                    </a>
+                </div>
+
                 <!-- Theme Selector -->
                 <div class="flex items-center space-x-1.5 bg-gray-100 p-1 rounded-xl text-xs font-semibold">
                     <button onclick="setGlobalTheme('auto')" id="btn-theme-auto" class="theme-btn px-2.5 py-1 rounded-lg bg-white shadow-xs text-gray-800">
@@ -371,7 +384,17 @@
                                 {{ $participant->name }}
                             </div>
                             <div class="text-[9.5px] sm:text-[10px] font-bold text-gray-600 uppercase tracking-normal mt-0.5 leading-tight">
-                                {{ $participant->desa ? 'Desa ' . $participant->desa : '' }} {{ $participant->kecamatan ? '• Kecamatan ' . $participant->kecamatan : '' }}
+                                @php
+                                    $desaDisplay = $participant->desa ?? '';
+                                    if ($desaDisplay && !preg_match('/^desa\b/i', trim($desaDisplay))) {
+                                        $desaDisplay = 'Desa ' . $desaDisplay;
+                                    }
+                                    $kecDisplay = $participant->kecamatan ?? '';
+                                    if ($kecDisplay && preg_match('/^kecamatan\b/i', trim($kecDisplay))) {
+                                        $kecDisplay = trim(preg_replace('/^kecamatan\s*/i', '', $kecDisplay));
+                                    }
+                                @endphp
+                                {{ $desaDisplay }} {{ $kecDisplay ? '• Kecamatan ' . $kecDisplay : '' }}
                             </div>
                         </div>
                     </div>

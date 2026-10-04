@@ -224,16 +224,15 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
             $query->where('kecamatan', $request->kecamatan);
         }
 
-        if ($request->has('exam_status') && $request->exam_status != '') {
-            if ($request->exam_status === 'belum_ujian') {
-                $query->whereDoesntHave('examSessions', function ($q) {
-                    $q->where('status', 'completed')->orWhereNotNull('completed_at');
-                });
-            } elseif ($request->exam_status === 'sudah_ujian') {
-                $query->whereHas('examSessions', function ($q) {
-                    $q->where('status', 'completed')->orWhereNotNull('completed_at');
-                });
-            }
+        $examStatus = $request->query('exam_status', 'belum_ujian');
+        if ($examStatus === '' || $examStatus === 'belum_ujian') {
+            $query->whereDoesntHave('examSessions', function ($q) {
+                $q->where('status', 'completed')->orWhereNotNull('completed_at');
+            });
+        } elseif ($examStatus === 'sudah_ujian') {
+            $query->whereHas('examSessions', function ($q) {
+                $q->where('status', 'completed')->orWhereNotNull('completed_at');
+            });
         }
         
         if ($request->has('search') && $request->search != '') {
@@ -282,16 +281,15 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
             $query->where('kecamatan', $request->kecamatan);
         }
 
-        if ($request->has('exam_status') && $request->exam_status != '') {
-            if ($request->exam_status === 'belum_ujian') {
-                $query->whereDoesntHave('examSessions', function ($q) {
-                    $q->where('status', 'completed')->orWhereNotNull('completed_at');
-                });
-            } elseif ($request->exam_status === 'sudah_ujian') {
-                $query->whereHas('examSessions', function ($q) {
-                    $q->where('status', 'completed')->orWhereNotNull('completed_at');
-                });
-            }
+        $examStatus = $request->query('exam_status', 'belum_ujian');
+        if ($examStatus === '' || $examStatus === 'belum_ujian') {
+            $query->whereDoesntHave('examSessions', function ($q) {
+                $q->where('status', 'completed')->orWhereNotNull('completed_at');
+            });
+        } elseif ($examStatus === 'sudah_ujian') {
+            $query->whereHas('examSessions', function ($q) {
+                $q->where('status', 'completed')->orWhereNotNull('completed_at');
+            });
         }
         
         if ($request->has('search') && $request->search != '') {
@@ -321,6 +319,17 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         if ($request->has('ids') && !empty($request->ids)) {
             $ids = is_array($request->ids) ? $request->ids : explode(',', $request->ids);
             $query->whereIn('users.id', $ids);
+        }
+
+        $examStatus = $request->query('exam_status', 'belum_ujian');
+        if ($examStatus === '' || $examStatus === 'belum_ujian') {
+            $query->whereDoesntHave('examSessions', function ($q) {
+                $q->where('status', 'completed')->orWhereNotNull('completed_at');
+            });
+        } elseif ($examStatus === 'sudah_ujian') {
+            $query->whereHas('examSessions', function ($q) {
+                $q->where('status', 'completed')->orWhereNotNull('completed_at');
+            });
         }
 
         $participants = $query->orderByRaw('CASE WHEN no_meja IS NULL OR no_meja = "" THEN 1 ELSE 0 END, CAST(no_meja AS UNSIGNED) ASC, no_meja ASC, name ASC')->get();

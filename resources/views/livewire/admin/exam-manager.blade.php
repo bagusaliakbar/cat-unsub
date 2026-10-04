@@ -790,7 +790,7 @@
                         </div>
                         @if($assigning_exam_id)
                             <div class="mt-3 sm:mt-0">
-                                <a href="{{ route('admin.exams.print_desk_numbers', $assigning_exam_id) }}" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl border border-amber-300 shadow-xs px-4 py-2.5 bg-amber-50 text-amber-800 hover:bg-amber-100 font-semibold text-xs sm:text-sm transition-all">
+                                <a href="{{ route('admin.exams.print_desk_numbers', ['examId' => $assigning_exam_id, 'exam_status' => 'belum_ujian']) }}" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl border border-amber-300 shadow-xs px-4 py-2.5 bg-amber-50 text-amber-800 hover:bg-amber-100 font-semibold text-xs sm:text-sm transition-all">
                                     <svg class="w-4 h-4 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                     Cetak Nomor Meja Peserta Ujian Ini
                                 </a>

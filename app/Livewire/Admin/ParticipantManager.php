@@ -31,7 +31,7 @@ class ParticipantManager extends Component
     public $filter_desa = '';
     public $filter_kecamatan = '';
     public $filter_institution = ''; // Backward compatibility
-    public $filter_exam_status = ''; // '', 'belum_ujian', 'sudah_ujian'
+    public $filter_exam_status = 'belum_ujian'; // 'belum_ujian', 'all', 'sudah_ujian'
     public $search = '';
 
     // Batch Deletion
@@ -75,7 +75,7 @@ class ParticipantManager extends Component
         $this->filter_desa = '';
         $this->filter_kecamatan = '';
         $this->filter_institution = '';
-        $this->filter_exam_status = '';
+        $this->filter_exam_status = 'belum_ujian';
         $this->search = '';
         $this->resetPage();
     }

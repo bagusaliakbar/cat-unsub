@@ -92,14 +92,14 @@
             <!-- Status Ujian Filter -->
             <div class="w-full sm:w-auto">
                 <select wire:model.live="filter_exam_status" class="w-full sm:w-auto min-w-[170px] rounded-xl border border-gray-200 text-sm py-2 pl-3.5 pr-9 bg-gray-50/50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-gray-700 cursor-pointer font-medium">
-                    <option value="">Semua Status Ujian</option>
-                    <option value="belum_ujian">⏳ Belum Ujian</option>
+                    <option value="belum_ujian">⏳ Belum Ujian (Aktif)</option>
+                    <option value="all">Semua Status Ujian</option>
                     <option value="sudah_ujian">✅ Sudah Ujian</option>
                 </select>
             </div>
 
             <!-- Reset Filter Button -->
-            @if($search || $filter_wave || $filter_desa || $filter_kecamatan || $filter_exam_status)
+            @if($search || $filter_wave || $filter_desa || $filter_kecamatan || ($filter_exam_status && $filter_exam_status !== 'belum_ujian'))
                 <button wire:click="resetFilters" type="button" class="inline-flex items-center px-3 py-2 text-xs font-semibold text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer" title="Reset semua filter">
                     <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     Reset Filter
