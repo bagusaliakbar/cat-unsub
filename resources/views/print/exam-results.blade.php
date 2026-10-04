@@ -63,7 +63,7 @@
     <div class="text-center mb-8">
         <h3 class="text-lg font-bold uppercase">DAFTAR HASIL UJIAN SELEKSI TERTULIS BERBASIS CAT</h3>
         @if($report && $report->village)
-        <h3 class="text-lg font-bold uppercase">CALON KEPALA DESA ANTAR WAKTU (PAW) DESA {{ strtoupper($report->village) }}</h3>
+        <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA {{ strtoupper($report->village) }}</h3>
         <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }} KABUPATEN SUBANG</h3>
         @endif
     </div>

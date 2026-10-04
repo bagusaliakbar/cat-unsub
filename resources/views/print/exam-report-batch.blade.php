@@ -100,7 +100,7 @@
         <!-- Title -->
         <div class="text-center mb-6">
             <h3 class="text-lg font-bold uppercase">BERITA ACARA HASIL SELEKSI TERTULIS BERBASIS CAT</h3>
-            <h3 class="text-lg font-bold uppercase">CALON KEPALA DESA ANTAR WAKTU (PAW) DESA {{ strtoupper($item['village']) }}</h3>
+            <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA {{ strtoupper($item['village']) }}</h3>
             @if(!empty($report->district))
             <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }} KABUPATEN SUBANG</h3>
             @else
@@ -111,7 +111,7 @@
 
         <!-- Content -->
         <div class="text-justify mb-4">
-            <p class="indent-10">Pada hari ini, <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l') }}</strong> tanggal <strong>{{ \Carbon\Carbon::now()->translatedFormat('d') }}</strong> bulan <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('F') }}</strong> tahun <strong>{{ ucwords(\NumberFormatter::create('id_ID', \NumberFormatter::SPELLOUT)->format(\Carbon\Carbon::now()->year)) }}</strong>, bertempat di Laboratorium Komputer Universitas Subang, telah dilaksanakan Ujian Penyaringan Seleksi Tertulis berbasis Computer Assisted Test (CAT) bagi Calon Kepala Desa Antar Waktu (PAW) Desa {{ ucwords(strtolower($item['village'])) }} @if(!empty($report->district)) Kecamatan {{ ucwords(strtolower($report->district)) }} @endif Kabupaten Subang oleh Lembaga Penelitian dan Pengabdian kepada Masyarakat (LPPM) Universitas Subang.</p>
+            <p class="indent-10">Pada hari ini, <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l') }}</strong> tanggal <strong>{{ \Carbon\Carbon::now()->translatedFormat('d') }}</strong> bulan <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('F') }}</strong> tahun <strong>{{ ucwords(\NumberFormatter::create('id_ID', \NumberFormatter::SPELLOUT)->format(\Carbon\Carbon::now()->year)) }}</strong>, bertempat di Laboratorium Komputer Universitas Subang, telah dilaksanakan Ujian Penyaringan Seleksi Tertulis berbasis Computer Assisted Test (CAT) bagi Bakal Calon Kepala Desa {{ ucwords(strtolower($item['village'])) }} @if(!empty($report->district)) Kecamatan {{ ucwords(strtolower($report->district)) }} @endif Kabupaten Subang oleh Lembaga Penelitian dan Pengabdian kepada Masyarakat (LPPM) Universitas Subang.</p>
         </div>
 
         <table class="w-full mb-4 text-left align-top">

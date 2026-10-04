@@ -97,9 +97,9 @@
     <div class="text-center mb-6">
         <h3 class="text-lg font-bold uppercase">BERITA ACARA HASIL SELEKSI TERTULIS BERBASIS CAT</h3>
         @if(!empty($targetVillage) && $targetVillage !== 'all' && !str_starts_with(strtolower($targetVillage), 'gabungan'))
-            <h3 class="text-lg font-bold uppercase">CALON KEPALA DESA ANTAR WAKTU (PAW) DESA {{ strtoupper($targetVillage) }}</h3>
+            <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA {{ strtoupper($targetVillage) }}</h3>
         @else
-            <h3 class="text-lg font-bold uppercase">CALON KEPALA DESA ANTAR WAKTU (PAW)</h3>
+            <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA</h3>
         @endif
         @if(!empty($report->district))
             <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }} KABUPATEN SUBANG</h3>
@@ -111,7 +111,7 @@
 
     <!-- Content -->
     <div class="text-justify mb-4">
-        <p class="indent-10">Pada hari ini, <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l') }}</strong> tanggal <strong>{{ \Carbon\Carbon::now()->translatedFormat('d') }}</strong> bulan <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('F') }}</strong> tahun <strong>{{ ucwords(\NumberFormatter::create('id_ID', \NumberFormatter::SPELLOUT)->format(\Carbon\Carbon::now()->year)) }}</strong>, bertempat di Laboratorium Komputer Universitas Subang, telah dilaksanakan Ujian Penyaringan Seleksi Tertulis berbasis Computer Assisted Test (CAT) bagi Calon Kepala Desa Antar Waktu (PAW)
+        <p class="indent-10">Pada hari ini, <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l') }}</strong> tanggal <strong>{{ \Carbon\Carbon::now()->translatedFormat('d') }}</strong> bulan <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('F') }}</strong> tahun <strong>{{ ucwords(\NumberFormatter::create('id_ID', \NumberFormatter::SPELLOUT)->format(\Carbon\Carbon::now()->year)) }}</strong>, bertempat di Laboratorium Komputer Universitas Subang, telah dilaksanakan Ujian Penyaringan Seleksi Tertulis berbasis Computer Assisted Test (CAT) bagi Bakal Calon Kepala Desa
         @if(!empty($targetVillage) && $targetVillage !== 'all' && !str_starts_with(strtolower($targetVillage), 'gabungan'))
             Desa {{ ucwords(strtolower($targetVillage)) }}
         @elseif(!empty($institutions) && count($institutions) > 1)
