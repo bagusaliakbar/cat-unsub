@@ -366,11 +366,11 @@
                         </div>
 
                         <!-- Participant Identity Info (Toggleable) -->
-                        <div class="participant-name-container text-center mt-1 px-1">
-                            <div class="text-[9.5px] font-bold text-gray-800 uppercase tracking-tight truncate">
+                        <div class="participant-name-container text-center mt-1.5 px-2">
+                            <div class="text-[13px] sm:text-[14px] font-extrabold text-gray-900 uppercase tracking-tight leading-snug">
                                 {{ $participant->name }}
                             </div>
-                            <div class="text-[7.5px] font-semibold text-gray-500 uppercase tracking-tight truncate">
+                            <div class="text-[9.5px] sm:text-[10px] font-bold text-gray-600 uppercase tracking-normal mt-0.5 leading-tight">
                                 {{ $participant->desa ? 'Desa ' . $participant->desa : '' }} {{ $participant->kecamatan ? '• Kec. ' . $participant->kecamatan : '' }}
                             </div>
                         </div>
