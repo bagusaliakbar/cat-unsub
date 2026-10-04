@@ -63,6 +63,16 @@ class ParticipantManager extends Component
         $this->resetPage();
     }
 
+    public function resetFilters()
+    {
+        $this->filter_wave = '';
+        $this->filter_desa = '';
+        $this->filter_kecamatan = '';
+        $this->filter_institution = '';
+        $this->search = '';
+        $this->resetPage();
+    }
+
     public function render()
     {
         $query = User::with('wave')->whereIn('role', ['peserta', 'participant']);
