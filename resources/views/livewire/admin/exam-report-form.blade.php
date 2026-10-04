@@ -19,23 +19,44 @@
         <form wire:submit.prevent="saveAndPrint" class="p-6 md:p-8 space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Pilihan Lingkup Berita Acara (Instansi) -->
-                <div class="bg-gradient-to-r from-blue-50 to-indigo-50/70 p-5 rounded-2xl border border-blue-200/80 md:col-span-2 space-y-3 shadow-sm">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div>
-                            <h4 class="text-sm font-bold text-blue-900 uppercase tracking-wider flex items-center">
-                                <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                                Pilihan Lingkup & Format Berita Acara
-                            </h4>
-                            <p class="text-xs text-blue-700 mt-1">
-                                Pada sesi ini terdapat <strong class="font-bold text-blue-900">{{ count($institutions) }} instansi/desa</strong>. Anda dapat mencetak berita acara gabungan, per instansi, atau cetak semua sekaligus terpisah per lembar.
+                <div class="bg-gradient-to-r from-blue-50 via-indigo-50/50 to-blue-50 p-6 rounded-2xl border border-blue-200 md:col-span-2 space-y-4 shadow-sm">
+                    <!-- Card Header -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-blue-100 pb-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-blue-900 tracking-wide">
+                                    PILIHAN LINGKUP & FORMAT BERITA ACARA
+                                </h4>
+                                <p class="text-xs text-blue-700">
+                                    Tentukan cakupan data peserta dan format halaman berita acara yang akan dicetak.
+                                </p>
+                            </div>
+                        </div>
+                        @if(count($institutions) > 0)
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 self-start sm:self-auto shrink-0 border border-blue-200">
+                                {{ count($institutions) }} Desa / Instansi
+                            </span>
+                        @endif
+                    </div>
+
+                    <!-- Card Body / Selector Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                        <div class="md:col-span-4">
+                            <label for="selected_institution" class="block text-xs font-bold text-blue-900 uppercase">
+                                Format Dokumen Cetak:
+                            </label>
+                            <p class="text-xs text-blue-600 mt-0.5">
+                                Pilih dokumen gabungan, satu desa spesifik, atau cetak semua terpisah.
                             </p>
                         </div>
-                        <div class="w-full md:w-80 shrink-0">
-                            <label for="selected_institution" class="block text-xs font-bold text-blue-900 uppercase mb-1">Cetak Untuk:</label>
-                            <select id="selected_institution" wire:model.live="selected_institution" class="w-full bg-white border border-blue-300 text-gray-800 text-sm font-semibold rounded-xl focus:ring-blue-500 focus:border-blue-500 p-2.5 shadow-sm">
+                        <div class="md:col-span-8">
+                            <select id="selected_institution" wire:model.live="selected_institution" class="w-full bg-white border border-blue-300 text-gray-800 text-sm font-semibold rounded-xl focus:ring-blue-500 focus:border-blue-500 p-3 shadow-sm transition-all">
                                 <option value="all">Semua Instansi (1 Dokumen Gabungan)</option>
                                 @if(count($institutions) > 1)
-                                    <option value="all_separated">Cetak Semua (Pisah Lembar Per Instansi)</option>
+                                    <option value="all_separated">Cetak Semua Sekaligus (Pisah Lembar Per Instansi)</option>
                                 @endif
                                 @if(count($institutions) > 0)
                                     <optgroup label="Cetak Khusus Per Instansi:">
@@ -48,15 +69,21 @@
                         </div>
                     </div>
                     
+                    <!-- Information Notice -->
                     @if($selected_institution && $selected_institution !== 'all' && $selected_institution !== 'all_separated')
-                        <div class="text-xs text-blue-800 bg-blue-100/70 p-3 rounded-xl flex items-center border border-blue-200">
-                            <svg class="w-4 h-4 mr-2 shrink-0 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                        <div class="text-xs text-blue-900 bg-blue-100/80 p-3 rounded-xl flex items-center border border-blue-200">
+                            <svg class="w-4 h-4 mr-2.5 shrink-0 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
                             <span>Sedang menampilkan Berita Acara khusus instansi <strong>{{ $selected_institution }}</strong>. Angka kehadiran & daftar nilai otomatis difilter khusus untuk peserta dari instansi ini.</span>
                         </div>
                     @elseif($selected_institution === 'all_separated')
-                        <div class="text-xs text-indigo-900 bg-indigo-100/70 p-3 rounded-xl flex items-center border border-indigo-200">
-                            <svg class="w-4 h-4 mr-2 shrink-0 text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                        <div class="text-xs text-indigo-900 bg-indigo-100/80 p-3 rounded-xl flex items-center border border-indigo-200">
+                            <svg class="w-4 h-4 mr-2.5 shrink-0 text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
                             <span><strong>Mode Batch Print (Multi-Halaman):</strong> Sistem akan menghasilkan Berita Acara resmi untuk setiap instansi secara otomatis terpisah per halaman (page break) dalam satu kali proses cetak.</span>
+                        </div>
+                    @else
+                        <div class="text-xs text-blue-800 bg-blue-100/50 p-2.5 rounded-xl flex items-center border border-blue-200/60">
+                            <svg class="w-4 h-4 mr-2.5 shrink-0 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                            <span>Dokumen gabungan akan memuat seluruh peserta dari semua instansi dalam 1 tabel lengkap dengan kolom Desa/Instansi.</span>
                         </div>
                     @endif
                 </div>
