@@ -521,16 +521,16 @@
 
                         <!-- Filter, Search & Action Toolbar -->
                         <div class="mb-4 bg-gray-50/80 p-4 rounded-2xl border border-gray-200/90 space-y-3">
-                            <!-- Top: Search, Gelombang, Instansi -->
+                            <!-- Top: Search, Gelombang, Kecamatan, Desa -->
                             <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
                                 <!-- Search Input -->
-                                <div class="sm:col-span-6 relative">
+                                <div class="sm:col-span-3 relative">
                                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                                     </div>
                                     <input type="text" 
                                            wire:model.live.debounce.300ms="assigning_search" 
-                                           placeholder="Cari nama, NIK, atau nomor peserta..." 
+                                           placeholder="Cari nama, NIK, meja..." 
                                            class="w-full pl-9 pr-4 py-2 bg-white border border-gray-300 rounded-xl text-xs sm:text-sm text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition">
                                 </div>
 
@@ -544,12 +544,22 @@
                                     </select>
                                 </div>
 
-                                <!-- Filter Instansi -->
+                                <!-- Filter Kecamatan -->
                                 <div class="sm:col-span-3">
-                                    <select wire:model.live="assigning_filter_institution" class="w-full py-2 pl-3 pr-8 bg-white border border-gray-300 rounded-xl text-xs sm:text-sm text-gray-700 font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
-                                        <option value="">Semua Instansi</option>
-                                        @foreach($institutions as $inst)
-                                            <option value="{{ $inst }}">{{ $inst }}</option>
+                                    <select wire:model.live="assigning_filter_kecamatan" class="w-full py-2 pl-3 pr-8 bg-white border border-gray-300 rounded-xl text-xs sm:text-sm text-gray-700 font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+                                        <option value="">Semua Kecamatan</option>
+                                        @foreach($kecamatans as $kec)
+                                            <option value="{{ $kec }}">{{ $kec }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Filter Desa -->
+                                <div class="sm:col-span-3">
+                                    <select wire:model.live="assigning_filter_desa" class="w-full py-2 pl-3 pr-8 bg-white border border-gray-300 rounded-xl text-xs sm:text-sm text-gray-700 font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+                                        <option value="">Semua Desa</option>
+                                        @foreach($desas as $desa)
+                                            <option value="{{ $desa }}">{{ $desa }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -561,7 +571,7 @@
                                     <span>Tampil: <strong class="text-gray-900 font-bold">{{ count($all_participants) }}</strong> peserta</span>
                                     <span class="text-gray-300">•</span>
                                     <span>Total Dipilih: <strong class="text-blue-600 font-bold">{{ count($selected_participants) }}</strong> peserta</span>
-                                    @if($assigning_search || $assigning_filter_wave || $assigning_filter_institution)
+                                    @if($assigning_search || $assigning_filter_wave || $assigning_filter_institution || $assigning_filter_desa || $assigning_filter_kecamatan)
                                         <button type="button" 
                                                 wire:click="resetAssigningFilters" 
                                                 class="ml-2 text-blue-600 hover:text-blue-800 underline font-semibold inline-flex items-center">
@@ -603,11 +613,14 @@
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Nama Peserta
                                         </th>
+                                        <th scope="col" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            No. Meja
+                                        </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Gelombang
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Instansi
+                                            Desa & Kecamatan
                                         </th>
                                     </tr>
                                 </thead>
@@ -632,6 +645,15 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td class="px-4 py-4 whitespace-nowrap text-center">
+                                                @if($participant->no_meja)
+                                                    <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-bold font-mono rounded-lg bg-blue-50 text-blue-800 border border-blue-200">
+                                                        {{ $participant->no_meja }}
+                                                    </span>
+                                                @else
+                                                    <span class="text-gray-400 text-xs">-</span>
+                                                @endif
+                                            </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 @if($participant->wave)
                                                     <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-md bg-blue-50 text-blue-700 border border-blue-200">
@@ -642,12 +664,15 @@
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900">{{ $participant->institution ?? '-' }}</div>
+                                                <div class="text-sm font-semibold text-gray-900">{{ $participant->desa ?: ($participant->institution ?: '-') }}</div>
+                                                <div class="text-xs text-gray-500 flex items-center mt-0.5">
+                                                    <span class="text-gray-600 font-medium">{{ $participant->kecamatan ? 'Kec. ' . $participant->kecamatan : 'Kec. -' }}</span>
+                                                </div>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" class="px-6 py-12 text-center text-gray-500">
+                                            <td colspan="5" class="px-6 py-12 text-center text-gray-500">
                                                 <p class="text-sm font-medium">Tidak ada peserta yang cocok dengan filter yang dipilih.</p>
                                             </td>
                                         </tr>

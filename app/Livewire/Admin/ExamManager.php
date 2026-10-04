@@ -44,6 +44,8 @@ class ExamManager extends Component
     public $selected_participants = [];
     public $assigning_filter_wave = '';
     public $assigning_filter_institution = '';
+    public $assigning_filter_desa = '';
+    public $assigning_filter_kecamatan = '';
     public $assigning_search = '';
 
     public function render()
@@ -71,14 +73,21 @@ class ExamManager extends Component
             ? 0 
             : \App\Models\Question::whereIn('id', $this->selected_questions)->sum('points');
 
-        $participantQuery = \App\Models\User::whereIn('role', ['peserta', 'participant'])->with('wave')->orderBy('name');
+        $participantQuery = \App\Models\User::whereIn('role', ['peserta', 'participant'])
+            ->with('wave')
+            ->orderByRaw('CASE WHEN no_meja IS NULL OR no_meja = "" THEN 1 ELSE 0 END, CAST(no_meja AS UNSIGNED) ASC, no_meja ASC, name ASC');
         
         if ($this->assigning_filter_wave) {
             $participantQuery->where('wave_id', $this->assigning_filter_wave);
         }
 
-        if ($this->assigning_filter_institution) {
-            $participantQuery->where('desa', $this->assigning_filter_institution);
+        $effectiveDesa = $this->assigning_filter_desa ?: $this->assigning_filter_institution;
+        if ($effectiveDesa) {
+            $participantQuery->where('desa', $effectiveDesa);
+        }
+
+        if ($this->assigning_filter_kecamatan) {
+            $participantQuery->where('kecamatan', $this->assigning_filter_kecamatan);
         }
 
         if ($this->assigning_search) {
@@ -87,6 +96,7 @@ class ExamManager extends Component
                   ->orWhere('nik', 'like', '%' . $this->assigning_search . '%')
                   ->orWhere('participant_number', 'like', '%' . $this->assigning_search . '%')
                   ->orWhere('desa', 'like', '%' . $this->assigning_search . '%')
+                  ->orWhere('kecamatan', 'like', '%' . $this->assigning_search . '%')
                   ->orWhere('no_meja', 'like', '%' . $this->assigning_search . '%');
             });
         }
@@ -98,14 +108,23 @@ class ExamManager extends Component
         
         $waves = \App\Models\Wave::where('is_active', true)->get();
 
-        $institutions = \App\Models\User::whereIn('role', ['peserta', 'participant'])
+        $desas = \App\Models\User::whereIn('role', ['peserta', 'participant'])
             ->whereNotNull('desa')
             ->where('desa', '!=', '')
             ->distinct()
             ->orderBy('desa')
             ->pluck('desa');
 
-        return view('livewire.admin.exam-manager', compact('exams', 'categories', 'bank_questions', 'total_points', 'all_participants', 'waves', 'institutions', 'is_all_participants_selected'))
+        $kecamatans = \App\Models\User::whereIn('role', ['peserta', 'participant'])
+            ->whereNotNull('kecamatan')
+            ->where('kecamatan', '!=', '')
+            ->distinct()
+            ->orderBy('kecamatan')
+            ->pluck('kecamatan');
+
+        $institutions = $desas;
+
+        return view('livewire.admin.exam-manager', compact('exams', 'categories', 'bank_questions', 'total_points', 'all_participants', 'waves', 'institutions', 'desas', 'kecamatans', 'is_all_participants_selected'))
             ->layout('layouts.app'); // Assuming breeze layout
     }
 
@@ -278,8 +297,12 @@ class ExamManager extends Component
         if ($this->assigning_filter_wave) {
             $participantQuery->where('wave_id', $this->assigning_filter_wave);
         }
-        if ($this->assigning_filter_institution) {
-            $participantQuery->where('desa', $this->assigning_filter_institution);
+        $effectiveDesa = $this->assigning_filter_desa ?: $this->assigning_filter_institution;
+        if ($effectiveDesa) {
+            $participantQuery->where('desa', $effectiveDesa);
+        }
+        if ($this->assigning_filter_kecamatan) {
+            $participantQuery->where('kecamatan', $this->assigning_filter_kecamatan);
         }
         if ($this->assigning_search) {
             $participantQuery->where(function ($q) {
@@ -287,6 +310,7 @@ class ExamManager extends Component
                   ->orWhere('nik', 'like', '%' . $this->assigning_search . '%')
                   ->orWhere('participant_number', 'like', '%' . $this->assigning_search . '%')
                   ->orWhere('desa', 'like', '%' . $this->assigning_search . '%')
+                  ->orWhere('kecamatan', 'like', '%' . $this->assigning_search . '%')
                   ->orWhere('no_meja', 'like', '%' . $this->assigning_search . '%');
             });
         }
@@ -309,6 +333,8 @@ class ExamManager extends Component
     {
         $this->assigning_filter_wave = '';
         $this->assigning_filter_institution = '';
+        $this->assigning_filter_desa = '';
+        $this->assigning_filter_kecamatan = '';
         $this->assigning_search = '';
     }
 
@@ -319,6 +345,8 @@ class ExamManager extends Component
         $this->selected_participants = [];
         $this->assigning_filter_wave = '';
         $this->assigning_filter_institution = '';
+        $this->assigning_filter_desa = '';
+        $this->assigning_filter_kecamatan = '';
         $this->assigning_search = '';
     }
 

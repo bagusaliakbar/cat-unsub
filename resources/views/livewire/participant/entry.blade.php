@@ -90,8 +90,13 @@
                                 <span class="font-medium text-gray-900 text-lg">{{ $participant->nik ?? '-' }}</span>
                             </div>
                             <div class="p-6 md:px-8 md:py-6 border-b border-gray-100 bg-gray-50/50">
-                                <span class="block text-gray-500 text-xs uppercase tracking-wider font-bold mb-1">Instansi</span>
-                                <span class="font-medium text-gray-900 text-lg">{{ $participant->institution ?? '-' }}</span>
+                                <span class="block text-gray-500 text-xs uppercase tracking-wider font-bold mb-1">Desa & Kecamatan</span>
+                                <span class="font-medium text-gray-900 text-lg">
+                                    {{ $participant->desa ?: ($participant->institution ?: '-') }}
+                                    @if($participant->kecamatan)
+                                        <span class="text-sm text-gray-600 font-normal block mt-0.5">Kec. {{ $participant->kecamatan }}</span>
+                                    @endif
+                                </span>
                             </div>
                             <div class="p-6 md:px-8 md:py-6 border-b md:border-b-0 md:border-r border-gray-100 bg-gray-50/50">
                                 <span class="block text-gray-500 text-xs uppercase tracking-wider font-bold mb-1">Tempat, Tanggal Lahir</span>
