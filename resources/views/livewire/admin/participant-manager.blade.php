@@ -201,14 +201,7 @@
                                         @endif
                                     </div>
                                     <div class="ml-3.5">
-                                        <div class="flex items-center gap-2">
-                                            <span class="text-sm font-bold text-gray-900 tracking-tight">{{ $participant->name }}</span>
-                                            @if($participant->latest_education)
-                                                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200" title="Pendidikan Terakhir: {{ $participant->latest_education }}">
-                                                    {{ $participant->latest_education }}
-                                                </span>
-                                            @endif
-                                        </div>
+                                        <div class="text-sm font-bold text-gray-900 tracking-tight" @if($participant->latest_education) title="Pendidikan: {{ $participant->latest_education }}" @endif>{{ $participant->name }}</div>
                                         @if($participant->birth_place || $participant->birth_date)
                                             <div class="text-xs text-gray-500 flex items-center mt-0.5">
                                                 <svg class="w-3.5 h-3.5 mr-1 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
