@@ -340,64 +340,87 @@ class ParticipantManager extends Component
             return;
         }
 
-        $users = User::whereIn('id', $this->selected_participants)->get();
-        $deletedCount = 0;
-        $skippedCount = 0;
+        try {
+            $users = User::whereIn('id', $this->selected_participants)->get();
+            $deletedCount = 0;
+            $skippedCount = 0;
 
-        foreach ($users as $user) {
-            // Check if user has an exam session (nilai / riwayat ujian)
-            $hasExamSessions = \App\Models\ExamSession::where('user_id', $user->id)->exists();
-            if ($hasExamSessions) {
-                $skippedCount++;
-                continue; // Protect participants with exam results!
+            foreach ($users as $user) {
+                // Check if user has an exam session (nilai / riwayat ujian)
+                $hasExamSessions = \App\Models\ExamSession::where('user_id', $user->id)->exists();
+                if ($hasExamSessions) {
+                    $skippedCount++;
+                    continue; // Protect participants with exam results!
+                }
+
+                // Delete profile photo safely
+                if ($user->profile_photo_path) {
+                    try {
+                        Storage::disk('public')->delete($user->profile_photo_path);
+                    } catch (\Throwable $e) {
+                        \Log::warning("Gagal menghapus foto peserta ID {$user->id}: " . $e->getMessage());
+                    }
+                }
+
+                // Detach from exams if assigned
+                if (method_exists($user, 'assignedExams')) {
+                    $user->assignedExams()->detach();
+                }
+
+                // Delete user
+                $user->delete();
+                $deletedCount++;
             }
 
-            // Delete profile photo
-            if ($user->profile_photo_path) {
-                Storage::disk('public')->delete($user->profile_photo_path);
+            \App\Services\LogService::record(
+                'delete_batch_participants',
+                "Admin menghapus massal peserta: {$deletedCount} berhasil dihapus, {$skippedCount} dilewati (karena memiliki riwayat ujian)."
+            );
+
+            $msg = "Berhasil menghapus {$deletedCount} data peserta.";
+            if ($skippedCount > 0) {
+                $msg .= " ({$skippedCount} peserta dilewati karena sudah memiliki riwayat ujian/nilai).";
             }
 
-            // Detach from exams if assigned
-            $user->exams()->detach();
-
-            // Delete user
-            $user->delete();
-            $deletedCount++;
+            session()->flash('message', $msg);
+            $this->selected_participants = [];
+            $this->closeDeleteBatchModal();
+        } catch (\Throwable $e) {
+            \Log::error('Batch delete failed: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            session()->flash('error', 'Terjadi kesalahan saat menghapus data: ' . $e->getMessage());
+            $this->closeDeleteBatchModal();
         }
-
-        \App\Services\LogService::record(
-            'delete_batch_participants',
-            "Admin menghapus massal peserta: {$deletedCount} berhasil dihapus, {$skippedCount} dilewati (karena memiliki riwayat ujian)."
-        );
-
-        $msg = "Berhasil menghapus {$deletedCount} data peserta.";
-        if ($skippedCount > 0) {
-            $msg .= " ({$skippedCount} peserta dilewati karena sudah memiliki riwayat ujian/nilai).";
-        }
-
-        session()->flash('message', $msg);
-        $this->selected_participants = [];
-        $this->closeDeleteBatchModal();
     }
 
     public function delete($id)
     {
-        $user = User::find($id);
-        if ($user) {
-            $hasExamSessions = \App\Models\ExamSession::where('user_id', $user->id)->exists();
-            if ($hasExamSessions) {
-                session()->flash('error', "Peserta '{$user->name}' tidak dapat dihapus karena sudah memiliki riwayat ujian/nilai.");
-                return;
-            }
+        try {
+            $user = User::find($id);
+            if ($user) {
+                $hasExamSessions = \App\Models\ExamSession::where('user_id', $user->id)->exists();
+                if ($hasExamSessions) {
+                    session()->flash('error', "Peserta '{$user->name}' tidak dapat dihapus karena sudah memiliki riwayat ujian/nilai.");
+                    return;
+                }
 
-            if ($user->profile_photo_path) {
-                Storage::disk('public')->delete($user->profile_photo_path);
+                if ($user->profile_photo_path) {
+                    try {
+                        Storage::disk('public')->delete($user->profile_photo_path);
+                    } catch (\Throwable $e) {
+                        \Log::warning("Gagal menghapus foto peserta ID {$user->id}: " . $e->getMessage());
+                    }
+                }
+                if (method_exists($user, 'assignedExams')) {
+                    $user->assignedExams()->detach();
+                }
+                $user->delete();
             }
-            $user->exams()->detach();
-            $user->delete();
+            $this->selected_participants = array_values(array_diff($this->selected_participants, [(string)$id]));
+            session()->flash('message', 'Peserta berhasil dihapus.');
+        } catch (\Throwable $e) {
+            \Log::error('Delete participant failed: ' . $e->getMessage());
+            session()->flash('error', 'Gagal menghapus peserta: ' . $e->getMessage());
         }
-        $this->selected_participants = array_values(array_diff($this->selected_participants, [(string)$id]));
-        session()->flash('message', 'Peserta berhasil dihapus.');
     }
 
     public function export()

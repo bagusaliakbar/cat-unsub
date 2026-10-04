@@ -46,6 +46,16 @@ class User extends Authenticatable
         return $this->belongsToMany(Exam::class);
     }
 
+    public function exams()
+    {
+        return $this->belongsToMany(Exam::class);
+    }
+
+    public function examSessions()
+    {
+        return $this->hasMany(ExamSession::class);
+    }
+
     public function wave()
     {
         return $this->belongsTo(Wave::class);
