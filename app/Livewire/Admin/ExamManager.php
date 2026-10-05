@@ -143,6 +143,10 @@ class ExamManager extends Component
 
         $bank_questions = $query->orderBy('created_at', 'desc')->get();
 
+        $current_question_ids = $bank_questions->pluck('id')->map(fn($id) => (string)$id)->toArray();
+        $is_all_questions_selected = !empty($current_question_ids) && 
+            count(array_intersect($current_question_ids, $this->selected_questions)) === count($current_question_ids);
+
         $total_points = empty($this->selected_questions) 
             ? 0 
             : \App\Models\Question::whereIn('id', $this->selected_questions)->sum('points');
@@ -198,7 +202,7 @@ class ExamManager extends Component
 
         $institutions = $desas;
 
-        return view('livewire.admin.exam-manager', compact('exams', 'countActive', 'countArchived', 'countAll', 'categories', 'bank_questions', 'total_points', 'all_participants', 'waves', 'institutions', 'desas', 'kecamatans', 'is_all_participants_selected'))
+        return view('livewire.admin.exam-manager', compact('exams', 'countActive', 'countArchived', 'countAll', 'categories', 'bank_questions', 'total_points', 'all_participants', 'waves', 'institutions', 'desas', 'kecamatans', 'is_all_participants_selected', 'is_all_questions_selected'))
             ->layout('layouts.app'); // Assuming breeze layout
     }
 
@@ -337,6 +341,41 @@ class ExamManager extends Component
         } else {
             $this->selected_questions[] = $id;
         }
+    }
+
+    public function toggleSelectAllQuestions()
+    {
+        $query = \App\Models\Question::query();
+        if ($this->filter_category) {
+            $query->where('category_id', $this->filter_category);
+        }
+        if ($this->filter_type) {
+            $query->where('type', $this->filter_type);
+        }
+        if ($this->search_question) {
+            $query->where('text', 'like', '%' . $this->search_question . '%');
+        }
+
+        $currentIds = $query->pluck('id')->map(fn($id) => (string)$id)->toArray();
+
+        if (empty($currentIds)) {
+            return;
+        }
+
+        $allSelected = count(array_intersect($currentIds, $this->selected_questions)) === count($currentIds);
+
+        if ($allSelected) {
+            $this->selected_questions = array_values(array_diff($this->selected_questions, $currentIds));
+        } else {
+            $this->selected_questions = array_values(array_unique(array_merge($this->selected_questions, $currentIds)));
+        }
+    }
+
+    public function resetQuestionFilters()
+    {
+        $this->filter_category = '';
+        $this->filter_type = '';
+        $this->search_question = '';
     }
 
     // --- Participant Management for Exam ---

@@ -515,9 +515,9 @@
                     </div>
                     <!-- Filter and Stats Header -->
                     <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                             <!-- Filters -->
-                            <div class="flex flex-col sm:flex-row gap-3 flex-1">
+                            <div class="flex flex-col sm:flex-row gap-3 flex-1 items-center">
                                 <select wire:model.live="filter_category" class="bg-white border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-48 p-2.5 shadow-sm">
                                     <option value="">Semua Kategori</option>
                                     @foreach($categories as $category)
@@ -533,38 +533,57 @@
                                 </select>
                                 
                                 <!-- Search -->
-                                <div class="relative flex-1">
+                                <div class="relative flex-1 w-full">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                     </div>
                                     <input wire:model.live.debounce.300ms="search_question" type="text" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 shadow-sm" placeholder="Cari soal...">
                                 </div>
-                            </div>
-                            
-                            <!-- Stats (Terpilih & Total Bobot) & Reset -->
-                            <div class="flex flex-col items-end gap-2">
-                                <div class="flex items-center gap-2">
-                                    <button wire:click="resetSelectedQuestions" type="button" class="text-xs font-bold bg-white text-red-600 hover:bg-red-50 border border-red-200 px-3 py-2 rounded-lg shadow-sm transition-colors flex items-center">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                        Reset
+
+                                @if($filter_category || $filter_type || $search_question)
+                                    <button wire:click="resetQuestionFilters" type="button" class="text-xs text-blue-600 hover:text-blue-800 underline font-medium self-center whitespace-nowrap flex items-center shrink-0" title="Reset filter pencarian">
+                                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                        Reset Filter
                                     </button>
-                                    <div class="text-sm font-medium text-gray-700 bg-white px-5 py-2 rounded-lg shadow-sm border {{ $total_points > 100 ? 'border-red-400 bg-red-50' : 'border-gray-200' }} whitespace-nowrap flex items-center space-x-4 transition-colors">
-                                        <div>
-                                            Terpilih: <span class="font-bold text-blue-600 text-base">{{ count($selected_questions) }}</span> soal
-                                        </div>
-                                        <div class="border-l border-gray-300 pl-4">
-                                            Total Bobot: <span class="font-bold text-base {{ $total_points > 100 ? 'text-red-600' : 'text-emerald-600' }}">{{ $total_points }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                @if($total_points > 100)
-                                    <div class="text-xs font-bold text-red-500 mt-2 flex items-center animate-pulse">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                        Peringatan: Total bobot melebihi 100!
-                                    </div>
                                 @endif
                             </div>
+                            
+                            <!-- Stats (Terpilih & Total Bobot) & Actions (Select All, Reset) -->
+                            <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2">
+                                <button type="button" 
+                                        wire:click="toggleSelectAllQuestions" 
+                                        class="text-xs font-bold px-3.5 py-2 rounded-lg shadow-sm transition-colors flex items-center whitespace-nowrap {{ $is_all_questions_selected ? 'bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-300' : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20' }}"
+                                        title="{{ $is_all_questions_selected ? 'Batal pilih semua soal yang tampil' : 'Pilih semua soal yang tampil di bawah' }}">
+                                    @if($is_all_questions_selected)
+                                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        Batal Pilih Semua ({{ count($bank_questions) }})
+                                    @else
+                                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        Pilih Semua ({{ count($bank_questions) }})
+                                    @endif
+                                </button>
+                                
+                                <button wire:click="resetSelectedQuestions" type="button" class="text-xs font-bold bg-white text-red-600 hover:bg-red-50 border border-red-200 px-3 py-2 rounded-lg shadow-sm transition-colors flex items-center whitespace-nowrap" title="Kosongkan semua soal terpilih">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    Reset
+                                </button>
+                                
+                                <div class="text-sm font-medium text-gray-700 bg-white px-4 py-2 rounded-lg shadow-sm border {{ $total_points > 100 ? 'border-red-400 bg-red-50' : 'border-gray-200' }} whitespace-nowrap flex items-center space-x-3 transition-colors">
+                                    <div>
+                                        Terpilih: <span class="font-bold text-blue-600 text-base">{{ count($selected_questions) }}</span> soal
+                                    </div>
+                                    <div class="border-l border-gray-300 pl-3">
+                                        Total Bobot: <span class="font-bold text-base {{ $total_points > 100 ? 'text-red-600' : 'text-emerald-600' }}">{{ $total_points }}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        @if($total_points > 100)
+                            <div class="text-xs font-bold text-red-500 mt-2 flex items-center animate-pulse">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                Peringatan: Total bobot melebihi 100!
+                            </div>
+                        @endif
                     </div>
 
                     <div class="px-6 py-4 bg-white overflow-y-auto flex-1">
