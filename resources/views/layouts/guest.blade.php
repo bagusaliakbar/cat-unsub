@@ -16,6 +16,11 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- Cloudflare Turnstile -->
+        @if(config('services.turnstile.enabled', true))
+            <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+        @endif
     </head>
     <body class="font-sans text-gray-900 antialiased bg-gray-50 selection:bg-blue-500 selection:text-white">
         <div class="min-h-screen flex">
