@@ -65,17 +65,25 @@
 
         <!-- Search & Wave Filter -->
         <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
-            <div class="relative flex-1 md:w-64">
-                <input type="text" wire:model.live.debounce.300ms="search_exam" placeholder="Cari judul atau lokasi..." class="w-full pl-9 pr-4 py-2 text-xs sm:text-sm bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-xs">
-                <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <div class="relative w-full sm:w-64 lg:w-72">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+                <input type="text" wire:model.live.debounce.300ms="search_exam" placeholder="Cari judul atau lokasi..." 
+                    class="block w-full pl-10 pr-4 py-2 text-xs sm:text-sm bg-white border border-gray-200 rounded-xl leading-5 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-xs transition">
             </div>
             @if(count($waves) > 0)
-                <select wire:model.live="filter_wave_exam" class="text-xs sm:text-sm bg-white border border-gray-200 rounded-xl py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-xs">
-                    <option value="">Semua Gelombang</option>
-                    @foreach($waves as $wave)
-                        <option value="{{ $wave->id }}">{{ $wave->name }}</option>
-                    @endforeach
-                </select>
+                <div class="w-full sm:w-auto">
+                    <select wire:model.live="filter_wave_exam" 
+                        class="w-full sm:w-auto min-w-[170px] text-xs sm:text-sm bg-white border border-gray-200 rounded-xl py-2 pl-3.5 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-xs transition text-gray-700 cursor-pointer">
+                        <option value="">Semua Gelombang</option>
+                        @foreach($waves as $wave)
+                            <option value="{{ $wave->id }}">{{ $wave->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
             @endif
         </div>
     </div>
