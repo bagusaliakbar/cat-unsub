@@ -139,7 +139,7 @@
 
         <!-- Content -->
         <div class="text-justify mb-4">
-            <p class="indent-10">Pada hari ini, <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l') }}</strong> tanggal <strong>{{ \Carbon\Carbon::now()->translatedFormat('d') }}</strong> bulan <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('F') }}</strong> tahun <strong>{{ ucwords(\NumberFormatter::create('id_ID', \NumberFormatter::SPELLOUT)->format(\Carbon\Carbon::now()->year)) }}</strong>, bertempat di Laboratorium Komputer Universitas Subang{{ !empty($isCombinedSession) && !empty($combinedLocations) ? ' (Ruang ' . $combinedLocations . ')' : (!empty($exam->location) ? ' (Ruang ' . $exam->location . ')' : '') }}, telah dilaksanakan Ujian Penyaringan Seleksi Tertulis berbasis Computer Assisted Test (CAT){{ $exam->wave ? ' (' . $exam->wave->name . ')' : '' }} bagi Bakal Calon Kepala Desa {{ ucwords(strtolower($item['village'])) }} @if(!empty($report->district)) Kecamatan {{ ucwords(strtolower($report->district)) }} @endif Kabupaten Subang oleh Lembaga Penelitian dan Pengabdian kepada Masyarakat (LPPM) Universitas Subang.</p>
+            <p class="indent-10">Pada hari ini, <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l') }}</strong> tanggal <strong>{{ \Carbon\Carbon::now()->translatedFormat('d') }}</strong> bulan <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('F') }}</strong> tahun <strong>{{ ucwords(\NumberFormatter::create('id_ID', \NumberFormatter::SPELLOUT)->format(\Carbon\Carbon::now()->year)) }}</strong>, bertempat di Laboratorium Komputer Universitas Subang{{ !empty($isCombinedSession) && !empty($combinedLocations) ? ' (Ruang ' . $combinedLocations . ')' : (!empty($exam->location) ? ' (Ruang ' . $exam->location . ')' : '') }}, telah dilaksanakan Ujian Penyaringan Seleksi Tertulis berbasis Computer Assisted Test (CAT){{ $exam->wave ? ' (' . $exam->wave->name . ')' : '' }} bagi Bakal Calon Kepala Desa {{ ucwords(strtolower($item['village'])) }} @if(!empty($report->district)) Kecamatan {{ ucwords(strtolower($report->district)) }} @endif Kabupaten Subang oleh Universitas Subang.</p>
         </div>
 
         <table class="w-full mb-4 text-left align-top">
@@ -177,7 +177,7 @@
                     <th class="w-10">No</th>
                     <th class="w-32">Nomor Peserta</th>
                     <th>Nama Lengkap Calon</th>
-                    <th class="w-36">Desa / Instansi</th>
+                    <th class="w-36">Desa / Kecamatan</th>
                     @if(!empty($isCombinedSession))
                         <th class="w-28">Ruang / Lab</th>
                     @endif
