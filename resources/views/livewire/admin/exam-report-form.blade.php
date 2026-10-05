@@ -18,6 +18,64 @@
 
         <form wire:submit.prevent="saveAndPrint" class="p-6 md:p-8 space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Pilihan Cakupan Sesi & Ruangan (Multi-Lab Sibling Support) -->
+                @if($has_sibling_exams)
+                    <div class="bg-gradient-to-r from-emerald-50 via-teal-50/40 to-emerald-50 p-6 rounded-2xl border border-emerald-200 md:col-span-2 space-y-4 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-100 pb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-emerald-950 tracking-wide flex items-center gap-2">
+                                        <span>CAKUPAN RUANGAN / SESI UJIAN</span>
+                                        <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-200 text-emerald-900 border border-emerald-300">
+                                            {{ $wave_name }}
+                                        </span>
+                                    </h4>
+                                    <p class="text-xs text-emerald-800">
+                                        Sesi ini dilaksanakan di beberapa ruangan berbeda: <strong>{{ $combined_locations }}</strong>. Pilih apakah ingin mencetak per ruangan atau rekap gabungan.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2 Card Radio Options -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Opsi Single Room -->
+                            <label class="relative flex items-start p-4 rounded-xl border-2 cursor-pointer transition-all {{ $scope_mode === 'single' ? 'bg-white border-emerald-600 shadow-md ring-2 ring-emerald-500/20' : 'bg-emerald-50/50 border-emerald-200 hover:bg-white hover:border-emerald-300' }}">
+                                <input type="radio" wire:model.live="scope_mode" value="single" class="mt-1 h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300">
+                                <div class="ml-3">
+                                    <span class="block text-sm font-bold text-gray-900">
+                                        Hanya Ruangan Ini: <span class="text-emerald-700 font-extrabold">{{ $exam->location ?? 'Lab Ini' }}</span>
+                                    </span>
+                                    <span class="block text-xs text-gray-600 mt-1 leading-relaxed">
+                                        Mencetak Berita Acara khusus untuk peserta yang bertempat di ruangan <strong>{{ $exam->location }}</strong> saja (Laporan pengawas/proktor ruang).
+                                    </span>
+                                </div>
+                            </label>
+
+                            <!-- Opsi Combined Session -->
+                            <label class="relative flex items-start p-4 rounded-xl border-2 cursor-pointer transition-all {{ $scope_mode === 'combined_session' ? 'bg-white border-emerald-600 shadow-md ring-2 ring-emerald-500/20' : 'bg-emerald-50/50 border-emerald-200 hover:bg-white hover:border-emerald-300' }}">
+                                <input type="radio" wire:model.live="scope_mode" value="combined_session" class="mt-1 h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300">
+                                <div class="ml-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="block text-sm font-bold text-gray-900">
+                                            Gabungan Semua Ruangan ({{ $wave_name }})
+                                        </span>
+                                        <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                            Rekomendasi Pleno
+                                        </span>
+                                    </div>
+                                    <span class="block text-xs text-gray-600 mt-1 leading-relaxed">
+                                        Menggabungkan seluruh peserta dari <strong>{{ $combined_locations }}</strong> ke dalam 1 dokumen Berita Acara Pleno Sesi resmi.
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                @endif
+
                 <!-- Pilihan Lingkup Berita Acara (Instansi) -->
                 <div class="bg-gradient-to-r from-blue-50 via-indigo-50/50 to-blue-50 p-6 rounded-2xl border border-blue-200 md:col-span-2 space-y-4 shadow-sm">
                     <!-- Card Header -->
@@ -93,7 +151,7 @@
                     <div class="flex items-center justify-between">
                         <h4 class="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            Rekap Kehadiran ({{ $selected_institution && $selected_institution !== 'all' && $selected_institution !== 'all_separated' ? $selected_institution : 'Semua Peserta' }})
+                            Rekap Kehadiran ({{ $selected_institution && $selected_institution !== 'all' && $selected_institution !== 'all_separated' ? $selected_institution : ($scope_mode === 'combined_session' ? 'Gabungan Sesi: ' . $combined_locations : 'Semua Peserta ' . ($exam->location ? '(' . $exam->location . ')' : '')) }})
                         </h4>
                         <span class="text-xs font-semibold text-gray-500">
                             Total Terdaftar: <strong class="text-gray-900">{{ $present_count + $absent_count }}</strong>

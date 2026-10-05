@@ -65,23 +65,32 @@
         <div class="flex items-center space-x-2">
             <label class="text-xs font-bold text-gray-700">Filter Cetak:</label>
             <select onchange="window.location.href = this.value" class="text-xs font-medium border-gray-300 rounded-lg py-1 px-2.5 bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
-                <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => 'all']) }}" {{ ($institution ?? 'all') === 'all' ? 'selected' : '' }}>
+                <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => 'all', 'scope' => $scope ?? 'single']) }}" {{ ($institution ?? 'all') === 'all' ? 'selected' : '' }}>
                     Semua Instansi (Gabungan)
                 </option>
                 @if(isset($institutions) && count($institutions) > 1)
-                    <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => 'all_separated']) }}" {{ ($institution ?? '') === 'all_separated' ? 'selected' : '' }}>
+                    <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => 'all_separated', 'scope' => $scope ?? 'single']) }}" {{ ($institution ?? '') === 'all_separated' ? 'selected' : '' }}>
                         Cetak Semua (Pisah Lembar)
                     </option>
                 @endif
                 @if(isset($institutions))
                     @foreach($institutions as $inst)
-                        <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => $inst]) }}" {{ ($institution ?? '') === $inst ? 'selected' : '' }}>
+                        <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => $inst, 'scope' => $scope ?? 'single']) }}" {{ ($institution ?? '') === $inst ? 'selected' : '' }}>
                             Desa: {{ $inst }}
                         </option>
                     @endforeach
                 @endif
             </select>
         </div>
+        @if(!empty($isCombinedSession))
+            <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-lg border border-emerald-300 flex items-center gap-1 shadow-xs">
+                👥 Pleno Sesi ({{ $combinedLocations }})
+            </span>
+        @elseif(!empty($exam->location))
+            <span class="text-xs bg-gray-100 text-gray-700 font-medium px-2 py-1 rounded-lg border border-gray-200">
+                Ruang: {{ $exam->location }}
+            </span>
+        @endif
         <button onclick="window.print()" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-xs flex items-center shadow-sm">
             <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
             Print
@@ -111,7 +120,7 @@
 
     <!-- Content -->
     <div class="text-justify mb-4">
-        <p class="indent-10">Pada hari ini, <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l') }}</strong> tanggal <strong>{{ \Carbon\Carbon::now()->translatedFormat('d') }}</strong> bulan <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('F') }}</strong> tahun <strong>{{ ucwords(\NumberFormatter::create('id_ID', \NumberFormatter::SPELLOUT)->format(\Carbon\Carbon::now()->year)) }}</strong>, bertempat di Laboratorium Komputer Universitas Subang, telah dilaksanakan Ujian Penyaringan Seleksi Tertulis berbasis Computer Assisted Test (CAT) bagi Bakal Calon Kepala Desa
+        <p class="indent-10">Pada hari ini, <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l') }}</strong> tanggal <strong>{{ \Carbon\Carbon::now()->translatedFormat('d') }}</strong> bulan <strong>{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('F') }}</strong> tahun <strong>{{ ucwords(\NumberFormatter::create('id_ID', \NumberFormatter::SPELLOUT)->format(\Carbon\Carbon::now()->year)) }}</strong>, bertempat di Laboratorium Komputer Universitas Subang{{ !empty($isCombinedSession) && !empty($combinedLocations) ? ' (Ruang ' . $combinedLocations . ')' : (!empty($exam->location) ? ' (Ruang ' . $exam->location . ')' : '') }}, telah dilaksanakan Ujian Penyaringan Seleksi Tertulis berbasis Computer Assisted Test (CAT){{ $exam->wave ? ' (' . $exam->wave->name . ')' : '' }} bagi Bakal Calon Kepala Desa
         @if(!empty($targetVillage) && $targetVillage !== 'all' && !str_starts_with(strtolower($targetVillage), 'gabungan'))
             Desa {{ ucwords(strtolower($targetVillage)) }}
         @elseif(!empty($institutions) && count($institutions) > 1)
@@ -156,7 +165,10 @@
                 <th class="w-10">No</th>
                 <th class="w-32">Nomor Peserta</th>
                 <th>Nama Lengkap Calon</th>
-                <th class="w-40">Desa / Instansi</th>
+                <th class="w-36">Desa / Instansi</th>
+                @if(!empty($isCombinedSession))
+                    <th class="w-28">Ruang / Lab</th>
+                @endif
                 <th class="w-24">Nilai CAT</th>
             </tr>
         </thead>
@@ -167,12 +179,15 @@
                 <td>{{ $session->user->participant_number ?? $session->user->nik }}</td>
                 <td class="text-left px-2">{{ $session->user->name }}</td>
                 <td class="text-left px-2">{{ ucwords(strtolower($session->user->institution ?? ($targetVillage ?? ($report->village ?? '-')))) }}</td>
+                @if(!empty($isCombinedSession))
+                    <td class="text-center px-1 font-semibold text-xs">{{ $session->exam->location ?? '-' }}</td>
+                @endif
                 <td>{{ rtrim(rtrim(number_format($session->score, 2), '0'), '.') }}</td>
             </tr>
             @endforeach
             @if($sessions->count() == 0)
             <tr>
-                <td colspan="5" class="py-4">Belum ada data nilai peserta untuk pilihan ini.</td>
+                <td colspan="{{ !empty($isCombinedSession) ? 6 : 5 }}" class="py-4">Belum ada data nilai peserta untuk pilihan ini.</td>
             </tr>
             @endif
         </tbody>

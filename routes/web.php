@@ -80,22 +80,67 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
     Route::get('/exams/{examId}/preview', \App\Livewire\Admin\ExamPreview::class)->name('exams.preview');
     Route::get('/exams/{examId}/report', \App\Livewire\Admin\ExamReportForm::class)->name('exams.report');
     Route::get('/exams/{examId}/report/print', function ($examId, \Illuminate\Http\Request $request) {
-        $exam = \App\Models\Exam::with('participants')->findOrFail($examId);
+        $exam = \App\Models\Exam::with(['participants', 'wave'])->findOrFail($examId);
         $report = \App\Models\ExamReport::where('exam_id', $examId)->firstOrFail();
         $institution = $request->query('institution', 'all');
+        $scope = $request->query('scope', 'single');
 
-        $institutions = $exam->participants()
-            ->whereNotNull('desa')
-            ->where('desa', '!=', '')
-            ->distinct()
-            ->orderBy('desa')
-            ->pluck('desa')
-            ->toArray();
+        $isCombinedSession = false;
+        $combinedLocations = $exam->location ?? 'Lab Komputer';
+        $targetExamIds = [$exam->id];
 
-        $baseSessionsQuery = \App\Models\ExamSession::with('user')
-            ->where('exam_id', $examId)
+        if ($scope === 'combined_session') {
+            if ($exam->wave_id) {
+                $sessionExams = \App\Models\Exam::where('wave_id', $exam->wave_id)->get();
+            } elseif ($exam->start_time) {
+                $sessionExams = \App\Models\Exam::where('start_time', $exam->start_time)
+                    ->where('title', $exam->title)
+                    ->get();
+            } else {
+                $sessionExams = collect([$exam]);
+            }
+
+            if ($sessionExams->count() > 1) {
+                $isCombinedSession = true;
+                $targetExamIds = $sessionExams->pluck('id')->toArray();
+                $combinedLocations = $sessionExams->pluck('location')->filter()->unique()->implode(' & ');
+            }
+        }
+
+        if ($isCombinedSession) {
+            $institutions = \App\Models\User::whereHas('exams', fn($q) => $q->whereIn('exams.id', $targetExamIds))
+                ->whereNotNull('desa')
+                ->where('desa', '!=', '')
+                ->distinct()
+                ->orderBy('desa')
+                ->pluck('desa')
+                ->toArray();
+        } else {
+            $institutions = $exam->participants()
+                ->whereNotNull('desa')
+                ->where('desa', '!=', '')
+                ->distinct()
+                ->orderBy('desa')
+                ->pluck('desa')
+                ->toArray();
+        }
+
+        $baseSessionsQuery = \App\Models\ExamSession::with(['user', 'exam'])
+            ->whereIn('exam_id', $targetExamIds)
             ->whereNotNull('started_at')
             ->orderByDesc('score');
+
+        $getParticipantsCount = function($inst = null) use ($isCombinedSession, $targetExamIds, $exam) {
+            if ($isCombinedSession) {
+                $q = \App\Models\User::whereHas('exams', fn($sq) => $sq->whereIn('exams.id', $targetExamIds));
+            } else {
+                $q = $exam->participants();
+            }
+            if ($inst) {
+                $q->where('desa', $inst);
+            }
+            return $q->count();
+        };
 
         // Mode: 'all_separated' -> Batch Print / Multi-Page Per Institution
         if ($institution === 'all_separated' && !empty($institutions)) {
@@ -106,7 +151,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
                     $q->where('desa', $inst);
                 });
                 $sessions = $sessQuery->get();
-                $partCount = $exam->participants()->where('desa', $inst)->count();
+                $partCount = $getParticipantsCount($inst);
                 $presentCount = $sessions->count();
                 $absentCount = max(0, $partCount - $presentCount);
 
@@ -120,7 +165,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
                     'sessions' => $sessions,
                 ];
             }
-            return view('print.exam-report-batch', compact('exam', 'report', 'reportsData', 'institutions', 'institution'));
+            return view('print.exam-report-batch', compact('exam', 'report', 'reportsData', 'institutions', 'institution', 'scope', 'isCombinedSession', 'combinedLocations'));
         }
 
         // Mode: Specific single institution
@@ -130,22 +175,22 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
                 $q->where('desa', $institution);
             });
             $sessions = $sessQuery->get();
-            $partCount = $exam->participants()->where('desa', $institution)->count();
+            $partCount = $getParticipantsCount($institution);
             $presentCount = $sessions->count();
             $absentCount = max(0, $partCount - $presentCount);
             $targetVillage = $institution;
 
-            return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage'));
+            return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage', 'scope', 'isCombinedSession', 'combinedLocations'));
         }
 
         // Mode: All combined
         $sessions = $baseSessionsQuery->get();
-        $totalRegistered = $exam->participants()->count();
+        $totalRegistered = $getParticipantsCount();
         $presentCount = $sessions->count();
         $absentCount = max(0, $totalRegistered - $presentCount);
         $targetVillage = 'all';
 
-        return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage'));
+        return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage', 'scope', 'isCombinedSession', 'combinedLocations'));
     })->name('exams.report.print');
     
     Route::get('/exams/{examId}/incident-report', function ($examId) {

@@ -13,6 +13,14 @@ class ExamReportForm extends Component
     public $present_count = 0;
     public $absent_count = 0;
 
+    // Scope Selection: 'single' (Hanya Ruangan Ini) or 'combined_session' (Gabungan Semua Ruangan di Sesi Ini)
+    public $scope_mode = 'single';
+    public $has_sibling_exams = false;
+    public $sibling_exams_count = 0;
+    public $combined_locations = '';
+    public $wave_name = '';
+    public $sibling_locations = [];
+
     // Institution selection for report scope
     public $selected_institution = 'all';
     public $institutions = [];
@@ -33,17 +41,26 @@ class ExamReportForm extends Component
 
     public function mount($examId)
     {
-        $this->exam = \App\Models\Exam::with('participants')->findOrFail($examId);
+        $this->exam = \App\Models\Exam::with(['participants', 'wave'])->findOrFail($examId);
         
-        // Distinct institutions/desas from assigned participants
-        $this->institutions = $this->exam->participants()
-            ->whereNotNull('desa')
-            ->where('desa', '!=', '')
-            ->distinct()
-            ->orderBy('desa')
-            ->pluck('desa')
-            ->toArray();
+        $sessionExams = collect([$this->exam]);
+        if ($this->exam->wave_id) {
+            $sessionExams = \App\Models\Exam::where('wave_id', $this->exam->wave_id)->get();
+        } elseif ($this->exam->start_time) {
+            $sessionExams = \App\Models\Exam::where('start_time', $this->exam->start_time)
+                ->where('title', $this->exam->title)
+                ->get();
+        }
 
+        if ($sessionExams->count() > 1) {
+            $this->has_sibling_exams = true;
+            $this->sibling_exams_count = $sessionExams->where('id', '!=', $this->exam->id)->count();
+            $this->combined_locations = $sessionExams->pluck('location')->filter()->unique()->implode(' & ');
+            $this->wave_name = $this->exam->wave->name ?? 'Sesi Ujian';
+            $this->sibling_locations = $sessionExams->where('id', '!=', $this->exam->id)->pluck('location')->filter()->unique()->toArray();
+        }
+
+        $this->loadInstitutions();
         $this->recalculateAttendance();
 
         // Default supervisor
@@ -79,6 +96,52 @@ class ExamReportForm extends Component
         }
     }
 
+    public function getSessionExamIds()
+    {
+        if ($this->exam->wave_id) {
+            return \App\Models\Exam::where('wave_id', $this->exam->wave_id)->pluck('id')->toArray();
+        } elseif ($this->exam->start_time) {
+            return \App\Models\Exam::where('start_time', $this->exam->start_time)
+                ->where('title', $this->exam->title)
+                ->pluck('id')->toArray();
+        }
+        return [$this->exam->id];
+    }
+
+    public function loadInstitutions()
+    {
+        $examIds = ($this->scope_mode === 'combined_session' && $this->has_sibling_exams)
+            ? $this->getSessionExamIds()
+            : [$this->exam->id];
+
+        $this->institutions = \App\Models\User::whereHas('exams', fn($q) => $q->whereIn('exams.id', $examIds))
+            ->whereNotNull('desa')
+            ->where('desa', '!=', '')
+            ->distinct()
+            ->orderBy('desa')
+            ->pluck('desa')
+            ->toArray();
+    }
+
+    public function updatedScopeMode($value)
+    {
+        $this->loadInstitutions();
+
+        if ($this->selected_institution !== 'all' && $this->selected_institution !== 'all_separated' && !in_array($this->selected_institution, $this->institutions)) {
+            $this->selected_institution = 'all';
+        }
+
+        $this->recalculateAttendance();
+
+        if ($this->selected_institution === 'all') {
+            if (count($this->institutions) > 1) {
+                $this->village = 'Gabungan (' . count($this->institutions) . ' Desa)';
+            } elseif (count($this->institutions) === 1) {
+                $this->village = $this->institutions[0];
+            }
+        }
+    }
+
     public function updatedSelectedInstitution($value)
     {
         $this->recalculateAttendance();
@@ -98,8 +161,12 @@ class ExamReportForm extends Component
 
     public function recalculateAttendance()
     {
-        $participantQuery = $this->exam->participants();
-        $sessionQuery = \App\Models\ExamSession::where('exam_id', $this->exam->id)->whereNotNull('started_at');
+        $examIds = ($this->scope_mode === 'combined_session' && $this->has_sibling_exams)
+            ? $this->getSessionExamIds()
+            : [$this->exam->id];
+
+        $participantQuery = \App\Models\User::whereHas('exams', fn($q) => $q->whereIn('exams.id', $examIds));
+        $sessionQuery = \App\Models\ExamSession::whereIn('exam_id', $examIds)->whereNotNull('started_at');
 
         if ($this->selected_institution && $this->selected_institution !== 'all' && $this->selected_institution !== 'all_separated') {
             $inst = $this->selected_institution;
@@ -132,38 +199,56 @@ class ExamReportForm extends Component
             $villageValue = ($this->selected_institution === 'all_separated') ? 'Otomatis' : 'Gabungan';
         }
 
-        $overallTotal = $this->exam->participants()->count();
-        $overallPresent = \App\Models\ExamSession::where('exam_id', $this->exam->id)->whereNotNull('started_at')->count();
+        $examIds = ($this->scope_mode === 'combined_session' && $this->has_sibling_exams)
+            ? $this->getSessionExamIds()
+            : [$this->exam->id];
+
+        $overallTotal = \App\Models\User::whereHas('exams', fn($q) => $q->whereIn('exams.id', $examIds))->count();
+        $overallPresent = \App\Models\ExamSession::whereIn('exam_id', $examIds)->whereNotNull('started_at')->count();
         $overallAbsent = max(0, $overallTotal - $overallPresent);
+
+        $reportData = [
+            'proctor_name' => $this->proctor_name ?? '-',
+            'supervisor_name' => $this->supervisor_name,
+            'present_count' => $overallPresent,
+            'absent_count' => $overallAbsent,
+            'notes' => $this->notes,
+            'village' => $villageValue,
+            'district' => $this->district,
+            'reference_number' => $this->reference_number,
+            'exam_materials' => $this->exam_materials,
+            'committee_name' => $this->committee_name,
+            'witness_1' => $this->witness_1,
+            'witness_2' => $this->witness_2,
+            'witness_3' => $this->witness_3,
+            'witness_4' => $this->witness_4,
+            'witness_5' => $this->witness_5,
+            'witness_6' => $this->witness_6,
+            'witness_7' => $this->witness_7,
+        ];
 
         \App\Models\ExamReport::updateOrCreate(
             ['exam_id' => $this->exam->id],
-            [
-                'proctor_name' => $this->proctor_name ?? '-',
-                'supervisor_name' => $this->supervisor_name,
-                'present_count' => $overallPresent,
-                'absent_count' => $overallAbsent,
-                'notes' => $this->notes,
-                'village' => $villageValue,
-                'district' => $this->district,
-                'reference_number' => $this->reference_number,
-                'exam_materials' => $this->exam_materials,
-                'committee_name' => $this->committee_name,
-                'witness_1' => $this->witness_1,
-                'witness_2' => $this->witness_2,
-                'witness_3' => $this->witness_3,
-                'witness_4' => $this->witness_4,
-                'witness_5' => $this->witness_5,
-                'witness_6' => $this->witness_6,
-                'witness_7' => $this->witness_7,
-            ]
+            $reportData
         );
 
-        \App\Services\LogService::record('cetak_berita_acara', 'Mencetak berita acara untuk ujian: ' . $this->exam->title . ' (Lingkup: ' . $this->selected_institution . ')');
+        if ($this->scope_mode === 'combined_session' && $this->has_sibling_exams) {
+            foreach ($examIds as $sExamId) {
+                if ($sExamId != $this->exam->id) {
+                    \App\Models\ExamReport::updateOrCreate(
+                        ['exam_id' => $sExamId],
+                        $reportData
+                    );
+                }
+            }
+        }
+
+        \App\Services\LogService::record('cetak_berita_acara', 'Mencetak berita acara untuk ujian: ' . $this->exam->title . ' (Scope: ' . $this->scope_mode . ', Lingkup: ' . $this->selected_institution . ')');
 
         return redirect()->route('admin.exams.report.print', [
             'examId' => $this->exam->id,
             'institution' => $this->selected_institution,
+            'scope' => $this->scope_mode,
         ]);
     }
 
