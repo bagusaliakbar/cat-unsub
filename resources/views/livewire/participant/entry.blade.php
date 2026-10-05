@@ -306,23 +306,26 @@
                     <div class="px-6 py-6 sm:px-8 relative shrink-0 border-b border-blue-900" style="background: linear-gradient(135deg, #091a32 0%, #0f2b52 50%, #16244f 100%) !important; color: #ffffff !important;">
                         <div class="flex justify-between items-center gap-4">
                             <div class="flex-1">
+                                <div class="inline-block px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider mb-2 shadow-xs" style="background-color: #f59e0b !important; color: #0f172a !important;">
+                                    CAT SELEKSI BAKAL CALON KEPALA DESA 2026
+                                </div>
                                 <h3 class="text-2xl sm:text-3xl font-black tracking-tight uppercase" style="color: #ffffff !important;">
-                                    TATA TERTIB PESERTA
+                                    ATURAN PENTING BAGI PESERTA CAT
                                 </h3>
-                                <p class="text-xs sm:text-sm mt-1 font-medium" style="color: #bfdbfe !important;">
-                                    {{ $viewingRulesExam->title }} — Harap dibaca dan dipahami sebelum memulai ujian.
+                                <p class="text-xs sm:text-sm mt-1 font-semibold" style="color: #bfdbfe !important;">
+                                    Wajib dibaca sebelum memasuki Lab CAT &bull; {{ $viewingRulesExam->title }}
                                 </p>
                             </div>
                             
                             <div class="flex items-center gap-3 shrink-0">
-                                <button wire:click="closeRules" type="button" class="p-2.5 rounded-xl transition-all hover:bg-white/20" style="color: #ffffff !important; background-color: rgba(255, 255, 255, 0.15) !important;">
+                                <button wire:click="closeRules" type="button" class="p-2.5 rounded-xl transition-all hover:bg-white/20" style="color: #ffffff !important; background-color: rgba(255, 255, 255, 0.15) !important;" title="Tutup">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                                 </button>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Body: Grid 9 Kartu Infografis -->
+                    <!-- Body: Grid Kartu Infografis -->
                     <div class="p-4 sm:p-6 md:p-7 space-y-4 sm:space-y-5" style="background-color: #f1f5f9 !important;">
 
                         @if($viewingRulesExam->rules)
@@ -338,325 +341,421 @@
                         </div>
                         @endif
 
-                        <!-- Grid 9 Kartu Infografis -->
+                        <!-- Grid 10 Kartu Infografis -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
                             
-                            <!-- 1. Ketentuan Sebelum Tes (Biru) -->
+                            <!-- 1. KEHADIRAN & KETERLAMBATAN (Biru) -->
                             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
                                 <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #dbeafe !important; border-color: #bfdbfe !important;">
                                     <div class="flex items-center space-x-2.5">
                                         <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #1d4ed8 !important; color: #ffffff !important;">1</span>
-                                        <h4 class="font-extrabold text-sm sm:text-[15px]" style="color: #1e3a8a !important;">Ketentuan Sebelum Tes</h4>
+                                        <h4 class="font-black text-sm sm:text-[15px] uppercase tracking-wide" style="color: #1e3a8a !important;">Kehadiran & Keterlambatan</h4>
                                     </div>
-                                    <svg class="w-4 h-4" style="color: #2563eb !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                                    <svg class="w-4 h-4" style="color: #2563eb !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 </div>
                                 <div class="p-4 sm:p-5 flex-1 flex flex-col sm:flex-row items-center sm:items-start gap-4">
-                                    <!-- Left Vector Illustration: Clipboard + Clock -->
                                     <div class="hidden sm:flex flex-col items-center justify-center w-20 shrink-0 select-none pt-1">
-                                        <svg class="w-16 h-20 drop-shadow-sm" viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="6" y="10" width="52" height="66" rx="6" fill="#1e3a8a"/>
-                                            <rect x="10" y="14" width="44" height="58" rx="4" fill="#ffffff"/>
-                                            <rect x="22" y="6" width="20" height="8" rx="3" fill="#3b82f6"/>
-                                            <circle cx="32" cy="10" r="2" fill="#ffffff"/>
-                                            <path d="M16 26L20 30L28 22" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <line x1="32" y1="26" x2="48" y2="26" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-                                            <path d="M16 38L20 42L28 34" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <line x1="32" y1="38" x2="48" y2="38" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-                                            <path d="M16 50L20 54L28 46" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <line x1="32" y1="50" x2="48" y2="50" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-                                            <circle cx="46" cy="58" r="14" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
-                                            <circle cx="46" cy="58" r="11" fill="#ffffff"/>
-                                            <path d="M46 51V58L51 61" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                                        <svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="32" cy="34" r="22" fill="#eff6ff" stroke="#2563eb" stroke-width="3"/>
+                                            <path d="M32 20V34L40 38" stroke="#1e3a8a" stroke-width="3" stroke-linecap="round"/>
+                                            <circle cx="32" cy="34" r="3" fill="#1e3a8a"/>
+                                            <path d="M16 14C13 17 11 20 11 20" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+                                            <path d="M48 14C51 17 53 20 53 20" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+                                            <path d="M19 12L25 18" stroke="#2563eb" stroke-width="3.5" stroke-linecap="round"/>
+                                            <path d="M45 12L39 18" stroke="#2563eb" stroke-width="3.5" stroke-linecap="round"/>
+                                            <path d="M8 28C6 31 6 37 8 40" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                                            <path d="M56 28C58 31 58 37 56 40" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
                                         </svg>
                                     </div>
                                     <div class="flex-1">
                                         <ul class="text-xs sm:text-[13px] text-slate-700 space-y-2 leading-relaxed list-disc list-outside pl-4 marker:text-blue-600">
-                                            <li>Peserta hadir di lokasi ujian paling lambat <strong class="text-slate-900 font-bold">15 (lima belas) menit</strong> sebelum waktu tes resmi dimulai, sesuai dengan jadwal yang ditetapkan.</li>
-                                            <li>Peserta wajib membawa <strong class="text-slate-900 font-bold">dokumen identitas diri yang sah</strong> (KTP/identitas resmi) untuk keperluan verifikasi.</li>
-                                            <li>Peserta melakukan registrasi kehadiran pada daftar hadir yang disediakan oleh petugas.</li>
-                                            <li>Peserta memahami dan menyiapkan diri untuk menggunakan <strong class="text-slate-900 font-bold">token akses unik</strong> yang dibagikan oleh Operator CAT.</li>
+                                            <li>Peserta wajib hadir di Auditorium <strong class="text-rose-600 font-bold">sebelum pukul 08.00</strong> untuk mengikuti pembukaan.</li>
+                                            <li>Peserta wajib mengikuti sesi sesuai pembagian yang telah ditetapkan.</li>
+                                            <li>Peserta yang terlambat tetap mengikuti sesi yang telah ditentukan.</li>
+                                            <li><strong class="text-rose-600 font-bold">Waktu ujian tidak diperpanjang</strong> karena keterlambatan.</li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 2. Ketentuan Saat Tes (Oranye) -->
+                            <!-- 2. IDENTITAS PESERTA (Oranye) -->
                             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
                                 <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #ffedd5 !important; border-color: #fed7aa !important;">
                                     <div class="flex items-center space-x-2.5">
                                         <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #ea580c !important; color: #ffffff !important;">2</span>
-                                        <h4 class="font-extrabold text-sm sm:text-[15px]" style="color: #9a3412 !important;">Ketentuan Saat Tes</h4>
+                                        <h4 class="font-black text-sm sm:text-[15px] uppercase tracking-wide" style="color: #9a3412 !important;">Identitas Peserta</h4>
                                     </div>
-                                    <svg class="w-4 h-4" style="color: #ea580c !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                    <svg class="w-4 h-4" style="color: #ea580c !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path></svg>
                                 </div>
                                 <div class="p-4 sm:p-5 flex-1 flex flex-col sm:flex-row items-center sm:items-start gap-4">
-                                    <!-- Left Vector Illustration: Computer Screen -->
                                     <div class="hidden sm:flex flex-col items-center justify-center w-20 shrink-0 select-none pt-1">
-                                        <svg class="w-18 h-20 drop-shadow-sm" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="32" y="52" width="8" height="10" fill="#64748b"/>
-                                            <ellipse cx="36" cy="62" rx="18" ry="4" fill="#475569"/>
-                                            <rect x="6" y="8" width="60" height="44" rx="4" fill="#0f172a"/>
-                                            <rect x="9" y="11" width="54" height="38" rx="2" fill="#0284c7"/>
-                                            <rect x="14" y="16" width="6" height="4" rx="1" fill="#ffffff"/>
-                                            <line x1="24" y1="18" x2="56" y2="18" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-                                            <rect x="14" y="24" width="6" height="4" rx="1" fill="#ffffff"/>
-                                            <line x1="24" y1="26" x2="56" y2="26" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-                                            <rect x="14" y="32" width="6" height="4" rx="1" fill="#ffffff"/>
-                                            <line x1="24" y1="34" x2="56" y2="34" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-                                            <rect x="14" y="40" width="6" height="4" rx="1" fill="#ffffff"/>
-                                            <line x1="24" y1="42" x2="46" y2="42" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                                        <svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="6" y="12" width="52" height="40" rx="5" fill="#f8fafc" stroke="#ea580c" stroke-width="2.5"/>
+                                            <rect x="6" y="12" width="52" height="10" rx="4" fill="#ea580c"/>
+                                            <circle cx="20" cy="34" r="7" fill="#fed7aa"/>
+                                            <circle cx="20" cy="32" r="3.5" fill="#9a3412"/>
+                                            <path d="M14 40C14 37 17 37 20 37C23 37 26 37 26 40" fill="#9a3412"/>
+                                            <line x1="32" y1="29" x2="50" y2="29" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+                                            <line x1="32" y1="35" x2="48" y2="35" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+                                            <line x1="32" y1="41" x2="44" y2="41" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
                                         </svg>
                                     </div>
                                     <div class="flex-1">
                                         <ul class="text-xs sm:text-[13px] text-slate-700 space-y-2 leading-relaxed list-disc list-outside pl-4 marker:text-orange-500">
-                                            <li>Peserta mengerjakan seluruh soal tes secara mandiri sesuai dengan instruksi sistem dan arahan Pengawas.</li>
-                                            <li>Peserta <strong class="text-rose-600 font-bold">dilarang keras melakukan perpindahan tab (tab switching)</strong> atau membuka aplikasi lain di luar sistem CAT. Pelanggaran terekam otomatis oleh sistem.</li>
-                                            <li>Peserta wajib menjaga ketertiban di dalam ruang ujian dan tidak mengganggu peserta lain.</li>
-                                            <li>Segera lapor ke Pengawas jika ada kendala teknis; <strong class="text-slate-900 font-bold">tidak diperkenankan memperbaiki sistem sendiri</strong>.</li>
-                                            <li>Jika waktu habis, sistem otomatis menghentikan sesi dan menyimpan seluruh jawaban.</li>
+                                            <li>Peserta wajib membawa <strong class="text-slate-900 font-bold">identitas/dokumen yang dipersyaratkan panitia (asli)</strong>.</li>
+                                            <li>Peserta wajib mengikuti pemeriksaan sebelum masuk Lab CAT.</li>
+                                            <li>Peserta hanya boleh menempati komputer yang telah ditentukan.</li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 3. Ketentuan Keterlambatan (Oranye) -->
+                            <!-- 3. PEMBAGIAN SESI & RUANGAN (Hijau/Emerald) -->
                             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
-                                <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #ffedd5 !important; border-color: #fed7aa !important;">
+                                <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #d1fae5 !important; border-color: #a7f3d0 !important;">
                                     <div class="flex items-center space-x-2.5">
-                                        <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #ea580c !important; color: #ffffff !important;">3</span>
-                                        <h4 class="font-extrabold text-sm sm:text-[15px]" style="color: #9a3412 !important;">Ketentuan Keterlambatan</h4>
+                                        <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #059669 !important; color: #ffffff !important;">3</span>
+                                        <h4 class="font-black text-sm sm:text-[15px] uppercase tracking-wide" style="color: #065f46 !important;">Pembagian Sesi & Ruangan</h4>
                                     </div>
-                                    <svg class="w-4 h-4" style="color: #ea580c !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <svg class="w-4 h-4" style="color: #059669 !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                                 </div>
                                 <div class="p-4 sm:p-5 flex-1 flex flex-col sm:flex-row items-center sm:items-start gap-4">
-                                    <!-- Left Vector Illustration: Running person + Clock -->
                                     <div class="hidden sm:flex flex-col items-center justify-center w-20 shrink-0 select-none pt-1">
-                                        <svg class="w-18 h-20 drop-shadow-sm" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="48" cy="28" r="16" fill="#f8fafc" stroke="#ea580c" stroke-width="3"/>
-                                            <path d="M48 18V28L55 33" stroke="#ea580c" stroke-width="2.5" stroke-linecap="round"/>
-                                            <line x1="8" y1="38" x2="16" y2="38" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
-                                            <line x1="6" y1="45" x2="18" y2="45" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
-                                            <line x1="10" y1="52" x2="20" y2="52" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
-                                            <circle cx="34" cy="22" r="5" fill="#1e3a8a"/>
-                                            <path d="M28 35L36 30L44 34L49 42" stroke="#1e3a8a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M36 30L33 44L24 53" stroke="#1e3a8a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M33 44L41 51L47 62" stroke="#1e3a8a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M28 35L21 32L18 39" stroke="#1e3a8a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="10" y="16" width="44" height="40" rx="3" fill="#ecfdf5" stroke="#059669" stroke-width="2.5"/>
+                                            <rect x="14" y="20" width="36" height="10" rx="2" fill="#059669"/>
+                                            <text x="32" y="27" fill="#ffffff" font-size="7" font-weight="900" text-anchor="middle" font-family="sans-serif">LAB CAT</text>
+                                            <rect x="16" y="36" width="8" height="8" rx="1" fill="#a7f3d0" stroke="#059669" stroke-width="1.5"/>
+                                            <rect x="40" y="36" width="8" height="8" rx="1" fill="#a7f3d0" stroke="#059669" stroke-width="1.5"/>
+                                            <rect x="27" y="36" width="10" height="20" rx="1" fill="#34d399"/>
                                         </svg>
                                     </div>
                                     <div class="flex-1">
-                                        <ul class="text-xs sm:text-[13px] text-slate-700 space-y-2 leading-relaxed list-disc list-outside pl-4 marker:text-orange-500">
-                                            <li>Peserta yang terlambat tetap diperkenankan masuk setelah melapor kepada Petugas Administrasi dan dicatat waktu kedatangannya.</li>
-                                            <li>Waktu ujian pada sistem tetap berjalan sesuai jadwal serentak: <strong class="text-slate-900 font-bold">durasi pengerjaan akan berkurang otomatis tanpa penambahan waktu</strong>.</li>
-                                            <li>Kebijakan keikutsertaan lebih lanjut ditetapkan oleh penyelenggara.</li>
+                                        <ul class="text-xs sm:text-[13px] text-slate-700 space-y-2 leading-relaxed list-disc list-outside pl-4 marker:text-emerald-600">
+                                            <li>Terdapat <strong class="text-slate-900 font-bold">2 sesi CAT</strong>.</li>
+                                            <li>Peserta wajib mengikuti sesi dan ruangan sesuai daftar peserta.</li>
+                                            <li><strong class="text-slate-900 font-bold">Lab CAT 1</strong> dan <strong class="text-slate-900 font-bold">Lab CAT 2</strong> digunakan sesuai pembagian peserta.</li>
+                                            <li>Peserta <strong class="text-rose-600 font-bold">tidak diperkenankan berpindah sesi atau ruangan</strong> tanpa persetujuan panitia.</li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 4. Penanganan Gangguan Teknis (Biru) -->
+                            <!-- 4. SIMULASI CAT (Ungu/Indigo) -->
                             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
-                                <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #dbeafe !important; border-color: #bfdbfe !important;">
+                                <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #ede9fe !important; border-color: #ddd6fe !important;">
                                     <div class="flex items-center space-x-2.5">
-                                        <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #1d4ed8 !important; color: #ffffff !important;">4</span>
-                                        <h4 class="font-extrabold text-sm sm:text-[15px]" style="color: #1e3a8a !important;">Penanganan Gangguan Teknis</h4>
+                                        <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #7c3aed !important; color: #ffffff !important;">4</span>
+                                        <h4 class="font-black text-sm sm:text-[15px] uppercase tracking-wide" style="color: #5b21b6 !important;">Simulasi CAT</h4>
                                     </div>
-                                    <svg class="w-4 h-4" style="color: #2563eb !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+                                    <svg class="w-4 h-4" style="color: #7c3aed !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                 </div>
                                 <div class="p-4 sm:p-5 flex-1 flex flex-col sm:flex-row items-center sm:items-start gap-4">
-                                    <!-- Left Vector Illustration: Gear + Warning Triangle -->
                                     <div class="hidden sm:flex flex-col items-center justify-center w-20 shrink-0 select-none pt-1">
-                                        <svg class="w-18 h-20 drop-shadow-sm" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="34" cy="34" r="14" fill="#1e3a8a"/>
-                                            <path d="M34 14V19M34 49V54M14 34H19M49 34H54M20 20L23.5 23.5M44.5 44.5L48 48M20 48L23.5 44.5M44.5 23.5L48 20" stroke="#1e3a8a" stroke-width="4.5" stroke-linecap="round"/>
-                                            <circle cx="34" cy="34" r="6" fill="#ffffff"/>
-                                            <path d="M46 60L58 38C59 36 62 36 63 38L75 60C76 62 74 65 72 65H49C47 65 45 62 46 60Z" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
-                                            <path d="M60.5 47V54" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-                                            <circle cx="60.5" cy="59" r="1.5" fill="#ffffff"/>
+                                        <svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="8" y="10" width="48" height="34" rx="3" fill="#312e81"/>
+                                            <rect x="11" y="13" width="42" height="28" rx="2" fill="#e0e7ff"/>
+                                            <rect x="15" y="17" width="5" height="5" rx="1" fill="#4f46e5"/>
+                                            <line x1="23" y1="20" x2="38" y2="20" stroke="#4f46e5" stroke-width="2" stroke-linecap="round"/>
+                                            <rect x="15" y="25" width="5" height="5" rx="1" fill="#4f46e5"/>
+                                            <line x1="23" y1="28" x2="35" y2="28" stroke="#4f46e5" stroke-width="2" stroke-linecap="round"/>
+                                            <path d="M36 28L44 36L40 37L43 43L40 44L37 38L33 41Z" fill="#1e1b4b"/>
+                                            <rect x="28" y="44" width="8" height="8" fill="#64748b"/>
+                                            <ellipse cx="32" cy="52" rx="14" ry="3" fill="#475569"/>
                                         </svg>
                                     </div>
                                     <div class="flex-1">
-                                        <ul class="text-xs sm:text-[13px] text-slate-700 space-y-2.5 leading-relaxed list-disc list-outside pl-4 marker:text-blue-600">
-                                            <li>Apabila terjadi gangguan teknis individual (PC bermasalah, mati lampu lokal) maupun massal, kegiatan dapat <strong class="text-blue-700 font-bold">di-pause (dijeda)</strong> atau disesuaikan oleh Tim Pelaksana.</li>
-                                            <li><strong class="text-emerald-700 font-bold">Jawaban peserta dijamin aman</strong>, tersimpan secara <em>real-time</em> di server, dan tidak akan hilang sehingga ujian dapat dilanjutkan kembali setelah gangguan teratasi.</li>
+                                        <ul class="text-xs sm:text-[13px] text-slate-700 space-y-2 leading-relaxed list-disc list-outside pl-4 marker:text-purple-600">
+                                            <li>Sebelum CAT dimulai, peserta mengikuti simulasi selama <strong class="text-rose-600 font-bold">10 menit</strong>.</li>
+                                            <li>Simulasi digunakan untuk memahami cara login, membuka soal, memilih jawaban, berpindah soal, dan menggunakan sistem CAT.</li>
+                                            <li>Peserta wajib memperhatikan instruksi pengawas.</li>
+                                            <li><strong class="text-slate-900 font-bold">Simulasi bukan bagian dari penilaian CAT.</strong></li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 5. Ketentuan Setelah Tes (Biru) -->
+                            <!-- 5. PELAKSANAAN UJIAN (Biru) -->
                             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
                                 <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #dbeafe !important; border-color: #bfdbfe !important;">
                                     <div class="flex items-center space-x-2.5">
                                         <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #1d4ed8 !important; color: #ffffff !important;">5</span>
-                                        <h4 class="font-extrabold text-sm sm:text-[15px]" style="color: #1e3a8a !important;">Ketentuan Setelah Tes</h4>
+                                        <h4 class="font-black text-sm sm:text-[15px] uppercase tracking-wide" style="color: #1e3a8a !important;">Pelaksanaan Ujian</h4>
                                     </div>
-                                    <svg class="w-4 h-4" style="color: #2563eb !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+                                    <svg class="w-4 h-4" style="color: #2563eb !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
                                 </div>
                                 <div class="p-4 sm:p-5 flex-1 flex flex-col sm:flex-row items-center sm:items-start gap-4">
-                                    <!-- Left Vector Illustration: SKOR Sheet + Checkmark -->
                                     <div class="hidden sm:flex flex-col items-center justify-center w-20 shrink-0 select-none pt-1">
-                                        <svg class="w-18 h-20 drop-shadow-sm" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="10" y="8" width="46" height="56" rx="4" fill="#ffffff" stroke="#1e3a8a" stroke-width="2.5"/>
-                                            <rect x="10" y="8" width="46" height="15" rx="3" fill="#1e3a8a"/>
-                                            <text x="33" y="19" fill="#ffffff" font-size="8" font-weight="900" text-anchor="middle" font-family="sans-serif">SKOR</text>
-                                            <line x1="16" y1="30" x2="38" y2="30" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-                                            <line x1="16" y1="37" x2="34" y2="37" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-                                            <line x1="16" y1="44" x2="30" y2="44" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-                                            <line x1="16" y1="51" x2="26" y2="51" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
-                                            <circle cx="48" cy="48" r="14" fill="#16a34a" stroke="#ffffff" stroke-width="2"/>
-                                            <path d="M42 48L46 52L54 44" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <svg class="w-16 h-18 drop-shadow-sm" viewBox="0 0 64 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="8" y="8" width="48" height="58" rx="4" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+                                            <rect x="8" y="8" width="48" height="14" rx="3" fill="#2563eb"/>
+                                            <text x="32" y="18" fill="#ffffff" font-size="8" font-weight="900" text-anchor="middle" font-family="sans-serif">100 SOAL</text>
+                                            <path d="M14 30L17 33L23 27" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/>
+                                            <line x1="27" y1="30" x2="46" y2="30" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+                                            <path d="M14 40L17 43L23 37" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/>
+                                            <line x1="27" y1="40" x2="42" y2="40" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+                                            <circle cx="44" cy="54" r="11" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+                                            <path d="M44 48V54L48 56" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
                                         </svg>
                                     </div>
                                     <div class="flex-1">
                                         <ul class="text-xs sm:text-[13px] text-slate-700 space-y-2 leading-relaxed list-disc list-outside pl-4 marker:text-blue-600">
-                                            <li>Peserta memastikan telah menyelesaikan seluruh soal dan mengamati kemunculan perolehan <strong class="text-slate-900 font-bold">skor akhir secara instan</strong> di layar.</li>
-                                            <li>Peserta meninggalkan ruang ujian secara tertib setelah dipersilakan oleh Pengawas.</li>
-                                            <li>Peserta menandatangani dokumen administrasi atau daftar hadir akhir sebelum meninggalkan lokasi ujian.</li>
+                                            <li>Jumlah soal CAT sebanyak <strong class="text-rose-600 font-bold">100 soal</strong>.</li>
+                                            <li>Durasi CAT adalah <strong class="text-rose-600 font-bold">90 menit</strong>.</li>
+                                            <li>Peserta mengerjakan soal secara mandiri.</li>
+                                            <li>Peserta wajib membaca soal dengan teliti.</li>
+                                            <li>Jawaban harus dipilih melalui sistem CAT.</li>
+                                            <li>Pastikan jawaban telah tersimpan sesuai mekanisme aplikasi.</li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 6. Barang yang Diperbolehkan & Dilarang (Oranye) -->
+                            <!-- 6. SELAMA UJIAN DILARANG (Merah) -->
                             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
-                                <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #ffedd5 !important; border-color: #fed7aa !important;">
+                                <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #ffe4e6 !important; border-color: #fecdd3 !important;">
                                     <div class="flex items-center space-x-2.5">
-                                        <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #ea580c !important; color: #ffffff !important;">6</span>
-                                        <h4 class="font-extrabold text-sm sm:text-[15px]" style="color: #9a3412 !important;">Barang yang Diperbolehkan & Dilarang</h4>
+                                        <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #e11d48 !important; color: #ffffff !important;">6</span>
+                                        <h4 class="font-black text-sm sm:text-[15px] uppercase tracking-wide" style="color: #9f1239 !important;">Selama Ujian Dilarang</h4>
                                     </div>
-                                    <svg class="w-4 h-4" style="color: #ea580c !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                </div>
-                                <div class="p-3.5 sm:p-4 flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    <!-- Diperbolehkan -->
-                                    <div class="rounded-xl p-3 flex flex-col justify-between" style="background-color: #f0fdf4 !important; border: 1.5px solid #86efac !important;">
-                                        <div>
-                                            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-black tracking-wide uppercase mb-2 shadow-xs" style="background-color: #16a34a !important; color: #ffffff !important;">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                                                Diperbolehkan
-                                            </div>
-                                            <!-- Pen & Notebook Icon -->
-                                            <div class="flex items-center justify-center py-1 text-emerald-600">
-                                                <svg class="w-10 h-10 drop-shadow-xs" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <rect x="8" y="10" width="22" height="30" rx="3" fill="#1e3a8a"/>
-                                                    <line x1="6" y1="14" x2="10" y2="14" stroke="#ffffff" stroke-width="2"/>
-                                                    <line x1="6" y1="20" x2="10" y2="20" stroke="#ffffff" stroke-width="2"/>
-                                                    <line x1="6" y1="26" x2="10" y2="26" stroke="#ffffff" stroke-width="2"/>
-                                                    <line x1="6" y1="32" x2="10" y2="32" stroke="#ffffff" stroke-width="2"/>
-                                                    <path d="M24 34L38 12C39 10 42 10 43 12L44 13C45 15 45 17 43 19L29 40L23 41L24 34Z" fill="#3b82f6" stroke="#ffffff" stroke-width="1.5"/>
-                                                </svg>
-                                            </div>
-                                            <p class="text-xs text-emerald-950 font-medium leading-relaxed text-center mt-1">
-                                                Alat tulis atau perlengkapan pribadi pendukung sesuai dengan ketentuan spesifik kegiatan.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- Dilarang -->
-                                    <div class="rounded-xl p-3 flex flex-col justify-between" style="background-color: #fef2f2 !important; border: 1.5px solid #fca5a5 !important;">
-                                        <div>
-                                            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-black tracking-wide uppercase mb-2 shadow-xs" style="background-color: #dc2626 !important; color: #ffffff !important;">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                                Dilarang
-                                            </div>
-                                            <!-- Mini Items Icons: Smartphone, Calculator, Headset -->
-                                            <div class="flex items-center justify-center gap-2 py-1 text-rose-500">
-                                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2.5"/></svg>
-                                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg>
-                                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
-                                            </div>
-                                            <p class="text-[11px] text-rose-950 font-medium leading-relaxed text-center mt-1">
-                                                Telepon genggam (smartphone), catatan, kalkulator, headset, atau elektronik lain di luar PC ujian.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 7. Larangan Khusus (Oranye) -->
-                            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
-                                <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #ffedd5 !important; border-color: #fed7aa !important;">
-                                    <div class="flex items-center space-x-2.5">
-                                        <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #ea580c !important; color: #ffffff !important;">7</span>
-                                        <h4 class="font-extrabold text-sm sm:text-[15px]" style="color: #9a3412 !important;">Larangan Khusus</h4>
-                                    </div>
-                                    <svg class="w-4 h-4" style="color: #ea580c !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                    <svg class="w-4 h-4" style="color: #e11d48 !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
                                 </div>
                                 <div class="p-4 sm:p-5 flex-1 flex flex-col sm:flex-row items-center sm:items-start gap-4">
-                                    <!-- Left Vector Illustration: Participants with Red Ban Sign -->
                                     <div class="hidden sm:flex flex-col items-center justify-center w-20 shrink-0 select-none pt-1">
-                                        <svg class="w-18 h-20 drop-shadow-sm" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="36" cy="22" r="6" fill="#1e3a8a"/>
-                                            <path d="M26 38C26 32 30 31 36 31C42 31 46 32 46 38" fill="#1e3a8a"/>
-                                            <circle cx="19" cy="26" r="4.5" fill="#3b82f6"/>
-                                            <path d="M11 40C11 35 14 34 19 34C24 34 26 35 26 40" fill="#3b82f6"/>
-                                            <circle cx="53" cy="26" r="4.5" fill="#3b82f6"/>
-                                            <path d="M46 40C46 35 48 34 53 34C58 34 61 35 61 40" fill="#3b82f6"/>
-                                            <circle cx="36" cy="46" r="16" stroke="#ef4444" stroke-width="4" fill="none"/>
-                                            <line x1="25" y1="35" x2="47" y2="57" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>
+                                        <svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="32" cy="32" r="26" stroke="#dc2626" stroke-width="5" fill="#fef2f2"/>
+                                            <line x1="14" y1="14" x2="50" y2="50" stroke="#dc2626" stroke-width="5" stroke-linecap="round"/>
+                                            <rect x="22" y="20" width="10" height="18" rx="2" stroke="#475569" stroke-width="2" fill="#ffffff"/>
+                                            <circle cx="40" cy="36" r="6" stroke="#475569" stroke-width="2" fill="#ffffff"/>
+                                            <circle cx="40" cy="36" r="2.5" fill="#475569"/>
                                         </svg>
                                     </div>
                                     <div class="flex-1">
-                                        <ul class="text-xs sm:text-[13px] text-slate-700 space-y-2.5 leading-relaxed list-disc list-outside pl-4 marker:text-orange-500">
-                                            <li>Peserta <strong class="text-rose-600 font-bold">dilarang bekerja sama</strong> dengan peserta lain dalam bentuk apa pun selama ujian berlangsung.</li>
-                                            <li>Peserta <strong class="text-rose-600 font-bold">dilarang keras mengakses sumber informasi eksternal</strong> (buku, catatan fisik, pencarian internet di luar aplikasi CAT, atau meminta bantuan pihak lain).</li>
+                                        <ul class="text-xs sm:text-[13px] text-slate-700 space-y-1.5 leading-relaxed list-none pl-0">
+                                            <li class="flex items-start gap-2">
+                                                <svg class="w-4 h-4 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                                <span>Bekerja sama atau berkomunikasi dengan peserta lain.</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <svg class="w-4 h-4 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                                <span>Menggunakan HP atau perangkat elektronik yang tidak diperbolehkan.</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <svg class="w-4 h-4 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                                <span>Membuka aplikasi atau website lain.</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <svg class="w-4 h-4 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                                <span>Memotret atau merekam soal / layar CAT.</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <svg class="w-4 h-4 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                                <span>Menyalin atau menyebarkan soal CAT.</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <svg class="w-4 h-4 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                                <span>Mengubah pengaturan komputer.</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <svg class="w-4 h-4 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                                <span>Mengganggu peserta lain.</span>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 8. Sifat Hasil Tes CAT (Biru) -->
+                            <!-- 7. GANGGUAN TEKNIS (Kuning/Amber) -->
                             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
-                                <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #dbeafe !important; border-color: #bfdbfe !important;">
+                                <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #fef3c7 !important; border-color: #fde68a !important;">
                                     <div class="flex items-center space-x-2.5">
-                                        <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #1d4ed8 !important; color: #ffffff !important;">8</span>
-                                        <h4 class="font-extrabold text-sm sm:text-[15px]" style="color: #1e3a8a !important;">Sifat Hasil Tes CAT</h4>
+                                        <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #d97706 !important; color: #ffffff !important;">7</span>
+                                        <h4 class="font-black text-sm sm:text-[15px] uppercase tracking-wide" style="color: #92400e !important;">Gangguan Teknis</h4>
                                     </div>
-                                    <svg class="w-4 h-4" style="color: #2563eb !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <svg class="w-4 h-4" style="color: #d97706 !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                                 </div>
                                 <div class="p-4 sm:p-5 flex-1 flex flex-col sm:flex-row items-center sm:items-start gap-4">
-                                    <!-- Left Vector Illustration: CAT Sheet + Yellow info badge -->
                                     <div class="hidden sm:flex flex-col items-center justify-center w-20 shrink-0 select-none pt-1">
-                                        <svg class="w-18 h-20 drop-shadow-sm" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="12" y="8" width="44" height="56" rx="4" fill="#ffffff" stroke="#1e3a8a" stroke-width="2.5"/>
-                                            <rect x="17" y="14" width="34" height="14" rx="2" fill="#0284c7"/>
-                                            <text x="34" y="24" fill="#ffffff" font-size="8" font-weight="900" text-anchor="middle" font-family="sans-serif">CAT</text>
-                                            <rect x="18" y="44" width="4" height="10" rx="1" fill="#3b82f6"/>
-                                            <rect x="25" y="38" width="4" height="16" rx="1" fill="#3b82f6"/>
-                                            <circle cx="44" cy="44" r="10" fill="#eab308" stroke="#ffffff" stroke-width="2"/>
-                                            <text x="44" y="48" fill="#1e293b" font-size="11" font-weight="900" text-anchor="middle" font-family="sans-serif">i</text>
+                                        <svg class="w-16 h-18 drop-shadow-sm" viewBox="0 0 64 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="28" cy="20" r="10" fill="#3b82f6"/>
+                                            <path d="M14 46C14 36 20 34 28 34C36 34 42 36 42 46" fill="#1e40af"/>
+                                            <path d="M42 38L52 22L56 24L48 42" stroke="#ea580c" stroke-width="3.5" stroke-linecap="round"/>
+                                            <circle cx="48" cy="14" r="9" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
+                                            <text x="48" y="19" fill="#ffffff" font-size="13" font-weight="900" text-anchor="middle" font-family="sans-serif">!</text>
                                         </svg>
                                     </div>
-                                    <div class="flex-1 flex items-center">
+                                    <div class="flex-1">
                                         <p class="text-xs sm:text-[13px] text-slate-700 leading-relaxed">
-                                            Perolehan nilai atau hasil tes CAT <strong class="text-slate-900 font-bold">bukan merupakan penentu tunggal kelulusan akhir</strong>, melainkan digunakan sebagai salah satu instrumen ukur dan komponen penilaian sah sesuai dengan ketentuan peraturan perundang-undangan serta kebijakan penyelenggaraan kegiatan.
+                                            Jika terjadi masalah komputer, jaringan, aplikasi, keyboard, mouse, atau perangkat lainnya:
+                                        </p>
+                                        <div class="bg-amber-100/90 border border-amber-300 rounded-xl p-3 my-2 text-center shadow-xs">
+                                            <p class="font-extrabold text-amber-950 text-xs sm:text-[13px] tracking-wide">JANGAN PANIK</p>
+                                            <p class="font-extrabold text-amber-950 text-xs sm:text-[13px] tracking-wide">JANGAN MENGUBAH KOMPUTER</p>
+                                            <p class="font-black text-rose-700 text-xs sm:text-[13px] tracking-wide mt-0.5">SEGERA ANGKAT TANGAN DAN LAPORKAN KEPADA PENGAWAS.</p>
+                                        </div>
+                                        <p class="text-xs sm:text-[13px] text-slate-700 leading-relaxed mt-1 list-disc list-outside pl-4">
+                                            Peserta tidak diperkenankan memperbaiki atau mengubah konfigurasi komputer sendiri.
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 9. Sanksi Pelanggaran (Full Width Banner Sesuai Poster) -->
-                            <div class="col-span-1 md:col-span-2 rounded-2xl shadow-sm overflow-hidden flex flex-col sm:flex-row items-center p-4 sm:p-5 gap-4" style="background-color: #e0f2fe !important; border: 1.5px solid #93c5fd !important;">
-                                <div class="flex items-center gap-3 shrink-0">
-                                    <span class="w-7 h-7 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #1d4ed8 !important; color: #ffffff !important;">9</span>
-                                    <h4 class="font-black text-sm sm:text-base tracking-wide uppercase" style="color: #1e3a8a !important;">Sanksi Pelanggaran</h4>
+                            <!-- 8. KETIKA WAKTU BERAKHIR / MENYELESAIKAN UJIAN (Teal) -->
+                            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
+                                <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #ccfbf1 !important; border-color: #99f6e4 !important;">
+                                    <div class="flex items-center space-x-2.5">
+                                        <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #0d9488 !important; color: #ffffff !important;">8</span>
+                                        <h4 class="font-black text-sm sm:text-[15px] uppercase tracking-wide" style="color: #115e59 !important;">Ketika Waktu Berakhir / Selesai</h4>
+                                    </div>
+                                    <svg class="w-4 h-4" style="color: #0d9488 !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 </div>
-                                <div class="flex items-center gap-4 flex-1">
-                                    <!-- Gavel Illustration -->
-                                    <div class="hidden sm:flex shrink-0 select-none">
-                                        <svg class="w-12 h-12 drop-shadow-xs" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <ellipse cx="26" cy="54" rx="16" ry="5" fill="#78350f"/>
-                                            <ellipse cx="26" cy="51" rx="16" ry="5" fill="#92400e"/>
-                                            <path d="M26 40L46 20" stroke="#b45309" stroke-width="4.5" stroke-linecap="round"/>
-                                            <g transform="rotate(-45 28 36)">
-                                                <rect x="18" y="28" width="18" height="14" rx="2" fill="#78350f"/>
-                                                <rect x="16" y="26" width="22" height="2.5" rx="1" fill="#d97706"/>
-                                                <rect x="16" y="41.5" width="22" height="2.5" rx="1" fill="#d97706"/>
-                                            </g>
+                                <div class="p-4 sm:p-5 flex-1 flex flex-col sm:flex-row items-center sm:items-start gap-4">
+                                    <div class="hidden sm:flex flex-col items-center justify-center w-20 shrink-0 select-none pt-1">
+                                        <svg class="w-16 h-18 drop-shadow-sm" viewBox="0 0 64 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="6" y="8" width="52" height="42" rx="4" fill="#0f172a"/>
+                                            <rect x="9" y="11" width="46" height="36" rx="2" fill="#f0fdf4"/>
+                                            <circle cx="32" cy="18" r="5" fill="#16a34a"/>
+                                            <path d="M29.5 18L31 19.5L34.5 16.5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+                                            <text x="32" y="28" fill="#15803d" font-size="5" font-weight="900" text-anchor="middle" font-family="sans-serif">Ujian Selesai</text>
+                                            <text x="32" y="34" fill="#64748b" font-size="3.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">Skor CAT Anda:</text>
+                                            <text x="32" y="43" fill="#1e3a8a" font-size="8.5" font-weight="900" text-anchor="middle" font-family="sans-serif">85</text>
+                                            <rect x="28" y="50" width="8" height="8" fill="#64748b"/>
+                                            <ellipse cx="32" cy="58" rx="16" ry="3" fill="#475569"/>
                                         </svg>
                                     </div>
-                                    <p class="text-xs sm:text-[13px] leading-relaxed" style="color: #0c4a6e !important;">
-                                        Pelanggaran terhadap tata tertib ini—termasuk pelanggaran keamanan sistem yang terekam secara otomatis oleh log CAT—akan dicatat dan dilaporkan untuk ditindaklanjuti dengan <strong class="font-extrabold underline underline-offset-2" style="color: #0f172a !important;">sanksi tegas</strong> sesuai dengan ketentuan kebijakan penyelenggara kegiatan.
-                                    </p>
+                                    <div class="flex-1">
+                                        <ul class="text-xs sm:text-[13px] text-slate-700 space-y-2 leading-relaxed list-disc list-outside pl-4 marker:text-teal-600">
+                                            <li>Jika peserta sudah selesai mengerjakan soal sebelum waktu habis, pilih menu <strong class="text-rose-600 font-bold">SELESAI</strong>. Skor CAT akan langsung muncul pada layar.</li>
+                                            <li>Ketika waktu CAT berakhir, sistem secara otomatis akan menyimpan semua jawaban Anda dan menampilkan skor CAT pada layar.</li>
+                                            <li>Peserta tidak perlu melakukan tindakan apa pun, cukup menunggu hingga skor ditampilkan.</li>
+                                            <li>Ikuti instruksi pengawas untuk keluar dari sistem dan meninggalkan komputer.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 9. SKOR/HASIL CAT (Ungu) -->
+                            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
+                                <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #ede9fe !important; border-color: #ddd6fe !important;">
+                                    <div class="flex items-center space-x-2.5">
+                                        <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #7c3aed !important; color: #ffffff !important;">9</span>
+                                        <h4 class="font-black text-sm sm:text-[15px] uppercase tracking-wide" style="color: #5b21b6 !important;">Skor / Hasil CAT</h4>
+                                    </div>
+                                    <svg class="w-4 h-4" style="color: #7c3aed !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                                </div>
+                                <div class="p-4 sm:p-5 flex-1 flex flex-col sm:flex-row items-center sm:items-start gap-4">
+                                    <div class="hidden sm:flex flex-col items-center justify-center w-20 shrink-0 select-none pt-1">
+                                        <svg class="w-16 h-18 drop-shadow-sm" viewBox="0 0 64 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="10" y="8" width="44" height="54" rx="4" fill="#ffffff" stroke="#7c3aed" stroke-width="2.5"/>
+                                            <line x1="18" y1="18" x2="36" y2="18" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round"/>
+                                            <line x1="18" y1="24" x2="30" y2="24" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+                                            <rect x="18" y="44" width="6" height="10" rx="1" fill="#a78bfa"/>
+                                            <rect x="27" y="36" width="6" height="18" rx="1" fill="#7c3aed"/>
+                                            <rect x="36" y="30" width="6" height="24" rx="1" fill="#4c1d95"/>
+                                            <circle cx="46" cy="46" r="11" fill="#16a34a" stroke="#ffffff" stroke-width="2"/>
+                                            <path d="M42 46L45 49L51 43" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <ul class="text-xs sm:text-[13px] text-slate-700 space-y-2 leading-relaxed list-disc list-outside pl-4 marker:text-purple-600">
+                                            <li>Hasil yang dihasilkan oleh sistem CAT merupakan <strong class="text-rose-600 font-bold">hasil final</strong> dan <strong class="text-rose-600 font-bold">tidak dapat diganggu gugat</strong>.</li>
+                                            <li>Peserta mengikuti prosedur yang ditetapkan panitia terkait pencetakan dan penyampaian hasil.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 10. SIKAP PESERTA (Biru/Langit) -->
+                            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
+                                <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #e0f2fe !important; border-color: #bae6fd !important;">
+                                    <div class="flex items-center space-x-2.5">
+                                        <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #0284c7 !important; color: #ffffff !important;">10</span>
+                                        <h4 class="font-black text-sm sm:text-[15px] uppercase tracking-wide" style="color: #0369a1 !important;">Sikap Peserta</h4>
+                                    </div>
+                                    <svg class="w-4 h-4" style="color: #0284c7 !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                </div>
+                                <div class="p-4 sm:p-5 flex-1 flex flex-col sm:flex-row items-center sm:items-start gap-4">
+                                    <div class="hidden sm:flex flex-col items-center justify-center w-20 shrink-0 select-none pt-1">
+                                        <svg class="w-16 h-16 drop-shadow-sm" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="32" cy="22" r="7" fill="#0284c7"/>
+                                            <path d="M22 44C22 36 26 34 32 34C38 34 42 36 42 44" fill="#ffffff" stroke="#0284c7" stroke-width="2"/>
+                                            <circle cx="16" cy="26" r="5.5" fill="#38bdf8"/>
+                                            <path d="M8 46C8 40 12 38 16 38C20 38 24 40 24 46" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2"/>
+                                            <circle cx="48" cy="26" r="5.5" fill="#38bdf8"/>
+                                            <path d="M40 46C40 40 44 38 48 38C52 38 56 40 56 46" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <ul class="text-xs sm:text-[13px] text-slate-700 space-y-2 leading-relaxed list-disc list-outside pl-4 marker:text-sky-600">
+                                            <li>Peserta wajib menjaga ketertiban, kejujuran, kedisiplinan, dan ketenangan dalam seluruh rangkaian kegiatan.</li>
+                                            <li>Mengikuti seluruh arahan panitia dan pengawas.</li>
+                                            <li>Menjaga nama baik diri sendiri dan kelancaran pelaksanaan CAT.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- JADWAL PELAKSANAAN CAT (Full Width Sesuai Infografis) -->
+                            <div class="col-span-1 md:col-span-2 rounded-2xl shadow-sm overflow-hidden border border-blue-900 bg-white">
+                                <div class="grid grid-cols-1 md:grid-cols-12 items-stretch">
+                                    <!-- Label Kiri: Biru Tua -->
+                                    <div class="md:col-span-4 p-4 sm:p-5 flex items-center justify-center md:justify-start gap-3.5 text-white" style="background-color: #0b2545 !important;">
+                                        <div class="p-2.5 rounded-xl bg-white/10 shrink-0">
+                                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-black text-sm sm:text-base uppercase tracking-wider text-white leading-tight">JADWAL PELAKSANAAN CAT</h4>
+                                            <p class="text-[11px] text-blue-200 font-medium mt-0.5">Sesi & Rincian Waktu Ujian</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Sesi 1: Hijau / Teal -->
+                                    <div class="md:col-span-4 p-4 border-t md:border-t-0 md:border-r border-slate-200 flex flex-col justify-center bg-emerald-50/40">
+                                        <div class="inline-flex items-center justify-center px-3 py-1 rounded-md text-[11px] font-black uppercase tracking-wider mb-2.5 text-white shadow-xs" style="background-color: #059669 !important;">
+                                            SESI 1 &ndash; 50 PESERTA
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-2 text-center">
+                                            <div class="bg-white rounded-lg p-2 border border-emerald-200">
+                                                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Simulasi</div>
+                                                <div class="text-xs sm:text-[13px] font-extrabold text-emerald-900">09.00 &ndash; 09.10</div>
+                                                <div class="text-[10px] font-semibold text-emerald-700">(10 menit)</div>
+                                            </div>
+                                            <div class="bg-white rounded-lg p-2 border border-emerald-200">
+                                                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Pelaksanaan CAT</div>
+                                                <div class="text-xs sm:text-[13px] font-extrabold text-emerald-900">09.10 &ndash; 10.40</div>
+                                                <div class="text-[10px] font-semibold text-emerald-700">(90 menit)</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Sesi 2: Oranye -->
+                                    <div class="md:col-span-4 p-4 border-t md:border-t-0 border-slate-200 flex flex-col justify-center bg-orange-50/40">
+                                        <div class="inline-flex items-center justify-center px-3 py-1 rounded-md text-[11px] font-black uppercase tracking-wider mb-2.5 text-white shadow-xs" style="background-color: #ea580c !important;">
+                                            SESI 2 &ndash; 49 PESERTA
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-2 text-center">
+                                            <div class="bg-white rounded-lg p-2 border border-orange-200">
+                                                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Simulasi</div>
+                                                <div class="text-xs sm:text-[13px] font-extrabold text-orange-950">11.00 &ndash; 11.10</div>
+                                                <div class="text-[10px] font-semibold text-orange-700">(10 menit)</div>
+                                            </div>
+                                            <div class="bg-white rounded-lg p-2 border border-orange-200">
+                                                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Pelaksanaan CAT</div>
+                                                <div class="text-xs sm:text-[13px] font-extrabold text-orange-950">11.10 &ndash; 12.40</div>
+                                                <div class="text-[10px] font-semibold text-orange-700">(90 menit)</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PENGUMUMAN AUDITORIUM (Full Width Sesuai Infografis Bawah) -->
+                            <div class="col-span-1 md:col-span-2 rounded-2xl shadow-sm overflow-hidden flex flex-col sm:flex-row items-center p-3.5 sm:p-4 gap-3 text-center sm:text-left" style="background-color: #fee2e2 !important; border: 1.5px solid #fca5a5 !important;">
+                                <div class="text-2xl shrink-0 select-none">
+                                    📢
+                                </div>
+                                <div class="text-xs sm:text-sm font-medium leading-relaxed" style="color: #7f1d1d !important;">
+                                    Seluruh peserta <strong class="font-extrabold text-rose-950">wajib hadir di Auditorium</strong> sebelum pukul <strong class="font-black text-rose-700 underline underline-offset-2">08.00</strong> untuk mengikuti pembukaan.
                                 </div>
                             </div>
 
