@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class Entry extends Component
 {
     public $participant_number = '';
+    public $turnstileToken = '';
 
     public $isValidated = false;
     public $participant = null;
@@ -36,6 +37,15 @@ class Entry extends Component
 
     public function validateParticipant()
     {
+        // 1. Verify Cloudflare Turnstile if enabled
+        if (config('services.turnstile.enabled', true) && !empty(config('services.turnstile.secret'))) {
+            if (empty($this->turnstileToken) || !\App\Services\TurnstileService::verify($this->turnstileToken, request()->ip())) {
+                $this->dispatch('reset-turnstile');
+                $this->addError('turnstile', 'Verifikasi keamanan Turnstile gagal atau kedaluwarsa. Silakan coba lagi.');
+                return;
+            }
+        }
+
         $this->validate([
             'participant_number' => 'required|string',
         ]);
@@ -48,6 +58,7 @@ class Entry extends Component
             ->first();
 
         if (!$this->participant) {
+            $this->dispatch('reset-turnstile');
             $this->addError('participant_number', 'ID Peserta tidak ditemukan.');
             return;
         }
