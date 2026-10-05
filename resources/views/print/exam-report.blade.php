@@ -146,7 +146,7 @@
             pada {{ count($institutions) }} Desa ({{ implode(', ', array_map(fn($v) => ucwords(strtolower($v)), $institutions)) }})
         @endif
         @if(!empty($report->district)) Kecamatan {{ ucwords(strtolower($report->district)) }} @endif
-        Kabupaten Subang oleh Lembaga Penelitian dan Pengabdian kepada Masyarakat (LPPM) Universitas Subang.</p>
+        Kabupaten Subang oleh Universitas Subang.</p>
     </div>
 
     <table class="w-full mb-4 text-left align-top">
@@ -184,7 +184,7 @@
                 <th class="w-10">No</th>
                 <th class="w-32">Nomor Peserta</th>
                 <th>Nama Lengkap Calon</th>
-                <th class="w-36">Desa / Instansi</th>
+                <th class="w-36">Desa / Kecamatan</th>
                 @if(!empty($isCombinedSession))
                     <th class="w-28">Ruang / Lab</th>
                 @endif
