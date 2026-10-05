@@ -26,6 +26,15 @@ class QuestionManager extends Component
     public $filter_category = '';
     public $filter_difficulty = '';
     public $filter_type = '';
+
+    // Multi-Select Batch Delete
+    public $selectedQuestions = [];
+    public $selectAllOnPage = false;
+
+    // Delete All Modal
+    public $isDeleteAllModalOpen = false;
+    public $deleteAllConfirmationText = '';
+    public $deleteAllScope = 'all'; // 'all' or 'category'
     
     // UI State
     public $viewMode = 'grid';
@@ -241,17 +250,154 @@ class QuestionManager extends Component
         $this->resetValidation('importFile');
     }
     
+    public function updatedFilterCategory()
+    {
+        $this->resetPage();
+        $this->clearSelection();
+    }
+
+    public function updatedFilterDifficulty()
+    {
+        $this->resetPage();
+        $this->clearSelection();
+    }
+
+    public function updatedFilterType()
+    {
+        $this->resetPage();
+        $this->clearSelection();
+    }
+
+    public function updatedSelectAllOnPage($value)
+    {
+        $currentPageIds = $this->getCurrentPageQuestionIds();
+        if ($value) {
+            $this->selectedQuestions = array_values(array_unique(array_merge($this->selectedQuestions, $currentPageIds)));
+        } else {
+            $this->selectedQuestions = array_values(array_diff($this->selectedQuestions, $currentPageIds));
+        }
+    }
+
+    public function selectAllFiltered()
+    {
+        $query = Question::query();
+        if ($this->filter_category) {
+            $query->where('category_id', $this->filter_category);
+        }
+        if ($this->filter_difficulty) {
+            $query->where('difficulty', $this->filter_difficulty);
+        }
+        if ($this->filter_type) {
+            $query->where('type', $this->filter_type);
+        }
+        $this->selectedQuestions = $query->pluck('id')->map(fn($id) => (string)$id)->toArray();
+        $this->selectAllOnPage = true;
+    }
+
+    public function clearSelection()
+    {
+        $this->selectedQuestions = [];
+        $this->selectAllOnPage = false;
+    }
+
+    private function getCurrentPageQuestionIds(): array
+    {
+        $query = Question::query();
+        if ($this->filter_category) {
+            $query->where('category_id', $this->filter_category);
+        }
+        if ($this->filter_difficulty) {
+            $query->where('difficulty', $this->filter_difficulty);
+        }
+        if ($this->filter_type) {
+            $query->where('type', $this->filter_type);
+        }
+        return $query->latest()->paginate(10)->pluck('id')->map(fn($id) => (string)$id)->toArray();
+    }
+
+    public function deleteSelected()
+    {
+        $count = count($this->selectedQuestions);
+        if ($count === 0) {
+            return;
+        }
+
+        $usedCount = \DB::table('user_answers')
+            ->whereIn('question_id', $this->selectedQuestions)
+            ->distinct()
+            ->count('question_id');
+
+        Question::whereIn('id', $this->selectedQuestions)->delete();
+
+        \App\Services\LogService::record('bulk_delete_questions', "Admin menghapus {$count} soal terpilih dari Bank Soal.");
+
+        $msg = "Berhasil menghapus {$count} soal terpilih dari Bank Soal.";
+        if ($usedCount > 0) {
+            $msg .= " (Catatan: {$usedCount} soal di antaranya memiliki riwayat pengerjaan peserta).";
+        }
+        session()->flash('message', $msg);
+
+        $this->clearSelection();
+    }
+
+    public function openDeleteAllModal($scope = 'all')
+    {
+        $this->deleteAllScope = $scope;
+        $this->deleteAllConfirmationText = '';
+        $this->resetErrorBag();
+        $this->isDeleteAllModalOpen = true;
+    }
+
+    public function closeDeleteAllModal()
+    {
+        $this->isDeleteAllModalOpen = false;
+        $this->deleteAllConfirmationText = '';
+        $this->resetErrorBag();
+    }
+
+    public function executeDeleteAll()
+    {
+        if (trim(strtoupper($this->deleteAllConfirmationText)) !== 'HAPUS') {
+            $this->addError('deleteAllConfirmationText', 'Ketik kata HAPUS dengan tepat untuk konfirmasi.');
+            return;
+        }
+
+        if ($this->deleteAllScope === 'category' && $this->filter_category) {
+            $cat = QuestionCategory::find($this->filter_category);
+            $catName = $cat ? $cat->name : 'Kategori Terpilih';
+            $count = Question::where('category_id', $this->filter_category)->count();
+            
+            Question::where('category_id', $this->filter_category)->delete();
+
+            \App\Services\LogService::record('delete_all_category_questions', "Admin menghapus seluruh soal ({$count} soal) pada kategori '{$catName}'.");
+            session()->flash('message', "Seluruh soal ({$count} soal) pada kategori '{$catName}' berhasil dihapus.");
+        } else {
+            $count = Question::count();
+            Question::query()->delete();
+
+            \App\Services\LogService::record('delete_all_questions', "Admin mengosongkan Bank Soal (menghapus {$count} soal).");
+            session()->flash('message', "Seluruh Bank Soal ({$count} soal) berhasil dikosongkan.");
+        }
+
+        $this->clearSelection();
+        $this->closeDeleteAllModal();
+    }
+
     public function import()
     {
         $this->validate([
             'importFile' => 'required|mimes:xlsx,xls,csv'
         ]);
         
-        Excel::import(new QuestionsImport, $this->importFile);
-        
-        \App\Services\LogService::record('import_questions', 'Admin mengimpor soal dari file Excel: ' . $this->importFile->getClientOriginalName());
-        
-        session()->flash('message', 'Soal berhasil diimpor dari file Excel.');
-        $this->closeImportModal();
+        try {
+            Excel::import(new QuestionsImport, $this->importFile);
+            
+            \App\Services\LogService::record('import_questions', 'Admin mengimpor soal dari file Excel: ' . $this->importFile->getClientOriginalName());
+            
+            session()->flash('message', 'Soal berhasil diimpor dari file Excel.');
+            $this->closeImportModal();
+        } catch (\Throwable $e) {
+            $this->addError('importFile', 'Gagal memproses file Excel: ' . $e->getMessage());
+        }
     }
 }

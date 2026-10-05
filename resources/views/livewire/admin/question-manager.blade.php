@@ -24,7 +24,7 @@
             </h2>
             <p class="text-blue-100 opacity-90 text-sm">Kelola seluruh soal Anda berdasarkan kategori dan tingkat kesulitan.</p>
         </div>
-        <div class="mt-4 md:mt-0 flex space-x-2">
+        <div class="mt-4 md:mt-0 flex flex-wrap gap-2">
             <button wire:click="export" class="bg-green-600 hover:bg-green-700 text-white focus:ring-4 focus:ring-green-400 font-medium py-2.5 px-4 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center border border-green-500">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 Export
@@ -36,6 +36,10 @@
             <button wire:click="openCategoryModal()" class="bg-blue-700 hover:bg-blue-800 text-white focus:ring-4 focus:ring-blue-400 font-medium py-2.5 px-4 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center border border-blue-500">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
                 Kategori
+            </button>
+            <button wire:click="openDeleteAllModal('{{ $filter_category ? 'category' : 'all' }}')" class="bg-red-600 hover:bg-red-700 text-white focus:ring-4 focus:ring-red-400 font-medium py-2.5 px-4 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center border border-red-500" title="{{ $filter_category ? 'Kosongkan soal di kategori yang difilter' : 'Kosongkan seluruh bank soal' }}">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                {{ $filter_category ? 'Kosongkan Kategori' : 'Kosongkan Bank Soal' }}
             </button>
             <button wire:click="create()" class="bg-white text-blue-700 hover:bg-blue-50 focus:ring-4 focus:ring-blue-300 font-bold py-2.5 px-5 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
@@ -96,23 +100,61 @@
         </div>
     </div>
 
+    <!-- Bulk Select Quick Bar -->
+    @if($questions->count() > 0)
+        <div class="bg-blue-50/70 border border-blue-100 rounded-xl px-4 py-2.5 mb-6 flex flex-wrap items-center justify-between gap-3 text-sm">
+            <div class="flex items-center space-x-3">
+                <label class="inline-flex items-center cursor-pointer select-none">
+                    <input type="checkbox" wire:model.live="selectAllOnPage" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 transition-colors">
+                    <span class="ml-2 font-semibold text-gray-700">Pilih Semua di Halaman Ini</span>
+                </label>
+                @if(count($selectedQuestions) > 0)
+                    <span class="text-xs bg-blue-600 text-white font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+                        {{ count($selectedQuestions) }} dipilih
+                    </span>
+                    @if(count($selectedQuestions) < $questions->total())
+                        <button wire:click="selectAllFiltered" class="text-xs text-blue-700 hover:text-blue-900 font-bold underline transition">
+                            Pilih Seluruh {{ $questions->total() }} Soal (Termasuk Halaman Lain)
+                        </button>
+                    @endif
+                @endif
+            </div>
+
+            @if(count($selectedQuestions) > 0)
+                <div class="flex items-center space-x-2">
+                    <button wire:click="deleteSelected" wire:confirm="Yakin ingin menghapus {{ count($selectedQuestions) }} soal terpilih dari Bank Soal? Tindakan ini tidak dapat dibatalkan." class="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm transition flex items-center">
+                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        Hapus {{ count($selectedQuestions) }} Terpilih
+                    </button>
+                    <button wire:click="clearSelection" class="text-xs text-gray-600 hover:text-gray-900 px-2 py-1 transition font-medium">
+                        Batal Pilihan
+                    </button>
+                </div>
+            @endif
+        </div>
+    @endif
+
     @if($viewMode === 'grid')
         <!-- Cards Layout for Questions -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse ($questions as $q)
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col group">
+                @php $isSelected = in_array((string)$q->id, $selectedQuestions); @endphp
+                <div class="bg-white rounded-2xl shadow-sm border {{ $isSelected ? 'border-blue-500 ring-2 ring-blue-500/20 bg-blue-50/10' : 'border-gray-100' }} overflow-hidden hover:shadow-md transition-all duration-200 flex flex-col group">
                     <!-- Card Header -->
-                    <div class="px-5 py-4 border-b border-gray-50 bg-gray-50/50 flex justify-between items-start">
-                        <div>
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $q->type === 'multiple_choice' ? 'bg-indigo-100 text-indigo-800' : 'bg-purple-100 text-purple-800' }}">
-                                {{ $q->type === 'multiple_choice' ? 'Pilihan Ganda' : 'Essay' }}
-                            </span>
-                            <div class="mt-1 flex items-center space-x-2 text-xs text-gray-500">
-                                <span class="font-medium text-gray-700">{{ $q->category ? $q->category->name : 'Tanpa Kategori' }}</span>
-                                <span>•</span>
-                                <span class="{{ $q->difficulty === 'easy' ? 'text-green-600' : ($q->difficulty === 'hard' ? 'text-red-600' : 'text-yellow-600') }}">
-                                    {{ ucfirst($q->difficulty) }}
+                    <div class="px-5 py-4 border-b border-gray-50 {{ $isSelected ? 'bg-blue-50/50' : 'bg-gray-50/50' }} flex justify-between items-start">
+                        <div class="flex items-start space-x-2.5">
+                            <input type="checkbox" wire:model.live="selectedQuestions" value="{{ (string)$q->id }}" class="w-4 h-4 mt-0.5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer transition">
+                            <div>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $q->type === 'multiple_choice' ? 'bg-indigo-100 text-indigo-800' : 'bg-purple-100 text-purple-800' }}">
+                                    {{ $q->type === 'multiple_choice' ? 'Pilihan Ganda' : 'Essay' }}
                                 </span>
+                                <div class="mt-1 flex items-center space-x-2 text-xs text-gray-500">
+                                    <span class="font-medium text-gray-700">{{ $q->category ? $q->category->name : 'Tanpa Kategori' }}</span>
+                                    <span>•</span>
+                                    <span class="{{ $q->difficulty === 'easy' ? 'text-green-600' : ($q->difficulty === 'hard' ? 'text-red-600' : 'text-yellow-600') }}">
+                                        {{ ucfirst($q->difficulty) }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="flex flex-col items-end">
@@ -173,7 +215,10 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-50 border-b border-gray-100 text-xs uppercase text-gray-500 font-semibold tracking-wider">
-                            <th class="p-4 pl-6">Kategori</th>
+                            <th class="p-4 pl-6 w-12 text-center">
+                                <input type="checkbox" wire:model.live="selectAllOnPage" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer">
+                            </th>
+                            <th class="p-4">Kategori</th>
                             <th class="p-4">Pertanyaan</th>
                             <th class="p-4">Tipe & Kesulitan</th>
                             <th class="p-4 text-center">Poin</th>
@@ -182,8 +227,12 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-sm">
                         @forelse($questions as $q)
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="p-4 pl-6 text-gray-700 font-medium">
+                            @php $isSelected = in_array((string)$q->id, $selectedQuestions); @endphp
+                            <tr class="hover:bg-gray-50 transition-colors {{ $isSelected ? 'bg-blue-50/40' : '' }}">
+                                <td class="p-4 pl-6 text-center">
+                                    <input type="checkbox" wire:model.live="selectedQuestions" value="{{ (string)$q->id }}" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer">
+                                </td>
+                                <td class="p-4 text-gray-700 font-medium">
                                     {{ $q->category ? $q->category->name : 'Tanpa Kategori' }}
                                 </td>
                                 <td class="p-4">
@@ -224,7 +273,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="p-8 text-center text-gray-500">
+                                <td colspan="6" class="p-8 text-center text-gray-500">
                                     <div class="flex flex-col items-center justify-center">
                                         <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                                         <p class="font-medium">Belum ada soal</p>
@@ -448,6 +497,89 @@
                                 <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                                 Memproses...
                             </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Floating Bottom Bar for Bulk Action -->
+    @if(count($selectedQuestions) > 0)
+        <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-gray-900/95 backdrop-blur-md text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-4 border border-gray-700 transition-all duration-300">
+            <div class="flex items-center space-x-2">
+                <span class="bg-blue-600 text-white font-bold text-xs px-2.5 py-1 rounded-full shadow-inner">{{ count($selectedQuestions) }}</span>
+                <span class="text-sm font-medium">Soal Dipilih</span>
+            </div>
+            <div class="h-4 w-px bg-gray-700"></div>
+            <div class="flex items-center space-x-2">
+                <button wire:click="deleteSelected" wire:confirm="Yakin ingin menghapus {{ count($selectedQuestions) }} soal terpilih dari Bank Soal? Tindakan ini tidak dapat dibatalkan." class="bg-red-600 hover:bg-red-700 active:scale-95 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center transition shadow-md">
+                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    Hapus Terpilih
+                </button>
+                <button wire:click="clearSelection" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-xl text-xs font-medium transition">
+                    Batal
+                </button>
+            </div>
+        </div>
+    @endif
+
+    <!-- Delete All / Kosongkan Bank Soal Modal -->
+    @if($isDeleteAllModalOpen)
+        <div class="fixed z-50 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" aria-hidden="true" wire:click="closeDeleteAllModal"></div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-red-200">
+                    <div class="bg-red-50 px-6 py-4 border-b border-red-100 flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 bg-red-100 text-red-600 rounded-xl">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-red-900">
+                                    {{ $deleteAllScope === 'category' ? 'Kosongkan Soal Kategori' : 'Kosongkan Seluruh Bank Soal' }}
+                                </h3>
+                                <p class="text-xs text-red-600">Tindakan ini permanen dan berisiko tinggi</p>
+                            </div>
+                        </div>
+                        <button wire:click="closeDeleteAllModal" class="text-gray-400 hover:text-gray-600 rounded-full p-1.5 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+
+                    <div class="p-6 bg-white space-y-4">
+                        <div class="p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-xl text-sm text-amber-900">
+                            @if($deleteAllScope === 'category' && $filter_category)
+                                @php $activeCat = $categories->firstWhere('id', $filter_category); @endphp
+                                Anda akan menghapus <strong>seluruh soal</strong> pada kategori: <span class="font-bold text-red-700 underline">{{ $activeCat ? $activeCat->name : 'Kategori Terpilih' }}</span>.
+                            @else
+                                Anda akan menghapus <strong>SEMUA SOAL</strong> yang ada di Bank Soal (tanpa memandang kategori).
+                            @endif
+                            <div class="mt-2 text-xs text-amber-800">
+                                ⚠️ Semua opsi jawaban dan riwayat pengerjaan soal terkait pada peserta ujian juga akan terhapus. Tindakan ini <strong>TIDAK DAPAT DIBATALKAN</strong>.
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+                                Ketik kata <span class="text-red-600 font-bold select-all bg-red-50 px-1.5 py-0.5 rounded border border-red-200">HAPUS</span> untuk mengonfirmasi:
+                            </label>
+                            <input type="text" wire:model="deleteAllConfirmationText" placeholder="Ketik HAPUS" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-red-500 focus:border-red-500 block w-full p-3 font-semibold tracking-wider">
+                            @error('deleteAllConfirmationText')
+                                <span class="text-red-500 text-xs mt-1.5 block font-medium">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 gap-2">
+                        <button wire:click="closeDeleteAllModal" type="button" class="w-full sm:w-auto px-5 py-2.5 bg-white border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition shadow-sm">
+                            Batal
+                        </button>
+                        <button wire:click="executeDeleteAll" type="button" class="w-full sm:w-auto px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition flex items-center justify-center">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            Ya, Hapus Sekarang
                         </button>
                     </div>
                 </div>
