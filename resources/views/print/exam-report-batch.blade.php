@@ -69,21 +69,40 @@
         <div class="flex items-center space-x-2">
             <label class="text-xs font-bold text-gray-700">Filter Cetak:</label>
             <select onchange="window.location.href = this.value" class="text-xs font-medium border-gray-300 rounded-lg py-1 px-2.5 bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
-                <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => 'all', 'scope' => $scope ?? 'single']) }}">
+                <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => 'all', 'scope' => $scope ?? 'single', 'sort' => $sort ?? 'participant_number']) }}">
                     Semua Instansi (Gabungan)
                 </option>
-                <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => 'all_separated', 'scope' => $scope ?? 'single']) }}" selected>
+                <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => 'all_separated', 'scope' => $scope ?? 'single', 'sort' => $sort ?? 'participant_number']) }}" selected>
                     Cetak Semua (Pisah Lembar Per Instansi)
                 </option>
                 @if(isset($institutions))
                     @foreach($institutions as $inst)
-                        <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => $inst, 'scope' => $scope ?? 'single']) }}">
+                        <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => $inst, 'scope' => $scope ?? 'single', 'sort' => $sort ?? 'participant_number']) }}">
                             Desa: {{ $inst }}
                         </option>
                     @endforeach
                 @endif
             </select>
         </div>
+
+        <div class="flex items-center space-x-2">
+            <label class="text-xs font-bold text-gray-700">Urutan:</label>
+            <select onchange="window.location.href = this.value" class="text-xs font-medium border-gray-300 rounded-lg py-1 px-2.5 bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+                <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => $institution ?? 'all_separated', 'scope' => $scope ?? 'single', 'sort' => 'participant_number']) }}" {{ ($sort ?? 'participant_number') === 'participant_number' ? 'selected' : '' }}>
+                    Nomor Peserta (Standar)
+                </option>
+                <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => $institution ?? 'all_separated', 'scope' => $scope ?? 'single', 'sort' => 'desa']) }}" {{ ($sort ?? '') === 'desa' ? 'selected' : '' }}>
+                    Desa & No. Peserta
+                </option>
+                <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => $institution ?? 'all_separated', 'scope' => $scope ?? 'single', 'sort' => 'score']) }}" {{ ($sort ?? '') === 'score' ? 'selected' : '' }}>
+                    Peringkat Nilai (Ranking)
+                </option>
+                <option value="{{ route('admin.exams.report.print', ['examId' => $exam->id, 'institution' => $institution ?? 'all_separated', 'scope' => $scope ?? 'single', 'sort' => 'no_meja']) }}" {{ ($sort ?? '') === 'no_meja' ? 'selected' : '' }}>
+                    Nomor Meja
+                </option>
+            </select>
+        </div>
+
         @if(!empty($isCombinedSession))
             <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-lg border border-emerald-300 flex items-center gap-1 shadow-xs">
                 👥 Pleno Sesi ({{ $combinedLocations }})

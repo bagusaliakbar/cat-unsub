@@ -84,6 +84,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         $report = \App\Models\ExamReport::where('exam_id', $examId)->firstOrFail();
         $institution = $request->query('institution', 'all');
         $scope = $request->query('scope', 'single');
+        $sort = $request->query('sort', 'participant_number'); // Default: 'participant_number'
 
         $isCombinedSession = false;
         $combinedLocations = $exam->location ?? 'Lab Komputer';
@@ -127,8 +128,46 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
 
         $baseSessionsQuery = \App\Models\ExamSession::with(['user', 'exam'])
             ->whereIn('exam_id', $targetExamIds)
-            ->whereNotNull('started_at')
-            ->orderByDesc('score');
+            ->whereNotNull('started_at');
+
+        $sortCollection = function($collection) use ($sort) {
+            return $collection->sort(function ($a, $b) use ($sort) {
+                if ($sort === 'score') {
+                    if ($a->score != $b->score) {
+                        return $b->score <=> $a->score;
+                    }
+                    return strnatcasecmp($a->user->participant_number ?? '', $b->user->participant_number ?? '');
+                }
+
+                if ($sort === 'desa') {
+                    $desaA = $a->user->desa ?? $a->user->institution ?? '';
+                    $desaB = $b->user->desa ?? $b->user->institution ?? '';
+                    $cmpDesa = strcasecmp($desaA, $desaB);
+                    if ($cmpDesa !== 0) {
+                        return $cmpDesa;
+                    }
+                    return strnatcasecmp($a->user->participant_number ?? '', $b->user->participant_number ?? '');
+                }
+
+                if ($sort === 'no_meja') {
+                    $mejaA = (int)($a->user->no_meja ?? 999999);
+                    $mejaB = (int)($b->user->no_meja ?? 999999);
+                    if ($mejaA !== $mejaB) {
+                        return $mejaA <=> $mejaB;
+                    }
+                    return strnatcasecmp($a->user->participant_number ?? '', $b->user->participant_number ?? '');
+                }
+
+                // Default: participant_number ASC (CAT2026001, CAT2026002, ...)
+                $numA = $a->user->participant_number ?? '';
+                $numB = $b->user->participant_number ?? '';
+                if (!empty($numA) && !empty($numB)) {
+                    $cmp = strnatcasecmp($numA, $numB);
+                    if ($cmp !== 0) return $cmp;
+                }
+                return strcasecmp($a->user->name ?? '', $b->user->name ?? '');
+            })->values();
+        };
 
         $getParticipantsCount = function($inst = null) use ($isCombinedSession, $targetExamIds, $exam) {
             if ($isCombinedSession) {
@@ -150,7 +189,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
                 $sessQuery->whereHas('user', function($q) use ($inst) {
                     $q->where('desa', $inst);
                 });
-                $sessions = $sessQuery->get();
+                $sessions = $sortCollection($sessQuery->get());
                 $partCount = $getParticipantsCount($inst);
                 $presentCount = $sessions->count();
                 $absentCount = max(0, $partCount - $presentCount);
@@ -165,7 +204,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
                     'sessions' => $sessions,
                 ];
             }
-            return view('print.exam-report-batch', compact('exam', 'report', 'reportsData', 'institutions', 'institution', 'scope', 'isCombinedSession', 'combinedLocations'));
+            return view('print.exam-report-batch', compact('exam', 'report', 'reportsData', 'institutions', 'institution', 'scope', 'sort', 'isCombinedSession', 'combinedLocations'));
         }
 
         // Mode: Specific single institution
@@ -174,23 +213,23 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
             $sessQuery->whereHas('user', function($q) use ($institution) {
                 $q->where('desa', $institution);
             });
-            $sessions = $sessQuery->get();
+            $sessions = $sortCollection($sessQuery->get());
             $partCount = $getParticipantsCount($institution);
             $presentCount = $sessions->count();
             $absentCount = max(0, $partCount - $presentCount);
             $targetVillage = $institution;
 
-            return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage', 'scope', 'isCombinedSession', 'combinedLocations'));
+            return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage', 'scope', 'sort', 'isCombinedSession', 'combinedLocations'));
         }
 
         // Mode: All combined
-        $sessions = $baseSessionsQuery->get();
+        $sessions = $sortCollection($baseSessionsQuery->get());
         $totalRegistered = $getParticipantsCount();
         $presentCount = $sessions->count();
         $absentCount = max(0, $totalRegistered - $presentCount);
         $targetVillage = 'all';
 
-        return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage', 'scope', 'isCombinedSession', 'combinedLocations'));
+        return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage', 'scope', 'sort', 'isCombinedSession', 'combinedLocations'));
     })->name('exams.report.print');
     
     Route::get('/exams/{examId}/incident-report', function ($examId) {
