@@ -70,7 +70,7 @@
 
         <!-- Footer -->
         <div class="bg-gray-50 p-4 border-t border-gray-100 text-center text-xs text-gray-500">
-            Terverifikasi oleh Sistem CAT LPPM Universitas Subang <br>
+            Terverifikasi oleh Sistem CAT Universitas Subang <br>
             {{ \Carbon\Carbon::now()->format('d M Y H:i:s') }}
         </div>
     </div>

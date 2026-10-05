@@ -179,7 +179,7 @@
 
                     <div>
                         <label for="reference_number" class="block text-sm font-semibold text-gray-700 mb-2">Nomor Surat / Berita Acara</label>
-                        <input type="text" id="reference_number" wire:model="reference_number" class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-3" placeholder="Contoh: 001/BA-CAT/LPPM-UNSUB/2026">
+                        <input type="text" id="reference_number" wire:model="reference_number" class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 p-3" placeholder="Contoh: 001/BA-CAT/UNSUB/2026">
                         @error('reference_number') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
 
