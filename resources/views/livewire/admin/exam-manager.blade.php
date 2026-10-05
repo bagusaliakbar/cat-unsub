@@ -549,30 +549,35 @@
                             </div>
                             
                             <!-- Stats (Terpilih & Total Bobot) & Actions (Select All, Reset) -->
-                            <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2.5">
+                            <div class="flex flex-col sm:flex-row items-end sm:items-center gap-3 sm:space-x-3" style="display: flex; align-items: center; gap: 10px;">
                                 <button type="button" 
                                         wire:click="toggleSelectAllQuestions" 
-                                        class="text-xs sm:text-sm font-semibold px-4.5 sm:px-5 py-2.5 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 whitespace-nowrap {{ $is_all_questions_selected ? 'bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-300' : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20' }}"
+                                        class="text-xs sm:text-sm font-semibold px-5 py-2.5 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 whitespace-nowrap {{ $is_all_questions_selected ? 'bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-300' : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20' }}"
+                                        style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 9px 18px; border-radius: 12px;"
                                         title="{{ $is_all_questions_selected ? 'Batal pilih semua soal yang tampil' : 'Pilih semua soal yang tampil di bawah' }}">
                                     @if($is_all_questions_selected)
-                                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        <svg class="w-4 h-4 shrink-0" style="width: 16px; height: 16px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                         <span>Batal Pilih Semua ({{ count($bank_questions) }})</span>
                                     @else
-                                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <svg class="w-4 h-4 shrink-0" style="width: 16px; height: 16px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                         <span>Pilih Semua ({{ count($bank_questions) }})</span>
                                     @endif
                                 </button>
                                 
-                                <button wire:click="resetSelectedQuestions" type="button" class="text-xs sm:text-sm font-semibold bg-white text-red-600 hover:bg-red-50 border border-red-200 px-4 py-2.5 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-1.5 whitespace-nowrap" title="Kosongkan semua soal terpilih">
-                                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                <button wire:click="resetSelectedQuestions" type="button" 
+                                        class="text-xs sm:text-sm font-semibold bg-white text-red-600 hover:bg-red-50 border border-red-200 px-4 py-2.5 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-1.5 whitespace-nowrap" 
+                                        style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 16px; border-radius: 12px;"
+                                        title="Kosongkan semua soal terpilih">
+                                    <svg class="w-4 h-4 shrink-0" style="width: 16px; height: 16px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     <span>Reset</span>
                                 </button>
                                 
-                                <div class="text-xs sm:text-sm font-medium text-gray-700 bg-white px-4 py-2 rounded-xl shadow-sm border {{ $total_points > 100 ? 'border-red-400 bg-red-50' : 'border-gray-200' }} whitespace-nowrap flex items-center space-x-3 transition-colors h-[42px]">
+                                <div class="text-xs sm:text-sm font-medium text-gray-700 bg-white px-4 py-2 rounded-xl shadow-sm border {{ $total_points > 100 ? 'border-red-400 bg-red-50' : 'border-gray-200' }} whitespace-nowrap flex items-center space-x-3 transition-colors h-[42px]"
+                                     style="display: inline-flex; align-items: center; padding: 8px 16px; border-radius: 12px; height: 42px;">
                                     <div>
                                         Terpilih: <span class="font-bold text-blue-600 text-sm sm:text-base">{{ count($selected_questions) }}</span> soal
                                     </div>
-                                    <div class="border-l border-gray-300 pl-3">
+                                    <div class="border-l border-gray-300 pl-3" style="border-left: 1px solid #d1d5db; padding-left: 12px; margin-left: 12px;">
                                         Total Bobot: <span class="font-bold text-sm sm:text-base {{ $total_points > 100 ? 'text-red-600' : 'text-emerald-600' }}">{{ $total_points }}</span>
                                     </div>
                                 </div>
