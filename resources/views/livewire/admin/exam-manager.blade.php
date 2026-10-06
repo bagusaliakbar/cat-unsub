@@ -135,7 +135,7 @@
                 <thead class="bg-gray-50/80">
                     <tr>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[280px]">Judul & Informasi Ujian</th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[220px]">Jadwal & Durasi</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[240px]">Jadwal & Durasi</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[110px]">Status</th>
                         <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Aksi</th>
                     </tr>
@@ -236,44 +236,59 @@
                             <!-- Kolom Terpadu: Jadwal & Durasi -->
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if($exam->start_time)
-                                    <div class="flex flex-col gap-1.5">
+                                    <div class="flex flex-col">
                                         <!-- Tanggal Pelaksanaan -->
-                                        <div class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                                            <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                            </svg>
-                                            <span>{{ \Carbon\Carbon::parse($exam->start_time)->format('d M Y') }}</span>
-                                            @if($exam->end_time && \Carbon\Carbon::parse($exam->start_time)->format('d M Y') !== \Carbon\Carbon::parse($exam->end_time)->format('d M Y'))
-                                                <span class="text-xs text-slate-400 font-normal">- {{ \Carbon\Carbon::parse($exam->end_time)->format('d M Y') }}</span>
-                                            @endif
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-7 h-7 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0 shadow-2xs">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                </svg>
+                                            </div>
+                                            <div class="flex items-baseline gap-1.5 flex-wrap">
+                                                <span class="text-sm font-bold text-slate-800 tracking-tight">
+                                                    {{ \Carbon\Carbon::parse($exam->start_time)->locale('id')->translatedFormat('d F Y') }}
+                                                </span>
+                                                @if($exam->end_time && \Carbon\Carbon::parse($exam->start_time)->format('Y-m-d') !== \Carbon\Carbon::parse($exam->end_time)->format('Y-m-d'))
+                                                    <span class="text-xs text-slate-500 font-medium">s/d {{ \Carbon\Carbon::parse($exam->end_time)->locale('id')->translatedFormat('d F Y') }}</span>
+                                                @endif
+                                            </div>
                                         </div>
 
                                         <!-- Rentang Jam & Durasi Menit -->
-                                        <div class="flex items-center gap-2 flex-wrap">
-                                            <span class="inline-flex items-center text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60 shadow-2xs">
-                                                {{ \Carbon\Carbon::parse($exam->start_time)->format('H:i') }}
-                                                @if($exam->end_time)
-                                                    - {{ \Carbon\Carbon::parse($exam->end_time)->format('H:i') }}
-                                                @endif
-                                                WIB
-                                            </span>
-                                            <span class="inline-flex items-center text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60 shadow-2xs">
-                                                <svg class="w-3 h-3 mr-1 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="flex items-center gap-2 mt-2 flex-wrap">
+                                            <!-- Jam -->
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-slate-50 text-slate-700 border border-slate-200/80 shadow-2xs">
+                                                <svg class="w-3.5 h-3.5 mr-1.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                </svg>
+                                                {{ \Carbon\Carbon::parse($exam->start_time)->format('H:i') }}@if($exam->end_time) - {{ \Carbon\Carbon::parse($exam->end_time)->format('H:i') }}@endif WIB
+                                            </span>
+
+                                            <!-- Durasi -->
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200/80 shadow-2xs">
+                                                <svg class="w-3.5 h-3.5 mr-1.5 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <circle cx="12" cy="13" r="8" stroke-width="2"/>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v4l2.5 2.5M10 2h4M12 2v2"/>
                                                 </svg>
                                                 {{ $exam->duration_minutes }} Menit
                                             </span>
                                         </div>
                                     </div>
                                 @else
-                                    <div class="flex flex-col gap-1">
-                                        <span class="inline-flex items-center text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200/60 w-fit shadow-2xs">
-                                            <svg class="w-3 h-3 mr-1 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    <div class="flex flex-col gap-1.5">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200/80 w-fit shadow-2xs">
+                                            <svg class="w-3.5 h-3.5 mr-1.5 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <circle cx="12" cy="13" r="8" stroke-width="2"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v4l2.5 2.5M10 2h4M12 2v2"/>
                                             </svg>
                                             {{ $exam->duration_minutes }} Menit
                                         </span>
-                                        <span class="text-xs text-slate-400 font-medium italic">Jadwal belum ditentukan</span>
+                                        <span class="text-xs text-slate-400 font-medium italic flex items-center gap-1.5">
+                                            <svg class="w-3.5 h-3.5 text-slate-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            </svg>
+                                            Jadwal belum ditentukan
+                                        </span>
                                     </div>
                                 @endif
                             </td>
