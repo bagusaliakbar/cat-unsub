@@ -205,22 +205,14 @@
 
     <!-- Tanda Tangan -->
     <div class="mt-8 break-inside-avoid">
-        <table class="w-full text-center">
-            <tr>
-                <td class="w-1/2">
-                    <br>
-                    Peserta Ujian,
-                    <br><br><br><br>
-                    <span class="font-bold underline">{{ $session->user->name }}</span>
-                </td>
-                <td class="w-1/2">
-                    Subang, {{ \Carbon\Carbon::now()->isoFormat('D MMMM Y') }}<br>
-                    Pengawas Ruangan / Operator CAT,
-                    <br><br><br><br>
-                    <span class="font-bold underline" id="pengawasName">___________________________</span>
-                </td>
-            </tr>
-        </table>
+        <div class="flex justify-end">
+            <div class="text-center w-72">
+                <p>Subang, {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</p>
+                <p>Pengawas Ruangan</p>
+                <div class="h-24"></div>
+                <p class="font-bold underline" id="pengawasName">___________________________</p>
+            </div>
+        </div>
     </div>
 
     <!-- Print Button (Hidden on Print) -->
@@ -228,7 +220,7 @@
         <button onclick="window.close()" class="px-6 py-2.5 bg-gray-500 hover:bg-gray-600 text-white rounded-lg shadow-lg font-bold">
             Tutup
         </button>
-        <button onclick="window.print()" class="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-lg font-bold flex items-center">
+        <button onclick="initPrint()" class="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-lg font-bold flex items-center">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
             Cetak (Print)
         </button>
@@ -236,12 +228,22 @@
 
     <script>
         function initPrint() {
-            let pengawas = prompt("Masukkan nama Pengawas Ruangan / Operator CAT (Opsional):", "");
-            if (pengawas) {
-                document.getElementById('pengawasName').innerText = pengawas;
-                document.getElementById('pengawasName').classList.remove('underline');
+            let el = document.getElementById('pengawasName');
+            let currentName = el ? el.innerText : '';
+            let defaultName = currentName.includes('___') ? '' : currentName;
+            let pengawas = prompt("Masukkan nama Pengawas Ruangan (Opsional):", defaultName);
+            if (pengawas !== null) {
+                if (pengawas.trim() !== '') {
+                    el.innerText = pengawas.trim();
+                    el.classList.remove('underline');
+                } else {
+                    el.innerText = "___________________________";
+                    el.classList.add('underline');
+                }
             }
-            window.print();
+            setTimeout(() => {
+                window.print();
+            }, 100);
         }
     </script>
 </body>
