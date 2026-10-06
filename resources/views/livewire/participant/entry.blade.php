@@ -368,7 +368,7 @@
                                     <p style="font-size: 13px; color: #334155 !important; line-height: 1.5; margin: 0; font-weight: 500;">
                                         Apakah Anda sudah membaca dan memahami seluruh Tata Tertib Ujian? Seluruh aktivitas pengerjaan diawasi dan terekam secara otomatis.
                                     </p>
-                                    <p style="margin: 0 0 10px 0;">
+                                    <p style="font-size: 12.5px; color: #475569 !important; line-height: 1.5; margin: 6px 0 0 0;">
                                         Ujian akan <strong>langsung berjalan otomatis</strong> segera setelah Anda menekan tombol di bawah dan tidak dapat diulang.
                                     </p>
                                 </div>
@@ -380,26 +380,6 @@
                                 <svg style="width: 16px; height: 16px; margin-right: 8px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                                 <span>Lihat Tata Tertib</span>
                             </button>
-                        </div>
-
-                        <!-- Card 2: Perhatian Waktu (Amber Warning Card dengan jarak icon aman) -->
-                        <div style="background-color: #fffbeb !important; border: 1px solid #fde68a !important; border-radius: 16px; padding: 18px; display: flex; align-items: flex-start;">
-                            <div style="width: 40px; height: 40px; border-radius: 12px; background-color: #f59e0b !important; color: #ffffff !important; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 14px; margin-top: 2px; box-shadow: 0 2px 6px rgba(245, 158, 11, 0.25);">
-                                <svg style="width: 22px; height: 22px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                            </div>
-                            <div style="flex: 1;">
-                                <div style="display: flex; align-items: center; flex-wrap: wrap; margin-bottom: 6px;">
-                                    <span style="font-size: 12px; font-weight: 900; color: #78350f !important; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 8px;">PERHATIAN KHUSUS</span>
-                                    <span style="width: 5px; height: 5px; border-radius: 50%; background-color: #f59e0b; display: inline-block; margin-right: 8px;"></span>
-                                    <span style="font-size: 12px; font-weight: 700; color: #92400e !important;">Waktu Langsung Berjalan</span>
-                                </div>
-                                
-                                <div style="font-size: 13px; color: #78350f !important; line-height: 1.5;">
-                                    <p style="margin: 0 0 10px 0;">
-                                        Waktu ujian (<strong style="background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; padding: 2px 8px; border-radius: 6px; font-weight: 800;">{{ $confirmingExam->duration_minutes }} Menit</strong>) akan <strong>langsung berjalan otomatis</strong> segera setelah Anda menekan tombol di bawah dan tidak dapat diulang.
-                                    </p>
-                                </div>
-                            </div>
                         </div>
 
                         <!-- Card 3: Token Input (Jika Diperlukan) -->
