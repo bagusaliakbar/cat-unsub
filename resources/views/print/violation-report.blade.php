@@ -96,14 +96,10 @@
                 <h3 class="text-lg font-bold uppercase">KABUPATEN SUBANG</h3>
             @endif
         @else
+            {{-- Cetak Gabungan: Teks Kabupaten Subang dan Sesi ditiadakan dari judul --}}
             <h3 class="text-lg font-bold uppercase">SELEKSI BAKAL CALON KEPALA DESA</h3>
-            @if(!empty($displayDistrict))
-                <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($displayDistrict) }} KABUPATEN SUBANG</h3>
-            @else
-                <h3 class="text-lg font-bold uppercase">KABUPATEN SUBANG</h3>
-            @endif
-            @if(!empty($session->exam->wave))
-                <p class="text-xs font-bold text-gray-700 uppercase tracking-wider mt-0.5">{{ $session->exam->wave->name }}</p>
+            @if(!empty($report->district))
+                <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }}</h3>
             @endif
         @endif
     </div>
