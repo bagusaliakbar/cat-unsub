@@ -82,7 +82,9 @@
         <h3 class="text-lg font-bold uppercase">LAPORAN PELANGGARAN PESERTA UJIAN</h3>
         @if($report && $report->village)
         <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA {{ strtoupper($report->village) }}</h3>
-        <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }} KABUPATEN SUBANG</h3>
+        @if(!empty($report->district))
+        <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }}</h3>
+        @endif
         @endif
     </div>
 

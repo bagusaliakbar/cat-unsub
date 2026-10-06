@@ -130,9 +130,7 @@
             <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA</h3>
         @endif
         @if(!empty($report->district))
-            <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }} KABUPATEN SUBANG</h3>
-        @else
-            <h3 class="text-lg font-bold uppercase">KABUPATEN SUBANG</h3>
+            <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }}</h3>
         @endif
         <p class="mt-1 font-bold">Nomor: {{ $report->reference_number ?? '[Nomor Surat]' }}</p>
     </div>

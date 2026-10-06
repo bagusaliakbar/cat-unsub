@@ -105,9 +105,7 @@
                 <h3 class="text-lg font-bold uppercase">DAFTAR HADIR PESERTA UJIAN SELEKSI TERTULIS BERBASIS CAT</h3>
                 <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA {{ strtoupper($attItem['village']) }}</h3>
                 @if(!empty($report->district))
-                <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }} KABUPATEN SUBANG</h3>
-                @else
-                <h3 class="text-lg font-bold uppercase">KABUPATEN SUBANG</h3>
+                <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }}</h3>
                 @endif
             </div>
 
@@ -218,9 +216,7 @@
                 <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA</h3>
             @endif
             @if(!empty($report->district))
-                <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }} KABUPATEN SUBANG</h3>
-            @else
-                <h3 class="text-lg font-bold uppercase">KABUPATEN SUBANG</h3>
+                <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }}</h3>
             @endif
         </div>
 
