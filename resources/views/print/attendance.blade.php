@@ -151,7 +151,6 @@
             <table class="w-full table-bordered mb-8">
                 <thead>
                     <tr>
-                        <th class="w-10 text-center">No</th>
                         <th class="w-20 text-center">No. Meja</th>
                         <th class="w-28 text-center">Nomor Peserta</th>
                         <th class="text-center">Nama Peserta</th>
@@ -163,7 +162,6 @@
                 <tbody>
                     @foreach($attItem['participants'] as $index => $participant)
                     <tr>
-                        <td class="text-center align-middle">{{ $index + 1 }}</td>
                         <td class="text-center align-middle font-bold font-mono">{{ $participant->no_meja ?? '-' }}</td>
                         <td class="text-center align-middle font-mono">{{ $participant->participant_number ?? $participant->nik }}</td>
                         <td class="px-3 align-middle">{{ $participant->name }}</td>
@@ -182,7 +180,7 @@
                     @endforeach
                     @if(count($attItem['participants']) == 0)
                     <tr>
-                        <td colspan="7" class="text-center py-4 text-gray-500">Belum ada peserta dari desa {{ $attItem['village'] }}.</td>
+                        <td colspan="6" class="text-center py-4 text-gray-500">Belum ada peserta dari desa {{ $attItem['village'] }}.</td>
                     </tr>
                     @endif
                 </tbody>
@@ -276,7 +274,6 @@
         <table class="w-full table-bordered mb-8">
             <thead>
                 <tr>
-                    <th class="w-10 text-center">No</th>
                     <th class="w-20 text-center">No. Meja</th>
                     <th class="w-28 text-center">Nomor Peserta</th>
                     <th class="text-center">Nama Peserta</th>
@@ -288,7 +285,6 @@
             <tbody>
                 @foreach($participants as $index => $participant)
                 <tr>
-                    <td class="text-center align-middle">{{ $index + 1 }}</td>
                     <td class="text-center align-middle font-bold font-mono">{{ $participant->no_meja ?? '-' }}</td>
                     <td class="text-center align-middle font-mono">{{ $participant->participant_number ?? $participant->nik }}</td>
                     <td class="px-3 align-middle">{{ $participant->name }}</td>
@@ -307,7 +303,7 @@
                 @endforeach
                 @if(count($participants) == 0)
                 <tr>
-                    <td colspan="7" class="text-center py-4 text-gray-500">Belum ada peserta yang sesuai dengan pilihan ini.</td>
+                    <td colspan="6" class="text-center py-4 text-gray-500">Belum ada peserta yang sesuai dengan pilihan ini.</td>
                 </tr>
                 @endif
             </tbody>
