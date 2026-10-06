@@ -169,7 +169,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
     })->name('exams.monitor.print');
     
     Route::get('/exams/session/{sessionId}/print', function ($sessionId) {
-        $session = \App\Models\ExamSession::with(['user', 'exam', 'answers.question.options', 'answers.option'])->findOrFail($sessionId);
+        $session = \App\Models\ExamSession::with(['user.wave', 'exam.wave', 'answers.question.options', 'answers.option'])->findOrFail($sessionId);
         $report = \App\Models\ExamReport::where('exam_id', $session->exam_id)->first();
         $violationLogs = \App\Models\SystemLog::where('user_id', $session->user_id)
             ->where('action', 'violation')
@@ -180,7 +180,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
     })->name('exams.session.print');
 
     Route::get('/exams/session/{sessionId}/print-violations', function ($sessionId) {
-        $session = \App\Models\ExamSession::with(['user', 'exam'])->findOrFail($sessionId);
+        $session = \App\Models\ExamSession::with(['user.wave', 'exam.wave'])->findOrFail($sessionId);
         $report = \App\Models\ExamReport::where('exam_id', $session->exam_id)->first();
         $violationLogs = \App\Models\SystemLog::where('user_id', $session->user_id)
             ->where('action', 'violation')

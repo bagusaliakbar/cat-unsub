@@ -120,6 +120,16 @@
                 <td class="align-top uppercase">{{ ucwords(strtolower($session->exam->title)) }}</td>
             </tr>
             <tr>
+                <td class="w-40 font-bold align-top">Sesi</td>
+                <td class="w-4 text-center align-top">:</td>
+                <td class="align-top uppercase">{{ $session->exam->wave ? $session->exam->wave->name : ($session->user->wave?->name ?? '-') }}</td>
+            </tr>
+            <tr>
+                <td class="w-40 font-bold align-top">Tempat</td>
+                <td class="w-4 text-center align-top">:</td>
+                <td class="align-top uppercase">{{ $session->exam->location ?: 'Laboratorium Komputer Universitas Subang' }}</td>
+            </tr>
+            <tr>
                 <td class="w-40 font-bold align-top">Waktu Pengerjaan</td>
                 <td class="w-4 text-center align-top">:</td>
                 <td class="align-top">
@@ -128,11 +138,10 @@
                     {{ $session->completed_at ? \Carbon\Carbon::parse($session->completed_at)->format('H:i:s') : '-' }}
                 </td>
             </tr>
-
             <tr>
-                <td class="w-40 font-bold align-top pt-4">Skor Akhir</td>
-                <td class="w-4 text-center align-top pt-4">:</td>
-                <td class="align-top font-bold pt-4 {{ $session->score >= $session->exam->passing_grade ? 'text-green-600' : 'text-red-600' }}">
+                <td class="w-40 font-bold align-top">Skor</td>
+                <td class="w-4 text-center align-top">:</td>
+                <td class="align-top font-bold">
                     {{ round($session->score) }}
                 </td>
             </tr>

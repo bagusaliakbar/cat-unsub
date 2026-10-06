@@ -137,6 +137,16 @@
                 <td class="align-top uppercase">{{ ucwords(strtolower($session->exam->title)) }}</td>
             </tr>
             <tr>
+                <td class="w-40 font-bold align-top">Sesi</td>
+                <td class="w-4 text-center align-top">:</td>
+                <td class="align-top uppercase">{{ $session->exam->wave ? $session->exam->wave->name : ($session->user->wave?->name ?? '-') }}</td>
+            </tr>
+            <tr>
+                <td class="w-40 font-bold align-top">Tempat</td>
+                <td class="w-4 text-center align-top">:</td>
+                <td class="align-top uppercase">{{ $session->exam->location ?: 'Laboratorium Komputer Universitas Subang' }}</td>
+            </tr>
+            <tr>
                 <td class="w-40 font-bold align-top">Waktu Pengerjaan</td>
                 <td class="w-4 text-center align-top">:</td>
                 <td class="align-top">
