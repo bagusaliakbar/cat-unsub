@@ -86,6 +86,17 @@
                     <option value="essay">Essay</option>
                 </select>
             </div>
+            <div class="w-full md:w-36">
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Tampilkan</label>
+                <select wire:model.live="perPage" class="w-full rounded-lg border-gray-200 text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm font-medium">
+                    <option value="5">5 Data</option>
+                    <option value="10">10 Data</option>
+                    <option value="20">20 Data</option>
+                    <option value="50">50 Data</option>
+                    <option value="100">100 Data</option>
+                    <option value="all">Semua</option>
+                </select>
+            </div>
         </div>
         
         <div class="flex items-center space-x-1 bg-gray-100 p-1 rounded-lg">
@@ -290,6 +301,10 @@
     @if($questions->hasPages())
         <div class="mt-6">
             {{ $questions->links() }}
+        </div>
+    @elseif($questions->total() > 0)
+        <div class="mt-6 text-sm text-gray-500 text-center sm:text-left">
+            Menampilkan seluruh <span class="font-bold text-gray-800">{{ $questions->total() }}</span> soal
         </div>
     @endif
 

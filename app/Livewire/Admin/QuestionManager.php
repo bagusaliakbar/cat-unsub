@@ -26,6 +26,7 @@ class QuestionManager extends Component
     public $filter_category = '';
     public $filter_difficulty = '';
     public $filter_type = '';
+    public $perPage = 10;
 
     // Multi-Select Batch Delete
     public $selectedQuestions = [];
@@ -82,7 +83,14 @@ class QuestionManager extends Component
             $query->where('type', $this->filter_type);
         }
 
-        $questions = $query->latest()->paginate(10);
+        if ($this->perPage === 'all' || $this->perPage === 'semua' || $this->perPage == -1) {
+            $totalCount = (clone $query)->count();
+            $questions = $query->latest()->paginate(max(1, $totalCount));
+        } else {
+            $perPageInt = (int)$this->perPage;
+            $validPerPage = in_array($perPageInt, [5, 10, 20, 50, 100]) ? $perPageInt : 10;
+            $questions = $query->latest()->paginate($validPerPage);
+        }
 
         return view('livewire.admin.question-manager', compact('questions', 'categories'))
             ->layout('layouts.app');
@@ -268,6 +276,12 @@ class QuestionManager extends Component
         $this->clearSelection();
     }
 
+    public function updatedPerPage()
+    {
+        $this->resetPage();
+        $this->clearSelection();
+    }
+
     public function updatedSelectAllOnPage($value)
     {
         $currentPageIds = $this->getCurrentPageQuestionIds();
@@ -312,7 +326,15 @@ class QuestionManager extends Component
         if ($this->filter_type) {
             $query->where('type', $this->filter_type);
         }
-        return $query->latest()->paginate(10)->pluck('id')->map(fn($id) => (string)$id)->toArray();
+
+        if ($this->perPage === 'all' || $this->perPage === 'semua' || $this->perPage == -1) {
+            $totalCount = (clone $query)->count();
+            return $query->latest()->paginate(max(1, $totalCount))->pluck('id')->map(fn($id) => (string)$id)->toArray();
+        }
+
+        $perPageInt = (int)$this->perPage;
+        $validPerPage = in_array($perPageInt, [5, 10, 20, 50, 100]) ? $perPageInt : 10;
+        return $query->latest()->paginate($validPerPage)->pluck('id')->map(fn($id) => (string)$id)->toArray();
     }
 
     public function deleteSelected()
