@@ -134,12 +134,10 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50/80">
                     <tr>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-1/3 min-w-[250px]">Judul & Deskripsi</th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Durasi</th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Waktu Mulai</th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Waktu Selesai</th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider text-right w-1/4">Aksi</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[280px]">Judul & Informasi Ujian</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[220px]">Jadwal & Durasi</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[110px]">Status</th>
+                        <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
@@ -235,29 +233,51 @@
                                     @endif
                                 </div>
                             </td>
-                            <td class="px-6 py-5 whitespace-nowrap">
-                                <div class="flex items-center text-sm text-gray-700 font-medium">
-                                    <svg class="w-4 h-4 text-gray-400 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    {{ $exam->duration_minutes }} Menit
-                                </div>
-                            </td>
-                            <td class="px-6 py-5 whitespace-nowrap">
+                            <!-- Kolom Terpadu: Jadwal & Durasi -->
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 @if($exam->start_time)
-                                    <div class="text-sm text-gray-900 font-medium">{{ \Carbon\Carbon::parse($exam->start_time)->format('d M Y') }}</div>
-                                    <div class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($exam->start_time)->format('H:i') }} WIB</div>
+                                    <div class="flex flex-col gap-1.5">
+                                        <!-- Tanggal Pelaksanaan -->
+                                        <div class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                                            <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            </svg>
+                                            <span>{{ \Carbon\Carbon::parse($exam->start_time)->format('d M Y') }}</span>
+                                            @if($exam->end_time && \Carbon\Carbon::parse($exam->start_time)->format('d M Y') !== \Carbon\Carbon::parse($exam->end_time)->format('d M Y'))
+                                                <span class="text-xs text-slate-400 font-normal">- {{ \Carbon\Carbon::parse($exam->end_time)->format('d M Y') }}</span>
+                                            @endif
+                                        </div>
+
+                                        <!-- Rentang Jam & Durasi Menit -->
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <span class="inline-flex items-center text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60 shadow-2xs">
+                                                {{ \Carbon\Carbon::parse($exam->start_time)->format('H:i') }}
+                                                @if($exam->end_time)
+                                                    - {{ \Carbon\Carbon::parse($exam->end_time)->format('H:i') }}
+                                                @endif
+                                                WIB
+                                            </span>
+                                            <span class="inline-flex items-center text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60 shadow-2xs">
+                                                <svg class="w-3 h-3 mr-1 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                </svg>
+                                                {{ $exam->duration_minutes }} Menit
+                                            </span>
+                                        </div>
+                                    </div>
                                 @else
-                                    <span class="text-sm text-gray-400 font-medium">-</span>
+                                    <div class="flex flex-col gap-1">
+                                        <span class="inline-flex items-center text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200/60 w-fit shadow-2xs">
+                                            <svg class="w-3 h-3 mr-1 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            {{ $exam->duration_minutes }} Menit
+                                        </span>
+                                        <span class="text-xs text-slate-400 font-medium italic">Jadwal belum ditentukan</span>
+                                    </div>
                                 @endif
                             </td>
-                            <td class="px-6 py-5 whitespace-nowrap">
-                                @if($exam->end_time)
-                                    <div class="text-sm text-gray-900 font-medium">{{ \Carbon\Carbon::parse($exam->end_time)->format('d M Y') }}</div>
-                                    <div class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($exam->end_time)->format('H:i') }} WIB</div>
-                                @else
-                                    <span class="text-sm text-gray-400 font-medium">-</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-5 whitespace-nowrap">
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 @if($exam->is_archived)
                                     <span class="px-2.5 py-1 inline-flex items-center text-xs leading-5 font-bold rounded-full bg-gray-100 text-gray-700 border border-gray-300">
                                         <svg class="w-3.5 h-3.5 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
@@ -280,53 +300,53 @@
                                     </button>
                                 @endif
                             </td>
-                            <td class="px-6 py-5 text-right text-sm font-medium">
-                                <div class="flex flex-wrap items-center justify-end gap-1.5 max-w-[420px] ml-auto">
-                                    <a href="{{ route('admin.exams.monitor', $exam->id) }}" class="text-emerald-600 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 p-1.5 rounded-lg transition-colors flex items-center" title="Monitor & Hasil Nilai">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                            <td class="px-6 py-4 text-right text-sm font-medium">
+                                <div class="flex flex-wrap items-center justify-end gap-1.5 ml-auto">
+                                    <a href="{{ route('admin.exams.monitor', $exam->id) }}" class="text-emerald-600 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 p-2 rounded-xl transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center" title="Monitor & Hasil Nilai">
+                                        <svg class="w-4.5 h-4.5" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                                     </a>
-                                    <a href="{{ route('admin.exams.preview', $exam->id) }}" class="text-purple-600 hover:text-purple-900 bg-purple-50 hover:bg-purple-100 p-1.5 rounded-lg transition-colors flex items-center" title="Preview Soal Ujian">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                    <a href="{{ route('admin.exams.preview', $exam->id) }}" class="text-purple-600 hover:text-purple-900 bg-purple-50 hover:bg-purple-100 p-2 rounded-xl transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center" title="Preview Soal Ujian">
+                                        <svg class="w-4.5 h-4.5" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                     </a>
-                                    <a href="{{ route('admin.exams.report', $exam->id) }}" class="text-orange-600 hover:text-orange-900 bg-orange-50 hover:bg-orange-100 p-1.5 rounded-lg transition-colors flex items-center" title="Cetak Berita Acara">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                    <a href="{{ route('admin.exams.report', $exam->id) }}" class="text-orange-600 hover:text-orange-900 bg-orange-50 hover:bg-orange-100 p-2 rounded-xl transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center" title="Cetak Berita Acara">
+                                        <svg class="w-4.5 h-4.5" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                     </a>
-                                    <a href="{{ route('admin.exams.incident-report', $exam->id) }}" class="text-pink-600 hover:text-pink-900 bg-pink-50 hover:bg-pink-100 p-1.5 rounded-lg transition-colors flex items-center" title="Cetak Form Kejadian Khusus" target="_blank">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                    <a href="{{ route('admin.exams.incident-report', $exam->id) }}" class="text-pink-600 hover:text-pink-900 bg-pink-50 hover:bg-pink-100 p-2 rounded-xl transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center" title="Cetak Form Kejadian Khusus" target="_blank">
+                                        <svg class="w-4.5 h-4.5" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                                     </a>
-                                    <a href="{{ route('admin.exams.attendance', $exam->id) }}" class="text-teal-600 hover:text-teal-900 bg-teal-50 hover:bg-teal-100 p-1.5 rounded-lg transition-colors flex items-center" title="Cetak Daftar Hadir" target="_blank">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                    <a href="{{ route('admin.exams.attendance', $exam->id) }}" class="text-teal-600 hover:text-teal-900 bg-teal-50 hover:bg-teal-100 p-2 rounded-xl transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center" title="Cetak Daftar Hadir" target="_blank">
+                                        <svg class="w-4.5 h-4.5" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                                     </a>
-                                    <button type="button" wire:click="manageQuestions({{ $exam->id }})" class="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 p-1.5 rounded-lg transition-colors flex items-center" title="Kelola Soal Ujian">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                                    <button type="button" wire:click="manageQuestions({{ $exam->id }})" class="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 p-2 rounded-xl transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center cursor-pointer" title="Kelola Soal Ujian">
+                                        <svg class="w-4.5 h-4.5" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                                     </button>
-                                    <button type="button" wire:click="manageParticipants({{ $exam->id }})" class="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 p-1.5 rounded-lg transition-colors flex items-center" title="Assign Peserta ({{ $exam->participants_count }} Peserta)">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                    <button type="button" wire:click="manageParticipants({{ $exam->id }})" class="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 p-2 rounded-xl transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center cursor-pointer" title="Assign Peserta ({{ $exam->participants_count }} Peserta)">
+                                        <svg class="w-4.5 h-4.5" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                                     </button>
 
                                     <!-- Archive / Unarchive Button -->
                                     @if($exam->is_archived)
-                                        <button type="button" wire:click="unarchiveExam({{ $exam->id }})" wire:confirm="Keluarkan ujian '{{ $exam->title }}' dari arsip?" class="text-amber-700 hover:text-amber-900 bg-amber-50 hover:bg-amber-100 p-1.5 rounded-lg transition-colors flex items-center" title="Keluarkan dari Arsip">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                        <button type="button" wire:click="unarchiveExam({{ $exam->id }})" wire:confirm="Keluarkan ujian '{{ $exam->title }}' dari arsip?" class="text-amber-700 hover:text-amber-900 bg-amber-50 hover:bg-amber-100 p-2 rounded-xl transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center cursor-pointer" title="Keluarkan dari Arsip">
+                                            <svg class="w-4.5 h-4.5" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                                         </button>
                                     @else
-                                        <button type="button" wire:click="archiveExam({{ $exam->id }})" wire:confirm="Arsipkan ujian '{{ $exam->title }}'? Ujian akan dipindahkan ke tab Arsip dan disembunyikan dari peserta." class="text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 p-1.5 rounded-lg transition-colors flex items-center" title="Arsipkan Ujian Ini">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                                        <button type="button" wire:click="archiveExam({{ $exam->id }})" wire:confirm="Arsipkan ujian '{{ $exam->title }}'? Ujian akan dipindahkan ke tab Arsip dan disembunyikan dari peserta." class="text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 p-2 rounded-xl transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center cursor-pointer" title="Arsipkan Ujian Ini">
+                                            <svg class="w-4.5 h-4.5" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
                                         </button>
                                     @endif
 
-                                    <button type="button" wire:click="edit({{ $exam->id }})" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 p-1.5 rounded-lg transition-colors" title="Edit">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                    <button type="button" wire:click="edit({{ $exam->id }})" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-xl transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center cursor-pointer" title="Edit">
+                                        <svg class="w-4.5 h-4.5" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                     </button>
-                                    <button wire:click="delete({{ $exam->id }})" wire:confirm="Apakah Anda yakin ingin menghapus ujian ini?" class="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 p-1.5 rounded-lg transition-colors" title="Hapus">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    <button wire:click="delete({{ $exam->id }})" wire:confirm="Apakah Anda yakin ingin menghapus ujian ini?" class="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 p-2 rounded-xl transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center cursor-pointer" title="Hapus">
+                                        <svg class="w-4.5 h-4.5" style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="4" class="px-6 py-12 text-center text-gray-500">
                                 <div class="flex flex-col items-center justify-center">
                                     <div class="bg-gray-50 text-gray-400 p-4 rounded-full mb-4">
                                         @if($tab === 'archived')
