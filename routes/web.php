@@ -39,20 +39,133 @@ Route::view('profile', 'profile')
 
 require __DIR__.'/auth.php';
 
+$renderExamResults = function ($examId, \Illuminate\Http\Request $request) {
+    $exam = \App\Models\Exam::with(['wave', 'participants'])->findOrFail($examId);
+    $report = \App\Models\ExamReport::where('exam_id', $examId)->first();
+    $institution = $request->query('institution', 'all');
+    $sort = $request->query('sort', 'score');
+
+    $institutions = $exam->participants()
+        ->whereNotNull('desa')
+        ->where('desa', '!=', '')
+        ->distinct()
+        ->orderBy('desa')
+        ->pluck('desa')
+        ->toArray();
+
+    if (empty($institutions)) {
+        $institutions = \App\Models\User::whereHas('examSessions', fn($q) => $q->where('exam_id', $examId))
+            ->whereNotNull('desa')
+            ->where('desa', '!=', '')
+            ->distinct()
+            ->orderBy('desa')
+            ->pluck('desa')
+            ->toArray();
+    }
+
+    $baseSessionsQuery = \App\Models\ExamSession::with(['user.wave', 'exam'])
+        ->where('exam_id', $examId)
+        ->whereNotNull('started_at');
+
+    $sortCollection = function($collection) use ($sort) {
+        return $collection->sort(function ($a, $b) use ($sort) {
+            if ($sort === 'participant_number') {
+                $numA = $a->user->participant_number ?? '';
+                $numB = $b->user->participant_number ?? '';
+                if (!empty($numA) && !empty($numB)) {
+                    $cmp = strnatcasecmp($numA, $numB);
+                    if ($cmp !== 0) return $cmp;
+                }
+                return strcasecmp($a->user->name ?? '', $b->user->name ?? '');
+            }
+
+            if ($sort === 'desa') {
+                $desaA = $a->user->desa ?? $a->user->institution ?? '';
+                $desaB = $b->user->desa ?? $b->user->institution ?? '';
+                $cmpDesa = strcasecmp($desaA, $desaB);
+                if ($cmpDesa !== 0) {
+                    return $cmpDesa;
+                }
+                if ($a->score != $b->score) {
+                    return $b->score <=> $a->score;
+                }
+                return strnatcasecmp($a->user->participant_number ?? '', $b->user->participant_number ?? '');
+            }
+
+            if ($sort === 'no_meja') {
+                $mejaA = (int)($a->user->no_meja ?? 999999);
+                $mejaB = (int)($b->user->no_meja ?? 999999);
+                if ($mejaA !== $mejaB) {
+                    return $mejaA <=> $mejaB;
+                }
+                return strnatcasecmp($a->user->participant_number ?? '', $b->user->participant_number ?? '');
+            }
+
+            // Default: score DESC (Ranking)
+            if ($a->score != $b->score) {
+                return $b->score <=> $a->score;
+            }
+            $numA = $a->user->participant_number ?? '';
+            $numB = $b->user->participant_number ?? '';
+            if (!empty($numA) && !empty($numB)) {
+                $cmp = strnatcasecmp($numA, $numB);
+                if ($cmp !== 0) return $cmp;
+            }
+            return strcasecmp($a->user->name ?? '', $b->user->name ?? '');
+        })->values();
+    };
+
+    if ($institution === 'all_separated' && !empty($institutions)) {
+        $resultsData = [];
+        foreach ($institutions as $inst) {
+            $sessQuery = clone $baseSessionsQuery;
+            $sessQuery->whereHas('user', function($q) use ($inst) {
+                $q->where('desa', $inst);
+            });
+            $instSessions = $sortCollection($sessQuery->get());
+
+            $firstUser = \App\Models\User::where('desa', $inst)->whereNotNull('kecamatan')->where('kecamatan', '!=', '')->first();
+            $instDistrict = $firstUser ? $firstUser->kecamatan : ($report->district ?? null);
+
+            $resultsData[] = [
+                'institution' => $inst,
+                'village' => $inst,
+                'district' => $instDistrict,
+                'sessions' => $instSessions,
+            ];
+        }
+        return view('print.exam-results', compact('exam', 'report', 'institutions', 'institution', 'resultsData', 'sort'));
+    }
+
+    if ($institution && $institution !== 'all') {
+        $sessQuery = clone $baseSessionsQuery;
+        $sessQuery->whereHas('user', function($q) use ($institution) {
+            $q->where('desa', $institution);
+        });
+        $sessions = $sortCollection($sessQuery->get());
+        $targetVillage = $institution;
+
+        $firstUser = \App\Models\User::where('desa', $institution)->whereNotNull('kecamatan')->where('kecamatan', '!=', '')->first();
+        $targetDistrict = ($report->district ?? null) ?: ($firstUser ? $firstUser->kecamatan : null);
+
+        return view('print.exam-results', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'targetVillage', 'targetDistrict', 'sort'));
+    }
+
+    $sessions = $sortCollection($baseSessionsQuery->get());
+    $targetVillage = 'all';
+    $allUsersDistricts = $sessions->pluck('user.kecamatan')->filter()->unique();
+    $targetDistrict = ($report->district ?? null) ?: ($allUsersDistricts->count() === 1 ? $allUsersDistricts->first() : null);
+
+    return view('print.exam-results', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'targetVillage', 'targetDistrict', 'sort'));
+};
+
 // Admin Routes
-Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->prefix('admin')->name('admin.')->group(function () use ($renderExamResults) {
     Route::get('/dashboard', \App\Livewire\Admin\Dashboard::class)->name('dashboard');
     Route::get('/exams', \App\Livewire\Admin\ExamManager::class)->name('exams');
     Route::get('/exams/{examId}/monitor', \App\Livewire\Admin\ExamMonitoring::class)->name('exams.monitor');
-    Route::get('/exams/{examId}/monitor/print', function ($examId) {
-        $exam = \App\Models\Exam::findOrFail($examId);
-        $sessions = \App\Models\ExamSession::with(['user'])
-            ->where('exam_id', $examId)
-            ->whereNotNull('started_at')
-            ->orderByDesc('score')
-            ->get();
-        $report = \App\Models\ExamReport::where('exam_id', $examId)->first();
-        return view('print.exam-results', compact('exam', 'sessions', 'report'));
+    Route::get('/exams/{examId}/monitor/print', function ($examId, \Illuminate\Http\Request $request) use ($renderExamResults) {
+        return $renderExamResults($examId, $request);
     })->name('exams.monitor.print');
     
     Route::get('/exams/session/{sessionId}/print', function ($sessionId) {
@@ -457,20 +570,13 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':participant']
 });
 
 // Pengawas Routes
-Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':pengawas'])->prefix('pengawas')->name('pengawas.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':pengawas'])->prefix('pengawas')->name('pengawas.')->group(function () use ($renderExamResults) {
     Route::get('/dashboard', \App\Livewire\Pengawas\Dashboard::class)->name('dashboard');
     Route::get('/exams/{examId}/monitor', \App\Livewire\Pengawas\ExamMonitoring::class)->name('exams.monitor');
     
     // Allow pengawas to print monitoring results too
-    Route::get('/exams/{examId}/monitor/print', function ($examId) {
+    Route::get('/exams/{examId}/monitor/print', function ($examId, \Illuminate\Http\Request $request) use ($renderExamResults) {
         if (auth()->user()->role !== 'pengawas' && auth()->user()->role !== 'admin') abort(403);
-        $exam = \App\Models\Exam::findOrFail($examId);
-        $sessions = \App\Models\ExamSession::with(['user'])
-            ->where('exam_id', $examId)
-            ->whereNotNull('started_at')
-            ->orderByDesc('score')
-            ->get();
-        $report = \App\Models\ExamReport::where('exam_id', $examId)->first();
-        return view('print.exam-results', compact('exam', 'sessions', 'report'));
+        return $renderExamResults($examId, $request);
     })->name('exams.monitor.print');
 });
