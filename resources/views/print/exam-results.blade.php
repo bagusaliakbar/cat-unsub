@@ -106,6 +106,11 @@
                 @endif
             </td>
         </tr>
+        <tr>
+            <td class="w-40 font-bold align-top">Tempat</td>
+            <td class="w-4 text-center align-top">:</td>
+            <td class="align-top">{{ $exam->location ?: 'Laboratorium Komputer Universitas Subang' }}</td>
+        </tr>
     </table>
 
     <table class="w-full table-bordered text-center mb-8">
