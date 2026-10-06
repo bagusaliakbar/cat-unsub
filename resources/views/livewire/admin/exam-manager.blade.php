@@ -81,20 +81,20 @@
         <div class="flex flex-wrap items-center gap-3 sm:gap-3.5 w-full md:w-auto"
              style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
             <!-- Search Box -->
-            <div class="relative w-full sm:w-64 lg:w-72" style="position: relative;">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400"
-                     style="position: absolute; left: 14px; top: 0; bottom: 0; display: flex; align-items: center; pointer-events: none;">
+            <div class="relative w-full sm:w-64 lg:w-72">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400"
+                     style="position: absolute; left: 0; top: 0; bottom: 0; padding-left: 14px; display: flex; align-items: center; pointer-events: none;">
                     <svg class="w-4 h-4 text-slate-400 shrink-0" style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </div>
                 <input type="text" wire:model.live.debounce.300ms="search_exam" placeholder="Cari judul atau lokasi..." 
-                    class="block w-full pl-11 pr-8 py-2.5 border border-slate-200 rounded-xl leading-5 bg-slate-50/70 hover:bg-white focus:bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs sm:text-sm font-medium shadow-2xs transition"
-                    style="padding-left: 42px; padding-right: 32px; padding-top: 9px; padding-bottom: 9px; border-radius: 12px;">
+                    class="block w-full pl-10 pr-8 py-2.5 border border-slate-200 rounded-xl leading-5 bg-slate-50/70 hover:bg-white focus:bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs sm:text-sm font-medium shadow-2xs transition"
+                    style="padding-left: 40px; padding-right: 32px; padding-top: 9px; padding-bottom: 9px; border-radius: 12px;">
                 @if($search_exam)
                     <button wire:click="$set('search_exam', '')" type="button" 
                         class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer" 
-                        style="position: absolute; right: 10px; top: 0; bottom: 0; display: flex; align-items: center;"
+                        style="position: absolute; right: 0; top: 0; bottom: 0; padding-right: 12px; display: flex; align-items: center;"
                         title="Hapus pencarian">
                         <svg class="w-4 h-4" style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
