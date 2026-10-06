@@ -52,9 +52,16 @@
                 </div>
 
                 <div>
-                    <p class="text-xs text-gray-500 font-semibold uppercase">Desa / Kecamatan</p>
+                    <p class="text-xs text-gray-500 font-semibold uppercase">Desa</p>
                     <p class="text-base font-semibold text-gray-700">
-                        {{ $participant->desa ?: ($participant->institution ?: '-') }}{{ $participant->kecamatan ? ', Kec. ' . $participant->kecamatan : '' }}
+                        {{ $participant->desa ?: ($participant->institution ?: '-') }}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs text-gray-500 font-semibold uppercase">Kecamatan</p>
+                    <p class="text-base font-semibold text-gray-700">
+                        {{ $participant->kecamatan ?: '-' }}
                     </p>
                 </div>
 

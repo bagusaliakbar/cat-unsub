@@ -177,7 +177,8 @@
                     <th class="w-10">No</th>
                     <th class="w-32">Nomor Peserta</th>
                     <th>Nama Lengkap Calon</th>
-                    <th class="w-36">Desa / Kecamatan</th>
+                    <th class="w-32">Desa</th>
+                    <th class="w-32">Kecamatan</th>
                     @if(!empty($isCombinedSession))
                         <th class="w-28">Ruang / Lab</th>
                     @endif
@@ -190,7 +191,8 @@
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $session->user->participant_number ?? $session->user->nik }}</td>
                     <td class="text-left px-2">{{ $session->user->name }}</td>
-                    <td class="text-left px-2">{{ ucwords(strtolower($item['village'])) }}</td>
+                    <td class="text-left px-2">{{ ucwords(strtolower($session->user->desa ?: $item['village'])) }}</td>
+                    <td class="text-left px-2">{{ ucwords(strtolower($session->user->kecamatan ?: ($item['district'] ?? ($report->district ?? '-')))) }}</td>
                     @if(!empty($isCombinedSession))
                         <td class="text-center px-1 font-semibold text-xs">{{ $session->exam->location ?? '-' }}</td>
                     @endif
@@ -199,7 +201,7 @@
                 @endforeach
                 @if(count($item['sessions']) == 0)
                 <tr>
-                    <td colspan="{{ !empty($isCombinedSession) ? 6 : 5 }}" class="py-4 text-gray-500">Belum ada data nilai peserta untuk instansi ini.</td>
+                    <td colspan="{{ !empty($isCombinedSession) ? 7 : 6 }}" class="py-4 text-gray-500">Belum ada data nilai peserta untuk instansi ini.</td>
                 </tr>
                 @endif
             </tbody>
