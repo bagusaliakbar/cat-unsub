@@ -94,6 +94,19 @@ class ExamReportForm extends Component
         } elseif (empty($this->village) && count($this->institutions) === 1) {
             $this->village = $this->institutions[0];
         }
+
+        if (empty($this->district)) {
+            $examIds = ($this->scope_mode === 'combined_session' && $this->has_sibling_exams) ? $this->getSessionExamIds() : [$this->exam->id];
+            $userDist = \App\Models\User::whereHas('exams', fn($q) => $q->whereIn('exams.id', $examIds))
+                ->when(!empty($this->village) && $this->selected_institution !== 'all' && $this->selected_institution !== 'all_separated', fn($q) => $q->where('desa', $this->village))
+                ->whereNotNull('kecamatan')
+                ->where('kecamatan', '!=', '')
+                ->pluck('kecamatan')
+                ->unique();
+            if ($userDist->count() === 1) {
+                $this->district = $userDist->first();
+            }
+        }
     }
 
     public function getSessionExamIds()
@@ -148,11 +161,20 @@ class ExamReportForm extends Component
 
         if ($value && $value !== 'all' && $value !== 'all_separated') {
             $this->village = $value;
+            $userDist = \App\Models\User::where('desa', $value)->whereNotNull('kecamatan')->where('kecamatan', '!=', '')->value('kecamatan');
+            if ($userDist) {
+                $this->district = $userDist;
+            }
         } elseif ($value === 'all') {
             if (count($this->institutions) > 1) {
                 $this->village = 'Gabungan (' . count($this->institutions) . ' Desa)';
             } elseif (count($this->institutions) === 1) {
                 $this->village = $this->institutions[0];
+            }
+            $examIds = ($this->scope_mode === 'combined_session' && $this->has_sibling_exams) ? $this->getSessionExamIds() : [$this->exam->id];
+            $districts = \App\Models\User::whereHas('exams', fn($q) => $q->whereIn('exams.id', $examIds))->pluck('kecamatan')->filter()->unique();
+            if ($districts->count() === 1) {
+                $this->district = $districts->first();
             }
         } elseif ($value === 'all_separated') {
             $this->village = 'Otomatis Sesuai Masing-Masing Desa';

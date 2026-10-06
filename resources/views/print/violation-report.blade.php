@@ -77,14 +77,34 @@
         <img src="{{ asset('images/kop-unsub.jpg') }}" alt="Kop Universitas Subang" class="w-full mx-auto h-auto object-contain">
     </div>
 
+    @php
+        $rawVillage = $session->user->desa ?: ($session->user->institution ?: ($report->village ?? ''));
+        $isPerDesa = !empty($rawVillage) && !str_starts_with(strtolower($rawVillage), 'gabungan') && !str_starts_with(strtolower($rawVillage), 'otomatis');
+        $displayVillage = $isPerDesa ? trim(preg_replace('/^desa\s+/i', '', $rawVillage)) : '';
+        $effectiveDistrict = $session->user->kecamatan ?: ($report->district ?? null);
+        $displayDistrict = !empty($effectiveDistrict) ? trim(preg_replace('/^kec(\.|\s+)/i', '', $effectiveDistrict)) : null;
+    @endphp
+
     <!-- Title -->
     <div class="text-center mb-8">
         <h3 class="text-lg font-bold uppercase">LAPORAN PELANGGARAN PESERTA UJIAN</h3>
-        @if($report && $report->village)
-        <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA {{ strtoupper($report->village) }}</h3>
-        @if(!empty($report->district))
-        <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }}</h3>
-        @endif
+        @if($isPerDesa)
+            <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA {{ strtoupper($displayVillage) }}</h3>
+            @if(!empty($displayDistrict))
+                <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($displayDistrict) }} KABUPATEN SUBANG</h3>
+            @else
+                <h3 class="text-lg font-bold uppercase">KABUPATEN SUBANG</h3>
+            @endif
+        @else
+            <h3 class="text-lg font-bold uppercase">SELEKSI BAKAL CALON KEPALA DESA</h3>
+            @if(!empty($displayDistrict))
+                <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($displayDistrict) }} KABUPATEN SUBANG</h3>
+            @else
+                <h3 class="text-lg font-bold uppercase">KABUPATEN SUBANG</h3>
+            @endif
+            @if(!empty($session->exam->wave))
+                <p class="text-xs font-bold text-gray-700 uppercase tracking-wider mt-0.5">{{ $session->exam->wave->name }}</p>
+            @endif
         @endif
     </div>
 
@@ -101,6 +121,20 @@
                 <td class="w-4 text-center align-top">:</td>
                 <td class="align-top uppercase">{{ $session->user->name }}</td>
             </tr>
+            @if(!empty($session->user->desa))
+            <tr>
+                <td class="w-40 font-bold align-top">Desa</td>
+                <td class="w-4 text-center align-top">:</td>
+                <td class="align-top uppercase">{{ $session->user->desa }}</td>
+            </tr>
+            @endif
+            @if(!empty($session->user->kecamatan))
+            <tr>
+                <td class="w-40 font-bold align-top">Kecamatan</td>
+                <td class="w-4 text-center align-top">:</td>
+                <td class="align-top uppercase">{{ $session->user->kecamatan }}</td>
+            </tr>
+            @endif
             <tr>
                 <td class="w-40 font-bold align-top">Ujian</td>
                 <td class="w-4 text-center align-top">:</td>

@@ -100,12 +100,20 @@
                 <img src="{{ asset('images/kop-unsub.jpg') }}" alt="Kop Universitas Subang" class="w-full mx-auto h-auto object-contain">
             </div>
 
+            @php
+                $displayVillage = trim(preg_replace('/^desa\s+/i', '', $attItem['village']));
+                $effectiveDistrict = !empty($attItem['district']) ? $attItem['district'] : (!empty($report->district) ? $report->district : null);
+                $displayDistrict = !empty($effectiveDistrict) ? trim(preg_replace('/^kec(\.|\s+)/i', '', $effectiveDistrict)) : null;
+            @endphp
+
             <!-- Title -->
             <div class="text-center mb-8">
                 <h3 class="text-lg font-bold uppercase">DAFTAR HADIR PESERTA UJIAN SELEKSI TERTULIS BERBASIS CAT</h3>
-                <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA {{ strtoupper($attItem['village']) }}</h3>
-                @if(!empty($report->district))
-                <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }}</h3>
+                <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA {{ strtoupper($displayVillage) }}</h3>
+                @if(!empty($displayDistrict))
+                    <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($displayDistrict) }} KABUPATEN SUBANG</h3>
+                @else
+                    <h3 class="text-lg font-bold uppercase">KABUPATEN SUBANG</h3>
                 @endif
             </div>
 
@@ -207,16 +215,35 @@
             <img src="{{ asset('images/kop-unsub.jpg') }}" alt="Kop Universitas Subang" class="w-full mx-auto h-auto object-contain">
         </div>
 
+        @php
+            $isPerDesa = !empty($targetVillage) && $targetVillage !== 'all' && !str_starts_with(strtolower($targetVillage), 'gabungan');
+            $displayVillage = $isPerDesa ? trim(preg_replace('/^desa\s+/i', '', $targetVillage)) : '';
+            $effectiveDistrict = !empty($targetDistrict) ? $targetDistrict : (!empty($report->district) ? $report->district : null);
+            $displayDistrict = !empty($effectiveDistrict) ? trim(preg_replace('/^kec(\.|\s+)/i', '', $effectiveDistrict)) : null;
+        @endphp
+
         <!-- Title -->
         <div class="text-center mb-8">
             <h3 class="text-lg font-bold uppercase">DAFTAR HADIR PESERTA UJIAN SELEKSI TERTULIS BERBASIS CAT</h3>
-            @if(!empty($targetVillage) && $targetVillage !== 'all' && !str_starts_with(strtolower($targetVillage), 'gabungan'))
-                <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA {{ strtoupper($targetVillage) }}</h3>
+            @if($isPerDesa)
+                {{-- Cetak Per-Desa --}}
+                <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA {{ strtoupper($displayVillage) }}</h3>
+                @if(!empty($displayDistrict))
+                    <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($displayDistrict) }} KABUPATEN SUBANG</h3>
+                @else
+                    <h3 class="text-lg font-bold uppercase">KABUPATEN SUBANG</h3>
+                @endif
             @else
-                <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA</h3>
-            @endif
-            @if(!empty($report->district))
-                <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }}</h3>
+                {{-- Cetak Per-Sesi (Gabungan) --}}
+                <h3 class="text-lg font-bold uppercase">SELEKSI BAKAL CALON KEPALA DESA</h3>
+                @if(!empty($displayDistrict))
+                    <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($displayDistrict) }} KABUPATEN SUBANG</h3>
+                @else
+                    <h3 class="text-lg font-bold uppercase">KABUPATEN SUBANG</h3>
+                @endif
+                @if(!empty($exam->wave))
+                    <p class="text-xs font-bold text-gray-700 uppercase tracking-wider mt-0.5">{{ $exam->wave->name }}</p>
+                @endif
             @endif
         </div>
 

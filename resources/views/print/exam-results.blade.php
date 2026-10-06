@@ -59,14 +59,36 @@
         <img src="{{ asset('images/kop-unsub.jpg') }}" alt="Kop Universitas Subang" class="w-full mx-auto h-auto object-contain">
     </div>
 
+    @php
+        $rawVillage = $report->village ?? null;
+        $isPerDesa = !empty($rawVillage) && $rawVillage !== 'all' && !str_starts_with(strtolower($rawVillage), 'gabungan') && !str_starts_with(strtolower($rawVillage), 'otomatis');
+        $displayVillage = $isPerDesa ? trim(preg_replace('/^desa\s+/i', '', $rawVillage)) : '';
+        
+        $allUsersDistricts = $sessions->pluck('user.kecamatan')->filter()->unique();
+        $effectiveDistrict = !empty($report->district) ? $report->district : ($allUsersDistricts->count() === 1 ? $allUsersDistricts->first() : null);
+        $displayDistrict = !empty($effectiveDistrict) ? trim(preg_replace('/^kec(\.|\s+)/i', '', $effectiveDistrict)) : null;
+    @endphp
+
     <!-- Title -->
     <div class="text-center mb-8">
         <h3 class="text-lg font-bold uppercase">DAFTAR HASIL UJIAN SELEKSI TERTULIS BERBASIS CAT</h3>
-        @if($report && $report->village)
-        <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA {{ strtoupper($report->village) }}</h3>
-        @if(!empty($report->district))
-        <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }}</h3>
-        @endif
+        @if($isPerDesa)
+            <h3 class="text-lg font-bold uppercase">BAKAL CALON KEPALA DESA {{ strtoupper($displayVillage) }}</h3>
+            @if(!empty($displayDistrict))
+                <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($displayDistrict) }} KABUPATEN SUBANG</h3>
+            @else
+                <h3 class="text-lg font-bold uppercase">KABUPATEN SUBANG</h3>
+            @endif
+        @else
+            <h3 class="text-lg font-bold uppercase">SELEKSI BAKAL CALON KEPALA DESA</h3>
+            @if(!empty($displayDistrict))
+                <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($displayDistrict) }} KABUPATEN SUBANG</h3>
+            @else
+                <h3 class="text-lg font-bold uppercase">KABUPATEN SUBANG</h3>
+            @endif
+            @if(!empty($exam->wave))
+                <p class="text-xs font-bold text-gray-700 uppercase tracking-wider mt-0.5">{{ $exam->wave->name }}</p>
+            @endif
         @endif
     </div>
 
@@ -96,17 +118,21 @@
                 <th class="w-10">No</th>
                 <th class="w-28">No. Peserta</th>
                 <th>Nama Peserta</th>
+                <th class="w-28">Desa</th>
+                <th class="w-28">Kecamatan</th>
                 <th class="w-24">Waktu Mulai</th>
                 <th class="w-24">Waktu Selesai</th>
-                <th class="w-24">Skor</th>
+                <th class="w-20">Skor</th>
             </tr>
         </thead>
         <tbody>
             @foreach($sessions as $index => $session)
             <tr>
                 <td class="align-middle">{{ $index + 1 }}</td>
-                <td class="align-middle">{{ $session->user->participant_number ?? $session->user->nik }}</td>
+                <td class="align-middle font-mono">{{ $session->user->participant_number ?? $session->user->nik }}</td>
                 <td class="text-left px-2 align-middle">{{ $session->user->name }}</td>
+                <td class="align-middle px-2">{{ $session->user->desa ?: ($session->user->institution ?: '-') }}</td>
+                <td class="align-middle px-2">{{ $session->user->kecamatan ?: '-' }}</td>
                 <td class="align-middle">{{ \Carbon\Carbon::parse($session->started_at)->format('H:i:s') }}</td>
                 <td class="align-middle">
                     {{ $session->completed_at ? \Carbon\Carbon::parse($session->completed_at)->format('H:i:s') : '-' }}

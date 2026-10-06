@@ -194,10 +194,13 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
                 $presentCount = $sessions->count();
                 $absentCount = max(0, $partCount - $presentCount);
 
+                $firstUser = \App\Models\User::where('desa', $inst)->whereNotNull('kecamatan')->where('kecamatan', '!=', '')->first();
+                $instDistrict = $firstUser ? $firstUser->kecamatan : ($report->district ?? null);
+
                 $reportsData[] = [
                     'institution' => $inst,
                     'village' => $inst,
-                    'district' => $report->district,
+                    'district' => $instDistrict,
                     'present_count' => $presentCount,
                     'absent_count' => $absentCount,
                     'total_count' => $partCount,
@@ -219,7 +222,10 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
             $absentCount = max(0, $partCount - $presentCount);
             $targetVillage = $institution;
 
-            return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage', 'scope', 'sort', 'isCombinedSession', 'combinedLocations'));
+            $firstUser = \App\Models\User::where('desa', $institution)->whereNotNull('kecamatan')->where('kecamatan', '!=', '')->first();
+            $targetDistrict = $report->district ?: ($firstUser ? $firstUser->kecamatan : null);
+
+            return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage', 'targetDistrict', 'scope', 'sort', 'isCombinedSession', 'combinedLocations'));
         }
 
         // Mode: All combined
@@ -228,8 +234,10 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         $presentCount = $sessions->count();
         $absentCount = max(0, $totalRegistered - $presentCount);
         $targetVillage = 'all';
+        $allUsersDistricts = $sessions->pluck('user.kecamatan')->filter()->unique();
+        $targetDistrict = ($report->district ?? null) ?: ($allUsersDistricts->count() === 1 ? $allUsersDistricts->first() : null);
 
-        return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage', 'scope', 'sort', 'isCombinedSession', 'combinedLocations'));
+        return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage', 'targetDistrict', 'scope', 'sort', 'isCombinedSession', 'combinedLocations'));
     })->name('exams.report.print');
     
     Route::get('/exams/{examId}/incident-report', function ($examId) {
@@ -260,9 +268,13 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
                     ->where('desa', $inst)
                     ->orderByRaw('CASE WHEN no_meja IS NULL OR no_meja = "" THEN 1 ELSE 0 END, CAST(no_meja AS UNSIGNED) ASC, no_meja ASC, name ASC')
                     ->get();
+                $firstUser = $parts->first(fn($u) => !empty($u->kecamatan));
+                $instDistrict = $firstUser ? $firstUser->kecamatan : ($report->district ?? null);
+
                 $attendanceData[] = [
                     'institution' => $inst,
                     'village' => $inst,
+                    'district' => $instDistrict,
                     'participants' => $parts,
                 ];
             }
@@ -276,8 +288,12 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         }
         $participants = $participantsQuery->get();
         $targetVillage = ($institution && $institution !== 'all') ? $institution : 'all';
+        $allPartsDistricts = $participants->pluck('kecamatan')->filter()->unique();
+        $targetDistrict = ($institution && $institution !== 'all')
+            ? ($participants->first(fn($u) => !empty($u->kecamatan))?->kecamatan ?: ($report->district ?? null))
+            : (($report->district ?? null) ?: ($allPartsDistricts->count() === 1 ? $allPartsDistricts->first() : null));
 
-        return view('print.attendance', compact('exam', 'report', 'participants', 'institution', 'institutions', 'targetVillage'));
+        return view('print.attendance', compact('exam', 'report', 'participants', 'institution', 'institutions', 'targetVillage', 'targetDistrict'));
     })->name('exams.attendance');
 
     Route::get('/questions', \App\Livewire\Admin\QuestionManager::class)->name('questions');
