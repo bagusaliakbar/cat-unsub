@@ -44,29 +44,36 @@
     <!-- Filter Tabs & Quick Search Toolbar -->
     <div class="bg-white p-3 sm:p-4 rounded-2xl shadow-xs border border-slate-200/80 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 transition-all">
         <!-- Segmented Tab Pills -->
-        <div class="inline-flex items-center p-1 bg-slate-100/90 rounded-xl border border-slate-200/70 shadow-inner max-w-full overflow-x-auto self-start md:self-auto">
+        <div class="inline-flex items-center p-1.5 bg-slate-100/90 rounded-2xl border border-slate-200/70 shadow-inner max-w-full overflow-x-auto self-start md:self-auto gap-2"
+             style="display: inline-flex; align-items: center; gap: 8px; padding: 6px;">
             <button wire:click="setTab('active')" type="button" title="Ujian yang sedang aktif atau berjalan"
-                class="whitespace-nowrap inline-flex items-center px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer {{ $tab === 'active' ? 'bg-white text-blue-700 shadow-sm border border-slate-200/50 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }}">
-                <span class="relative flex h-2 w-2 mr-2 shrink-0">
+                class="whitespace-nowrap inline-flex items-center px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer {{ $tab === 'active' ? 'bg-white text-blue-700 shadow-sm border border-slate-200/50 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }}"
+                style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 12px;">
+                <span class="relative flex h-2.5 w-2.5 shrink-0" style="position: relative; display: flex; width: 10px; height: 10px; flex-shrink: 0;">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                 </span>
                 <span>Ujian Aktif</span>
-                <span class="ml-2 px-2 py-0.5 rounded-full text-xs font-bold transition-colors {{ $tab === 'active' ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-700/15' : 'bg-slate-200/80 text-slate-600' }}">{{ $countActive }}</span>
+                <span class="px-2 py-0.5 rounded-full text-xs font-bold transition-colors {{ $tab === 'active' ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-700/15' : 'bg-slate-200/80 text-slate-600' }}"
+                      style="margin-left: 4px; padding: 2px 8px; border-radius: 9999px;">{{ $countActive }}</span>
             </button>
 
             <button wire:click="setTab('archived')" type="button" title="Ujian yang sudah selesai atau diarsipkan"
-                class="whitespace-nowrap inline-flex items-center px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer {{ $tab === 'archived' ? 'bg-white text-amber-800 shadow-sm border border-slate-200/50 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }}">
-                <svg class="w-3.5 h-3.5 mr-1.5 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                class="whitespace-nowrap inline-flex items-center px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer {{ $tab === 'archived' ? 'bg-white text-amber-800 shadow-sm border border-slate-200/50 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }}"
+                style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 12px;">
+                <svg class="w-4 h-4 text-amber-600 shrink-0" style="width: 16px; height: 16px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
                 <span>Arsip</span>
-                <span class="ml-2 px-2 py-0.5 rounded-full text-xs font-bold transition-colors {{ $tab === 'archived' ? 'bg-amber-50 text-amber-800 ring-1 ring-amber-700/15' : 'bg-slate-200/80 text-slate-600' }}">{{ $countArchived }}</span>
+                <span class="px-2 py-0.5 rounded-full text-xs font-bold transition-colors {{ $tab === 'archived' ? 'bg-amber-50 text-amber-800 ring-1 ring-amber-700/15' : 'bg-slate-200/80 text-slate-600' }}"
+                      style="margin-left: 4px; padding: 2px 8px; border-radius: 9999px;">{{ $countArchived }}</span>
             </button>
 
             <button wire:click="setTab('all')" type="button" title="Seluruh riwayat ujian"
-                class="whitespace-nowrap inline-flex items-center px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer {{ $tab === 'all' ? 'bg-white text-slate-900 shadow-sm border border-slate-200/50 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }}">
-                <svg class="w-3.5 h-3.5 mr-1.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                class="whitespace-nowrap inline-flex items-center px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer {{ $tab === 'all' ? 'bg-white text-slate-900 shadow-sm border border-slate-200/50 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }}"
+                style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 12px;">
+                <svg class="w-4 h-4 text-slate-500 shrink-0" style="width: 16px; height: 16px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
                 <span>Semua</span>
-                <span class="ml-2 px-2 py-0.5 rounded-full text-xs font-bold transition-colors {{ $tab === 'all' ? 'bg-slate-100 text-slate-800 ring-1 ring-slate-300' : 'bg-slate-200/80 text-slate-600' }}">{{ $countAll }}</span>
+                <span class="px-2 py-0.5 rounded-full text-xs font-bold transition-colors {{ $tab === 'all' ? 'bg-slate-100 text-slate-800 ring-1 ring-slate-300' : 'bg-slate-200/80 text-slate-600' }}"
+                      style="margin-left: 4px; padding: 2px 8px; border-radius: 9999px;">{{ $countAll }}</span>
             </button>
         </div>
 
