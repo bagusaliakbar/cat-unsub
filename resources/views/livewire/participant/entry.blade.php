@@ -368,6 +368,9 @@
                                     <p style="font-size: 13px; color: #334155 !important; line-height: 1.5; margin: 0; font-weight: 500;">
                                         Apakah Anda sudah membaca dan memahami seluruh Tata Tertib Ujian? Seluruh aktivitas pengerjaan diawasi dan terekam secara otomatis.
                                     </p>
+                                    <p style="margin: 0 0 10px 0;">
+                                        Ujian akan <strong>langsung berjalan otomatis</strong> segera setelah Anda menekan tombol di bawah dan tidak dapat diulang.
+                                    </p>
                                 </div>
                             </div>
 
