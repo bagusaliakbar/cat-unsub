@@ -294,86 +294,84 @@
             <div class="min-h-full flex items-center justify-center p-3 sm:p-5 md:p-6 text-center">
                 <div class="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden text-left my-8 border border-slate-200">
                     
-                    <!-- Header Modal Modern -->
-                    <div class="px-6 py-5 sm:px-8 text-white relative shrink-0 border-b border-blue-900" style="background: linear-gradient(135deg, #091a32 0%, #0f2b52 50%, #16244f 100%) !important;">
+                    <!-- Header Modal Konsisten (Brand Royal Blue Theme) -->
+                    <div class="px-6 py-5 sm:px-8 text-white relative shrink-0 border-b border-blue-600/30" style="background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%) !important; color: #ffffff !important;">
                         <div class="flex justify-between items-center gap-4">
-                            <div class="flex items-center gap-3.5">
-                                <div class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 shadow-inner" style="background-color: rgba(255, 255, 255, 0.12) !important;">
-                                    <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                            <div class="flex items-center">
+                                <div style="width: 44px; height: 44px; border-radius: 12px; background-color: rgba(255, 255, 255, 0.18) !important; border: 1px solid rgba(255, 255, 255, 0.28); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 14px;">
+                                    <svg style="width: 24px; height: 24px; color: #ffffff;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                                 </div>
                                 <div>
-                                    <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider mb-1" style="background-color: #f59e0b !important; color: #0f172a !important;">
+                                    <span style="background-color: rgba(255, 255, 255, 0.22) !important; color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.35) !important; padding: 4px 10px; border-radius: 9999px; font-size: 10px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; display: inline-block; margin-bottom: 4px;">
                                         {{ $confirmingExam->is_simulation ? 'Simulasi Ujian CAT' : 'Konfirmasi Ujian CAT' }}
                                     </span>
-                                    <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight leading-tight">
+                                    <h3 style="color: #ffffff !important; font-size: 20px; font-weight: 900; line-height: 1.25; margin: 0;" class="tracking-tight">
                                         Konfirmasi Memulai Ujian
                                     </h3>
                                 </div>
                             </div>
-                            <button wire:click="cancelStart" class="p-2 rounded-xl text-blue-200 hover:text-white transition-all hover:bg-white/10" title="Batal &amp; Tutup">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                            <button wire:click="cancelStart" type="button" style="background-color: rgba(255, 255, 255, 0.15) !important; color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" title="Batal &amp; Tutup">
+                                <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
                             </button>
                         </div>
                     </div>
                     
                     <div class="p-6 sm:p-7 md:p-8 space-y-5 overflow-y-auto max-h-[calc(85vh-150px)]">
                         <!-- Hero Card: Paket Ujian Terpilih -->
-                        <div class="bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/40 rounded-2xl p-5 border border-slate-200/90 shadow-2xs">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                                <div>
-                                    <span class="text-[11px] font-bold text-blue-600 uppercase tracking-wider">PAKET UJIAN AKTIF</span>
-                                    <h4 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-snug mt-0.5">{{ $confirmingExam->title }}</h4>
-                                    <p class="text-xs sm:text-sm text-slate-500 mt-1">Silakan konfirmasi kesiapan Anda sebelum sistem mengaktifkan sesi pengerjaan.</p>
-                                </div>
+                        <div style="background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%) !important; border: 1px solid #dbeafe !important; border-radius: 16px; padding: 20px;">
+                            <div>
+                                <span style="font-size: 11px; font-weight: 800; color: #2563eb !important; text-transform: uppercase; letter-spacing: 0.08em; display: block;">PAKET UJIAN AKTIF</span>
+                                <h4 style="font-size: 22px; font-weight: 900; color: #0f172a !important; margin-top: 4px; margin-bottom: 6px; line-height: 1.2;">{{ $confirmingExam->title }}</h4>
+                                <p style="font-size: 13px; color: #64748b !important; margin: 0;">Silakan konfirmasi kesiapan Anda sebelum sistem mengaktifkan sesi pengerjaan.</p>
                             </div>
 
-                            <!-- Meta Chips -->
-                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mt-4 pt-4 border-t border-slate-200/80">
-                                <div class="bg-white rounded-xl p-3 border border-slate-200 flex items-center gap-3 shadow-2xs">
-                                    <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <!-- Meta Chips Berjarak Rapi & Ikon Pasti Terlihat -->
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mt-4 pt-4 border-t border-slate-200" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                                <div style="background-color: #ffffff !important; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; display: flex; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                                    <div style="width: 38px; height: 38px; border-radius: 10px; background-color: #eff6ff !important; color: #2563eb !important; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 12px;">
+                                        <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                     </div>
                                     <div>
-                                        <span class="text-[10px] uppercase font-bold text-slate-400 block leading-tight">Durasi Ujian</span>
-                                        <span class="text-xs sm:text-sm font-black text-slate-800 leading-tight">{{ $confirmingExam->duration_minutes }} Menit</span>
+                                        <span style="font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; display: block; line-height: 1.1;">Durasi Ujian</span>
+                                        <span style="font-size: 14px; font-weight: 800; color: #1e293b; display: block; margin-top: 2px;">{{ $confirmingExam->duration_minutes }} Menit</span>
                                     </div>
                                 </div>
 
-                                <div class="bg-white rounded-xl p-3 border border-slate-200 flex items-center gap-3 shadow-2xs">
-                                    <div class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <div style="background-color: #ffffff !important; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; display: flex; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                                    <div style="width: 38px; height: 38px; border-radius: 10px; background-color: #ecfdf5 !important; color: #059669 !important; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 12px;">
+                                        <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                     </div>
                                     <div>
-                                        <span class="text-[10px] uppercase font-bold text-slate-400 block leading-tight">Jumlah Soal</span>
-                                        <span class="text-xs sm:text-sm font-black text-slate-800 leading-tight">{{ $confirmingExam->questions()->count() }} Soal</span>
+                                        <span style="font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; display: block; line-height: 1.1;">Jumlah Soal</span>
+                                        <span style="font-size: 14px; font-weight: 800; color: #1e293b; display: block; margin-top: 2px;">{{ $confirmingExam->questions()->count() }} Soal</span>
                                     </div>
                                 </div>
 
-                                <div class="col-span-2 sm:col-span-1 bg-white rounded-xl p-3 border border-slate-200 flex items-center gap-3 shadow-2xs">
-                                    <div class="w-9 h-9 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
-                                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                                <div class="col-span-2 sm:col-span-1" style="background-color: #ffffff !important; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; display: flex; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                                    <div style="width: 38px; height: 38px; border-radius: 10px; background-color: #f5f3ff !important; color: #7c3aed !important; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 12px;">
+                                        <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
                                     </div>
                                     <div>
-                                        <span class="text-[10px] uppercase font-bold text-slate-400 block leading-tight">Tampilan</span>
-                                        <span class="text-xs sm:text-sm font-black text-slate-800 leading-tight">Layar Penuh</span>
+                                        <span style="font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; display: block; line-height: 1.1;">Tampilan</span>
+                                        <span style="font-size: 14px; font-weight: 800; color: #1e293b; display: block; margin-top: 2px;">Layar Penuh</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Card 1: Tata Tertib (Blue Elegant Notice) -->
-                        <div class="bg-gradient-to-r from-blue-50/90 to-sky-50/80 border border-blue-200/90 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xs">
-                            <div class="flex items-start gap-3.5">
-                                <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5 sm:mt-0">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <!-- Card 1: Tata Tertib (Blue Elegant Notice dengan jarak icon aman) -->
+                        <div style="background-color: #f0f7ff !important; border: 1px solid #bfdbfe !important; border-radius: 16px; padding: 18px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: flex-start; flex: 1 1 280px;">
+                                <div style="width: 40px; height: 40px; border-radius: 12px; background-color: #2563eb !important; color: #ffffff !important; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 14px; margin-top: 2px; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);">
+                                    <svg style="width: 22px; height: 22px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 </div>
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-xs font-black uppercase tracking-wider text-blue-900">Penting</span>
-                                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                                        <span class="text-xs font-bold text-blue-700">Tata Tertib Peserta</span>
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; flex-wrap: wrap; margin-bottom: 4px;">
+                                        <span style="font-size: 12px; font-weight: 900; color: #1e3a8a !important; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 8px;">PENTING</span>
+                                        <span style="width: 5px; height: 5px; border-radius: 50%; background-color: #3b82f6; display: inline-block; margin-right: 8px;"></span>
+                                        <span style="font-size: 12px; font-weight: 700; color: #1d4ed8 !important;">Tata Tertib Peserta</span>
                                     </div>
-                                    <p class="text-xs sm:text-sm text-slate-700 font-medium mt-1 leading-relaxed">
+                                    <p style="font-size: 13px; color: #334155 !important; line-height: 1.5; margin: 0; font-weight: 500;">
                                         Apakah Anda sudah membaca dan memahami seluruh Tata Tertib Ujian? Seluruh aktivitas pengerjaan diawasi dan terekam secara otomatis.
                                     </p>
                                 </div>
@@ -381,39 +379,37 @@
 
                             <button type="button" 
                                     wire:click="viewRules({{ $confirmingExam->id }})" 
-                                    class="self-end sm:self-center shrink-0 inline-flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-300 hover:border-blue-600 rounded-xl font-bold text-xs shadow-2xs hover:shadow-sm transition-all duration-150">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                    style="background-color: #ffffff !important; color: #1d4ed8 !important; border: 1.5px solid #93c5fd !important; padding: 10px 18px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: all 0.15s;">
+                                <svg style="width: 16px; height: 16px; margin-right: 8px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                                 <span>Lihat Tata Tertib</span>
                             </button>
                         </div>
 
-                        <!-- Card 2: Perhatian Waktu (Amber Warning Card) -->
-                        <div class="bg-gradient-to-r from-amber-50/90 to-orange-50/70 border border-amber-200/90 rounded-2xl p-4 sm:p-5 shadow-2xs">
-                            <div class="flex items-start gap-3.5">
-                                <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        <!-- Card 2: Perhatian Waktu (Amber Warning Card dengan jarak icon aman) -->
+                        <div style="background-color: #fffbeb !important; border: 1px solid #fde68a !important; border-radius: 16px; padding: 18px; display: flex; align-items: flex-start;">
+                            <div style="width: 40px; height: 40px; border-radius: 12px; background-color: #f59e0b !important; color: #ffffff !important; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 14px; margin-top: 2px; box-shadow: 0 2px 6px rgba(245, 158, 11, 0.25);">
+                                <svg style="width: 22px; height: 22px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; flex-wrap: wrap; margin-bottom: 6px;">
+                                    <span style="font-size: 12px; font-weight: 900; color: #78350f !important; text-transform: uppercase; letter-spacing: 0.05em; margin-right: 8px;">PERHATIAN KHUSUS</span>
+                                    <span style="width: 5px; height: 5px; border-radius: 50%; background-color: #f59e0b; display: inline-block; margin-right: 8px;"></span>
+                                    <span style="font-size: 12px; font-weight: 700; color: #92400e !important;">Waktu Langsung Berjalan</span>
                                 </div>
-                                <div class="flex-1">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-xs font-black uppercase tracking-wider text-amber-900">Perhatian Khusus</span>
-                                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                                        <span class="text-xs font-bold text-amber-800">Waktu Langsung Berjalan</span>
-                                    </div>
-                                    
-                                    <div class="mt-2 text-xs sm:text-[13px] text-amber-950/90 space-y-2 leading-relaxed">
-                                        <p>
-                                            Waktu ujian (<span class="font-black text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200">{{ $confirmingExam->duration_minutes }} Menit</span>) akan <strong>langsung berjalan otomatis</strong> segera setelah Anda menekan tombol di bawah dan tidak dapat diulang.
-                                        </p>
-                                        <div class="flex flex-wrap items-center gap-y-1.5 gap-x-4 pt-1 text-[11px] font-semibold text-amber-800">
-                                            <span class="inline-flex items-center gap-1.5">
-                                                <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                                                Pastikan koneksi internet stabil
-                                            </span>
-                                            <span class="inline-flex items-center gap-1.5">
-                                                <svg class="w-4 h-4 text-rose-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
-                                                Dilarang membuka tab / aplikasi lain
-                                            </span>
-                                        </div>
+                                
+                                <div style="font-size: 13px; color: #78350f !important; line-height: 1.5;">
+                                    <p style="margin: 0 0 10px 0;">
+                                        Waktu ujian (<strong style="background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; padding: 2px 8px; border-radius: 6px; font-weight: 800;">{{ $confirmingExam->duration_minutes }} Menit</strong>) akan <strong>langsung berjalan otomatis</strong> segera setelah Anda menekan tombol di bawah dan tidak dapat diulang.
+                                    </p>
+                                    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding-top: 4px; font-size: 12px; font-weight: 600;">
+                                        <span style="display: inline-flex; align-items: center; color: #166534 !important;">
+                                            <svg style="width: 16px; height: 16px; color: #16a34a; margin-right: 6px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                                            Pastikan koneksi internet stabil
+                                        </span>
+                                        <span style="display: inline-flex; align-items: center; color: #991b1b !important;">
+                                            <svg style="width: 16px; height: 16px; color: #dc2626; margin-right: 6px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                                            Dilarang membuka tab / aplikasi lain
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -421,22 +417,22 @@
 
                         <!-- Card 3: Token Input (Jika Diperlukan) -->
                         @if($confirmingExam->token)
-                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-5 shadow-2xs">
-                            <div class="flex items-center gap-2 mb-2">
-                                <div class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+                        <div style="background-color: #eff6ff !important; border: 1.5px solid #bfdbfe !important; border-radius: 16px; padding: 18px; margin-top: 16px;">
+                            <div style="display: flex; align-items: center; margin-bottom: 6px;">
+                                <div style="width: 30px; height: 30px; border-radius: 8px; background-color: #2563eb; color: #ffffff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 10px;">
+                                    <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
                                 </div>
-                                <label for="input_token" class="text-sm font-black text-blue-950 uppercase tracking-wide">Masukkan Token Ujian</label>
+                                <label for="input_token" style="font-size: 13px; font-weight: 900; color: #1e3a8a; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Masukkan Token Ujian</label>
                             </div>
-                            <p class="text-xs text-blue-700 mb-3">Ujian ini memerlukan token autentikasi resmi yang diberikan oleh pengawas ruangan.</p>
+                            <p style="font-size: 12px; color: #3b82f6; margin: 0 0 12px 0;">Ujian ini memerlukan token autentikasi resmi yang diberikan oleh pengawas ruangan.</p>
                             <input type="text" 
                                    id="input_token" 
                                    wire:model="input_token" 
-                                   class="bg-white border-2 border-blue-300 text-blue-950 text-xl font-mono tracking-[0.3em] uppercase rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-600 block w-full p-3.5 transition shadow-xs text-center font-black placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400 placeholder:text-sm" 
+                                   style="background-color: #ffffff !important; border: 2px solid #93c5fd !important; color: #1e3a8a !important; font-size: 20px; font-family: monospace; letter-spacing: 0.3em; text-transform: uppercase; border-radius: 12px; width: 100%; padding: 12px; text-align: center; font-weight: 900; box-sizing: border-box;" 
                                    placeholder="Ketik token di sini...">
                             @error('input_token') 
-                                <span class="text-red-600 text-xs mt-2 block font-bold flex items-center gap-1">
-                                    <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                <span style="color: #dc2626 !important; font-size: 12px; font-weight: 700; margin-top: 8px; display: flex; align-items: center;">
+                                    <svg style="width: 16px; height: 16px; margin-right: 6px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                                     {{ $message }}
                                 </span> 
                             @enderror
@@ -451,20 +447,22 @@
                         @enderror
                     </div>
                     
-                    <!-- Footer Actions -->
-                    <div class="px-6 py-4.5 sm:px-8 border-t border-slate-200/90 bg-slate-50/80 flex flex-col-reverse sm:flex-row justify-between items-center gap-3 shrink-0">
+                    <!-- Footer Actions: Tombol Terlihat Jelas & Berwarna Pasti -->
+                    <div class="px-6 py-4.5 sm:px-8 border-t border-slate-200 bg-slate-50 flex flex-col-reverse sm:flex-row justify-between items-center gap-3 shrink-0" style="background-color: #f8fafc !important; border-top: 1px solid #e2e8f0 !important; padding: 18px 24px;">
                         <button wire:click="cancelStart" 
                                 type="button" 
-                                class="w-full sm:w-auto px-6 py-3 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 rounded-xl font-bold text-xs sm:text-sm shadow-2xs transition-colors">
+                                class="w-full sm:w-auto transition-colors"
+                                style="background-color: #ffffff !important; color: #475569 !important; border: 1.5px solid #cbd5e1 !important; padding: 12px 24px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer;">
                             Batal &amp; Kembali
                         </button>
                         <button onclick="requestFullScreen()" 
                                 wire:loading.attr="disabled" 
                                 wire:click="startExam({{ $confirmingExam->id }})" 
                                 type="button" 
-                                class="w-full sm:w-auto px-7 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 disabled:opacity-50 text-white rounded-xl font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 group">
+                                class="w-full sm:w-auto text-white rounded-xl font-bold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 group"
+                                style="background-color: #16a34a !important; color: #ffffff !important; border: 1px solid #15803d !important; padding: 12px 28px; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35);">
                             <span>Saya Mengerti &amp; Mulai Ujian</span>
-                            <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            <svg style="width: 18px; height: 18px; margin-left: 8px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </button>
                     </div>
                 </div>
@@ -482,17 +480,17 @@
             <div class="min-h-full flex items-start justify-center p-3 sm:p-5 md:p-8 text-center">
                 <div class="relative w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden text-left my-6 sm:my-8 border border-slate-200">
                     
-                    <!-- Header Infografis Modern (Deep Navy + Amber Badge) -->
-                    <div class="px-6 py-6 sm:px-8 relative shrink-0 border-b border-blue-900" style="background: linear-gradient(135deg, #091a32 0%, #0f2b52 50%, #16244f 100%) !important; color: #ffffff !important;">
+                    <!-- Header Infografis Modern (Royal Blue Theme Konsisten) -->
+                    <div class="px-6 py-6 sm:px-8 relative shrink-0 border-b border-blue-600/30" style="background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%) !important; color: #ffffff !important;">
                         <div class="flex justify-between items-center gap-4">
                             <div class="flex-1">
-                                <div class="inline-block px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider mb-2 shadow-xs" style="background-color: #f59e0b !important; color: #0f172a !important;">
+                                <div class="inline-block px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider mb-2 shadow-xs" style="background-color: rgba(255, 255, 255, 0.22) !important; color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.35) !important;">
                                     CAT SELEKSI BAKAL CALON KEPALA DESA 2026
                                 </div>
                                 <h3 class="text-2xl sm:text-3xl font-black tracking-tight uppercase" style="color: #ffffff !important;">
                                     ATURAN PENTING BAGI PESERTA CAT
                                 </h3>
-                                <p class="text-xs sm:text-sm mt-1 font-semibold" style="color: #bfdbfe !important;">
+                                <p class="text-xs sm:text-sm mt-1 font-semibold" style="color: #dbeafe !important;">
                                     Wajib dibaca sebelum memasuki Lab CAT &bull; {{ $viewingRulesExam->title }}
                                 </p>
                             </div>
