@@ -527,7 +527,7 @@
                                     </div>
                                     <div class="flex-1">
                                         <ul class="text-xs sm:text-[13px] text-slate-700 space-y-2 leading-relaxed list-disc list-outside pl-4 marker:text-purple-600">
-                                            <li>Sebelum CAT dimulai, peserta mengikuti simulasi selama <strong class="text-rose-600 font-bold">10 menit</strong>.</li>
+                                            <li>Sebelum ujian CAT dimulai, peserta mengikuti simulasi selama <strong class="text-rose-600 font-bold">10 menit</strong>.</li>
                                             <li>Simulasi digunakan untuk memahami cara login, membuka soal, memilih jawaban, berpindah soal, dan menggunakan sistem CAT.</li>
                                             <li>Peserta wajib memperhatikan instruksi pengawas.</li>
                                             <li><strong class="text-slate-900 font-bold">Simulasi bukan bagian dari penilaian CAT.</strong></li>
@@ -561,7 +561,7 @@
                                     </div>
                                     <div class="flex-1">
                                         <ul class="text-xs sm:text-[13px] text-slate-700 space-y-2 leading-relaxed list-disc list-outside pl-4 marker:text-blue-600">
-                                            <li>Jumlah soal CAT sebanyak <strong class="text-rose-600 font-bold">100 soal</strong>.</li>
+                                            <li>Jumlah soal CAT sebanyak <strong class="text-rose-600 font-bold">100 soal</strong> untuk setiap peserta.</li>
                                             <li>Durasi CAT adalah <strong class="text-rose-600 font-bold">90 menit</strong>.</li>
                                             <li>Peserta mengerjakan soal secara mandiri.</li>
                                             <li>Peserta wajib membaca soal dengan teliti.</li>
@@ -603,11 +603,11 @@
                                             </li>
                                             <li class="flex items-start gap-2">
                                                 <svg class="w-4 h-4 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
-                                                <span>Membuka aplikasi atau website lain.</span>
+                                                <span>Membuka aplikasi/website lain.</span>
                                             </li>
                                             <li class="flex items-start gap-2">
                                                 <svg class="w-4 h-4 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
-                                                <span>Memotret atau merekam soal / layar CAT.</span>
+                                                <span>Memotret atau merekam soal/layar CAT.</span>
                                             </li>
                                             <li class="flex items-start gap-2">
                                                 <svg class="w-4 h-4 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
@@ -647,7 +647,7 @@
                                     </div>
                                     <div class="flex-1">
                                         <p class="text-xs sm:text-[13px] text-slate-700 leading-relaxed">
-                                            Jika terjadi masalah komputer, jaringan, aplikasi, keyboard, mouse, atau perangkat lainnya:
+                                             Jika terjadi masalah komputer, jaringan, aplikasi, keyboard, mouse, atau perangkat lainnya:
                                         </p>
                                         <div class="bg-amber-100/90 border border-amber-300 rounded-xl p-3 my-2 text-center shadow-xs">
                                             <p class="font-extrabold text-amber-950 text-xs sm:text-[13px] tracking-wide">JANGAN PANIK</p>
@@ -666,7 +666,7 @@
                                 <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #ccfbf1 !important; border-color: #99f6e4 !important;">
                                     <div class="flex items-center space-x-2.5">
                                         <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #0d9488 !important; color: #ffffff !important;">8</span>
-                                        <h4 class="font-black text-sm sm:text-[15px] uppercase tracking-wide" style="color: #115e59 !important;">Ketika Waktu Berakhir / Selesai</h4>
+                                        <h4 class="font-black text-sm sm:text-[15px] uppercase tracking-wide" style="color: #115e59 !important;">Ketika Waktu Berakhir / Menyelesaikan Ujian</h4>
                                     </div>
                                     <svg class="w-4 h-4" style="color: #0d9488 !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 </div>
@@ -700,7 +700,7 @@
                                 <div class="px-4 py-2.5 border-b flex items-center justify-between" style="background-color: #ede9fe !important; border-color: #ddd6fe !important;">
                                     <div class="flex items-center space-x-2.5">
                                         <span class="w-6 h-6 rounded-full font-black text-xs flex items-center justify-center shrink-0 shadow-sm" style="background-color: #7c3aed !important; color: #ffffff !important;">9</span>
-                                        <h4 class="font-black text-sm sm:text-[15px] uppercase tracking-wide" style="color: #5b21b6 !important;">Skor / Hasil CAT</h4>
+                                        <h4 class="font-black text-sm sm:text-[15px] uppercase tracking-wide" style="color: #5b21b6 !important;">Skor/Hasil CAT</h4>
                                     </div>
                                     <svg class="w-4 h-4" style="color: #7c3aed !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                                 </div>
@@ -756,54 +756,125 @@
                                 </div>
                             </div>
 
-                            <!-- JADWAL PELAKSANAAN CAT (Full Width Sesuai Infografis) -->
-                            <div class="col-span-1 md:col-span-2 rounded-2xl shadow-sm overflow-hidden border border-blue-900 bg-white">
-                                <div class="grid grid-cols-1 md:grid-cols-12 items-stretch">
-                                    <!-- Label Kiri: Biru Tua -->
-                                    <div class="md:col-span-4 p-4 sm:p-5 flex items-center justify-center md:justify-start gap-3.5 text-white" style="background-color: #0b2545 !important;">
-                                        <div class="p-2.5 rounded-xl bg-white/10 shrink-0">
-                                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                        </div>
-                                        <div>
-                                            <h4 class="font-black text-sm sm:text-base uppercase tracking-wider text-white leading-tight">JADWAL PELAKSANAAN CAT</h4>
-                                            <p class="text-[11px] text-blue-200 font-medium mt-0.5">Sesi & Rincian Waktu Ujian</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Sesi 1: Hijau / Teal -->
-                                    <div class="md:col-span-4 p-4 border-t md:border-t-0 md:border-r border-slate-200 flex flex-col justify-center bg-emerald-50/40">
-                                        <div class="inline-flex items-center justify-center px-3 py-1 rounded-md text-[11px] font-black uppercase tracking-wider mb-2.5 text-white shadow-xs" style="background-color: #059669 !important;">
-                                            SESI 1 &ndash; 50 PESERTA
-                                        </div>
-                                        <div class="grid grid-cols-2 gap-2 text-center">
-                                            <div class="bg-white rounded-lg p-2 border border-emerald-200">
-                                                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Simulasi</div>
-                                                <div class="text-xs sm:text-[13px] font-extrabold text-emerald-900">09.00 &ndash; 09.10</div>
-                                                <div class="text-[10px] font-semibold text-emerald-700">(10 menit)</div>
+                            <!-- JADWAL & JUMLAH PESERTA (Sesuai Infografis Resmi) -->
+                            <div class="col-span-1 md:col-span-2 rounded-2xl shadow-sm overflow-hidden border border-slate-300 bg-white">
+                                <!-- Top Bar Grid: Label & Total Peserta | Sesi 1 | Sesi 2 -->
+                                <div class="grid grid-cols-1 md:grid-cols-12 divide-y md:divide-y-0 md:divide-x divide-slate-200">
+                                    <!-- Label Title & Total Peserta (Dark Navy) -->
+                                    <div class="md:col-span-4 p-4 sm:p-5 flex flex-col justify-between text-white" style="background: linear-gradient(135deg, #091a32 0%, #0f2b52 100%) !important;">
+                                        <div class="flex items-center gap-3">
+                                            <div class="p-2.5 rounded-xl bg-white/10 shrink-0">
+                                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                             </div>
-                                            <div class="bg-white rounded-lg p-2 border border-emerald-200">
-                                                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Pelaksanaan CAT</div>
-                                                <div class="text-xs sm:text-[13px] font-extrabold text-emerald-900">09.10 &ndash; 10.40</div>
-                                                <div class="text-[10px] font-semibold text-emerald-700">(90 menit)</div>
+                                            <div>
+                                                <h4 class="font-black text-sm sm:text-base uppercase tracking-wider text-white leading-tight">JADWAL &amp; JUMLAH PESERTA</h4>
+                                                <p class="text-[11px] text-blue-200 font-medium">Pembagian Ruangan &amp; Kuota Peserta</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-4 pt-3 border-t border-white/15 flex items-center justify-between">
+                                            <span class="text-xs font-bold text-blue-200 uppercase tracking-wider">TOTAL PESERTA</span>
+                                            <div class="flex items-center gap-2">
+                                                <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path></svg>
+                                                <span class="text-xl sm:text-2xl font-black text-white">97 <span class="text-xs font-semibold text-blue-200">orang</span></span>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- Sesi 2: Oranye -->
-                                    <div class="md:col-span-4 p-4 border-t md:border-t-0 border-slate-200 flex flex-col justify-center bg-orange-50/40">
-                                        <div class="inline-flex items-center justify-center px-3 py-1 rounded-md text-[11px] font-black uppercase tracking-wider mb-2.5 text-white shadow-xs" style="background-color: #ea580c !important;">
-                                            SESI 2 &ndash; 49 PESERTA
+                                    <!-- SESI 1 (Teal/Emerald) -->
+                                    <div class="md:col-span-4 flex flex-col justify-between">
+                                        <div class="px-4 py-2.5 text-center text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2" style="background-color: #059669 !important;">
+                                            <span>SESI 1</span>
+                                            <span class="bg-white/20 px-2.5 py-0.5 rounded-full text-[11px] font-bold">50 peserta</span>
                                         </div>
-                                        <div class="grid grid-cols-2 gap-2 text-center">
-                                            <div class="bg-white rounded-lg p-2 border border-orange-200">
-                                                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Simulasi</div>
-                                                <div class="text-xs sm:text-[13px] font-extrabold text-orange-950">11.00 &ndash; 11.10</div>
-                                                <div class="text-[10px] font-semibold text-orange-700">(10 menit)</div>
+                                        <div class="p-3.5 grid grid-cols-2 gap-2.5 bg-emerald-50/40 flex-1 items-center">
+                                            <div class="bg-white rounded-xl p-2.5 border border-emerald-200 text-center flex flex-col justify-center shadow-xs">
+                                                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-tight">Lab CAT 1</span>
+                                                <span class="text-lg font-black text-emerald-800">30 <span class="text-xs font-semibold text-slate-500">peserta</span></span>
+                                                <span class="text-[11px] font-bold text-emerald-600 mt-0.5">(No. 1&ndash;30)</span>
                                             </div>
-                                            <div class="bg-white rounded-lg p-2 border border-orange-200">
-                                                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">Pelaksanaan CAT</div>
-                                                <div class="text-xs sm:text-[13px] font-extrabold text-orange-950">11.10 &ndash; 12.40</div>
-                                                <div class="text-[10px] font-semibold text-orange-700">(90 menit)</div>
+                                            <div class="bg-white rounded-xl p-2.5 border border-emerald-200 text-center flex flex-col justify-center shadow-xs">
+                                                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-tight">Lab CAT 2</span>
+                                                <span class="text-lg font-black text-emerald-800">20 <span class="text-xs font-semibold text-slate-500">peserta</span></span>
+                                                <span class="text-[11px] font-bold text-emerald-600 mt-0.5">(No. 31&ndash;50)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- SESI 2 (Oranye) -->
+                                    <div class="md:col-span-4 flex flex-col justify-between">
+                                        <div class="px-4 py-2.5 text-center text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2" style="background-color: #ea580c !important;">
+                                            <span>SESI 2</span>
+                                            <span class="bg-white/20 px-2.5 py-0.5 rounded-full text-[11px] font-bold">47 peserta</span>
+                                        </div>
+                                        <div class="p-3.5 grid grid-cols-2 gap-2.5 bg-orange-50/40 flex-1 items-center">
+                                            <div class="bg-white rounded-xl p-2.5 border border-orange-200 text-center flex flex-col justify-center shadow-xs">
+                                                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-tight">Lab CAT 1</span>
+                                                <span class="text-lg font-black text-orange-900">28 <span class="text-xs font-semibold text-slate-500">peserta</span></span>
+                                                <span class="text-[11px] font-bold text-orange-700 mt-0.5">(No. 51&ndash;78)</span>
+                                            </div>
+                                            <div class="bg-white rounded-xl p-2.5 border border-orange-200 text-center flex flex-col justify-center shadow-xs">
+                                                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-tight">Lab CAT 2</span>
+                                                <span class="text-lg font-black text-orange-900">19 <span class="text-xs font-semibold text-slate-500">peserta</span></span>
+                                                <span class="text-[11px] font-bold text-orange-700 mt-0.5">(No. 79&ndash;97)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- WAKTU PELAKSANAAN (Sesuai Infografis Resmi) -->
+                            <div class="col-span-1 md:col-span-2 rounded-2xl shadow-sm overflow-hidden border border-slate-300 bg-white">
+                                <div class="grid grid-cols-1 md:grid-cols-12 divide-y md:divide-y-0 md:divide-x divide-slate-200 items-stretch">
+                                    <!-- Label Kiri (Blue Cyan) -->
+                                    <div class="md:col-span-4 p-4 sm:p-5 flex items-center justify-start gap-3.5 text-white" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;">
+                                        <div class="p-2.5 rounded-xl bg-white/15 shrink-0">
+                                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-black text-sm sm:text-base uppercase tracking-wider text-white leading-tight">WAKTU PELAKSANAAN</h4>
+                                            <p class="text-[11px] text-sky-100 font-medium mt-0.5">Rincian Durasi &amp; Jam Pelaksanaan</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Sesi 1 Waktu -->
+                                    <div class="md:col-span-4 p-4 flex flex-col justify-center bg-slate-50/70">
+                                        <div class="inline-flex self-start px-3 py-1 rounded-md text-[11px] font-black uppercase text-white mb-2.5 shadow-xs" style="background-color: #0f2b52 !important;">
+                                            Sesi 1
+                                        </div>
+                                        <div class="space-y-1.5 text-xs sm:text-[13px] text-slate-800">
+                                            <div class="flex items-center justify-between py-1 border-b border-slate-200/80">
+                                                <span class="font-medium text-slate-600">Simulasi</span>
+                                                <span class="font-bold">: 09.00 &ndash; 09.10 <span class="font-semibold text-slate-500 text-[11px]">(10 menit)</span></span>
+                                            </div>
+                                            <div class="flex items-center justify-between py-1 border-b border-slate-200/80">
+                                                <span class="font-medium text-slate-600">Pelaksanaan CAT</span>
+                                                <span class="font-black text-blue-900">: 09.10 &ndash; 10.40 <span class="font-bold text-blue-700 text-[11px]">(90 menit)</span></span>
+                                            </div>
+                                            <div class="flex items-center justify-between py-1">
+                                                <span class="font-medium text-slate-600">Peserta</span>
+                                                <span class="font-bold text-emerald-700">: 50 peserta <span class="text-[11px] font-semibold text-slate-500">(Lab 1 = 30, Lab 2 = 20)</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Sesi 2 Waktu -->
+                                    <div class="md:col-span-4 p-4 flex flex-col justify-center bg-slate-50/70">
+                                        <div class="inline-flex self-start px-3 py-1 rounded-md text-[11px] font-black uppercase text-white mb-2.5 shadow-xs" style="background-color: #0f2b52 !important;">
+                                            Sesi 2
+                                        </div>
+                                        <div class="space-y-1.5 text-xs sm:text-[13px] text-slate-800">
+                                            <div class="flex items-center justify-between py-1 border-b border-slate-200/80">
+                                                <span class="font-medium text-slate-600">Simulasi</span>
+                                                <span class="font-bold">: 11.00 &ndash; 11.10 <span class="font-semibold text-slate-500 text-[11px]">(10 menit)</span></span>
+                                            </div>
+                                            <div class="flex items-center justify-between py-1 border-b border-slate-200/80">
+                                                <span class="font-medium text-slate-600">Pelaksanaan CAT</span>
+                                                <span class="font-black text-blue-900">: 11.10 &ndash; 12.40 <span class="font-bold text-blue-700 text-[11px]">(90 menit)</span></span>
+                                            </div>
+                                            <div class="flex items-center justify-between py-1">
+                                                <span class="font-medium text-slate-600">Peserta</span>
+                                                <span class="font-bold text-orange-700">: 47 peserta <span class="text-[11px] font-semibold text-slate-500">(Lab 1 = 28, Lab 2 = 19)</span></span>
                                             </div>
                                         </div>
                                     </div>
@@ -811,12 +882,12 @@
                             </div>
 
                             <!-- PENGUMUMAN AUDITORIUM (Full Width Sesuai Infografis Bawah) -->
-                            <div class="col-span-1 md:col-span-2 rounded-2xl shadow-sm overflow-hidden flex flex-col sm:flex-row items-center p-3.5 sm:p-4 gap-3 text-center sm:text-left" style="background-color: #fee2e2 !important; border: 1.5px solid #fca5a5 !important;">
-                                <div class="text-2xl shrink-0 select-none">
+                            <div class="col-span-1 md:col-span-2 rounded-2xl shadow-sm overflow-hidden flex flex-col sm:flex-row items-center p-4 gap-3 text-center sm:text-left" style="background-color: #fee2e2 !important; border: 1.5px solid #fca5a5 !important;">
+                                <div class="text-3xl shrink-0 select-none">
                                     📢
                                 </div>
                                 <div class="text-xs sm:text-sm font-medium leading-relaxed" style="color: #7f1d1d !important;">
-                                    Seluruh peserta <strong class="font-extrabold text-rose-950">wajib hadir di Auditorium</strong> sebelum pukul <strong class="font-black text-rose-700 underline underline-offset-2">08.00</strong> untuk mengikuti pembukaan.
+                                    Seluruh peserta <strong class="font-extrabold text-rose-950">wajib hadir di Auditorium</strong> sebelum pukul <strong class="font-black text-rose-700 underline underline-offset-2">08.00</strong> untuk <strong class="font-extrabold text-rose-950">mengikuti pembukaan</strong>.
                                 </div>
                             </div>
 
