@@ -42,29 +42,30 @@
     @endif
 
     <!-- Filter Tabs & Quick Search -->
-    <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <!-- Tabs -->
-        <div class="flex items-center p-1.5 bg-gray-100 rounded-2xl border border-gray-200 shadow-xs w-full md:w-auto">
-            <button wire:click="setTab('active')" type="button" class="flex-1 md:flex-none flex items-center justify-center space-x-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $tab === 'active' ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
-                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <div class="inline-flex items-center p-1.5 bg-gray-100/90 rounded-2xl border border-gray-200/80 shadow-xs max-w-full overflow-x-auto">
+            <button wire:click="setTab('active')" type="button" class="whitespace-nowrap flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $tab === 'active' ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span>
                 <span>Ujian Aktif / Berjalan</span>
-                <span class="ml-1.5 px-2 py-0.5 rounded-full text-xs {{ $tab === 'active' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-700' }}">{{ $countActive }}</span>
+                <span class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold {{ $tab === 'active' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-700' }}">{{ $countActive }}</span>
             </button>
 
-            <button wire:click="setTab('archived')" type="button" class="flex-1 md:flex-none flex items-center justify-center space-x-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $tab === 'archived' ? 'bg-white text-amber-800 shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
-                <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+            <button wire:click="setTab('archived')" type="button" class="whitespace-nowrap flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $tab === 'archived' ? 'bg-white text-amber-800 shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
+                <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
                 <span>Arsip / Selesai</span>
-                <span class="ml-1.5 px-2 py-0.5 rounded-full text-xs {{ $tab === 'archived' ? 'bg-amber-100 text-amber-800' : 'bg-gray-200 text-gray-700' }}">{{ $countArchived }}</span>
+                <span class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold {{ $tab === 'archived' ? 'bg-amber-100 text-amber-800' : 'bg-gray-200 text-gray-700' }}">{{ $countArchived }}</span>
             </button>
 
-            <button wire:click="setTab('all')" type="button" class="flex-1 md:flex-none flex items-center justify-center space-x-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $tab === 'all' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
-                <span>Semua</span>
-                <span class="ml-1.5 px-2 py-0.5 rounded-full text-xs {{ $tab === 'all' ? 'bg-gray-300 text-gray-900' : 'bg-gray-200 text-gray-700' }}">{{ $countAll }}</span>
+            <button wire:click="setTab('all')" type="button" class="whitespace-nowrap flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $tab === 'all' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
+                <svg class="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                <span>Semua Ujian</span>
+                <span class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold {{ $tab === 'all' ? 'bg-gray-300 text-gray-900' : 'bg-gray-200 text-gray-700' }}">{{ $countAll }}</span>
             </button>
         </div>
 
         <!-- Search & Wave Filter -->
-        <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+        <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
             <div class="relative w-full sm:w-64 lg:w-72">
                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -72,12 +73,12 @@
                     </svg>
                 </div>
                 <input type="text" wire:model.live.debounce.300ms="search_exam" placeholder="Cari judul atau lokasi..." 
-                    class="block w-full pl-10 pr-4 py-2 text-xs sm:text-sm bg-white border border-gray-200 rounded-xl leading-5 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-xs transition">
+                    class="block w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl leading-5 bg-gray-50/50 hover:bg-white focus:bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm shadow-xs transition">
             </div>
             @if(count($waves) > 0)
                 <div class="w-full sm:w-auto">
                     <select wire:model.live="filter_wave_exam" 
-                        class="w-full sm:w-auto min-w-[170px] text-xs sm:text-sm bg-white border border-gray-200 rounded-xl py-2 pl-3.5 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-xs transition text-gray-700 cursor-pointer">
+                        class="w-full sm:w-auto min-w-[170px] border border-gray-200 rounded-xl py-2 pl-3.5 pr-10 bg-gray-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm shadow-xs transition text-gray-700 cursor-pointer font-medium">
                         <option value="">Semua Gelombang</option>
                         @foreach($waves as $wave)
                             <option value="{{ $wave->id }}">{{ $wave->name }}</option>
