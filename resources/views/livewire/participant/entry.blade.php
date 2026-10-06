@@ -291,61 +291,180 @@
         @if($confirmingExam)
         <div class="fixed inset-0 overflow-y-auto" style="z-index: 9990;" role="dialog" aria-modal="true">
             <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity" wire:click="cancelStart"></div>
-            <div class="min-h-full flex items-center justify-center p-4 text-center">
-                <div class="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden text-left my-8 border border-gray-100">
-                    <div class="bg-blue-600 px-6 py-5 flex justify-between items-center shrink-0">
-                        <h3 class="text-xl font-bold text-white flex items-center">
-                            <svg class="w-6 h-6 mr-2 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            Konfirmasi Ujian
-                        </h3>
-                        <button wire:click="cancelStart" class="text-blue-100 hover:text-white transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                        </button>
+            <div class="min-h-full flex items-center justify-center p-3 sm:p-5 md:p-6 text-center">
+                <div class="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden text-left my-8 border border-slate-200">
+                    
+                    <!-- Header Modal Modern -->
+                    <div class="px-6 py-5 sm:px-8 text-white relative shrink-0 border-b border-blue-900" style="background: linear-gradient(135deg, #091a32 0%, #0f2b52 50%, #16244f 100%) !important;">
+                        <div class="flex justify-between items-center gap-4">
+                            <div class="flex items-center gap-3.5">
+                                <div class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 shadow-inner" style="background-color: rgba(255, 255, 255, 0.12) !important;">
+                                    <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                                </div>
+                                <div>
+                                    <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider mb-1" style="background-color: #f59e0b !important; color: #0f172a !important;">
+                                        {{ $confirmingExam->is_simulation ? 'Simulasi Ujian CAT' : 'Konfirmasi Ujian CAT' }}
+                                    </span>
+                                    <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight leading-tight">
+                                        Konfirmasi Memulai Ujian
+                                    </h3>
+                                </div>
+                            </div>
+                            <button wire:click="cancelStart" class="p-2 rounded-xl text-blue-200 hover:text-white transition-all hover:bg-white/10" title="Batal &amp; Tutup">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                        </div>
                     </div>
                     
-                    <div class="p-6 md:p-8 overflow-y-auto">
-                        <div class="mb-5">
-                            <h4 class="text-xl font-bold text-gray-900">{{ $confirmingExam->title }}</h4>
-                            <p class="text-sm text-gray-500 mt-1">Silakan konfirmasi kesiapan Anda sebelum memulai ujian.</p>
-                        </div>
-                        
-                        <div class="bg-blue-50 border border-blue-200 rounded-2xl p-5 text-blue-800 text-sm flex items-start">
-                            <svg class="w-6 h-6 text-blue-600 mt-0.5 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <div>
-                                <strong>Penting:</strong> Apakah Anda sudah membaca dan memahami seluruh Tata Tertib Ujian?
+                    <div class="p-6 sm:p-7 md:p-8 space-y-5 overflow-y-auto max-h-[calc(85vh-150px)]">
+                        <!-- Hero Card: Paket Ujian Terpilih -->
+                        <div class="bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/40 rounded-2xl p-5 border border-slate-200/90 shadow-2xs">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <div>
+                                    <span class="text-[11px] font-bold text-blue-600 uppercase tracking-wider">PAKET UJIAN AKTIF</span>
+                                    <h4 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-snug mt-0.5">{{ $confirmingExam->title }}</h4>
+                                    <p class="text-xs sm:text-sm text-slate-500 mt-1">Silakan konfirmasi kesiapan Anda sebelum sistem mengaktifkan sesi pengerjaan.</p>
+                                </div>
+                            </div>
+
+                            <!-- Meta Chips -->
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mt-4 pt-4 border-t border-slate-200/80">
+                                <div class="bg-white rounded-xl p-3 border border-slate-200 flex items-center gap-3 shadow-2xs">
+                                    <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] uppercase font-bold text-slate-400 block leading-tight">Durasi Ujian</span>
+                                        <span class="text-xs sm:text-sm font-black text-slate-800 leading-tight">{{ $confirmingExam->duration_minutes }} Menit</span>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white rounded-xl p-3 border border-slate-200 flex items-center gap-3 shadow-2xs">
+                                    <div class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] uppercase font-bold text-slate-400 block leading-tight">Jumlah Soal</span>
+                                        <span class="text-xs sm:text-sm font-black text-slate-800 leading-tight">{{ $confirmingExam->questions()->count() }} Soal</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-span-2 sm:col-span-1 bg-white rounded-xl p-3 border border-slate-200 flex items-center gap-3 shadow-2xs">
+                                    <div class="w-9 h-9 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+                                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] uppercase font-bold text-slate-400 block leading-tight">Tampilan</span>
+                                        <span class="text-xs sm:text-sm font-black text-slate-800 leading-tight">Layar Penuh</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        
-                        <div class="mt-6 bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-start">
-                            <svg class="w-6 h-6 text-amber-600 mt-0.5 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                            <div class="text-sm text-amber-800">
-                                <strong>Perhatian:</strong> Waktu ujian akan mulai berjalan (<strong>{{ $confirmingExam->duration_minutes }} menit</strong>) segera setelah Anda menekan tombol di bawah. Pastikan koneksi internet Anda stabil.
+
+                        <!-- Card 1: Tata Tertib (Blue Elegant Notice) -->
+                        <div class="bg-gradient-to-r from-blue-50/90 to-sky-50/80 border border-blue-200/90 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xs">
+                            <div class="flex items-start gap-3.5">
+                                <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5 sm:mt-0">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-black uppercase tracking-wider text-blue-900">Penting</span>
+                                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                        <span class="text-xs font-bold text-blue-700">Tata Tertib Peserta</span>
+                                    </div>
+                                    <p class="text-xs sm:text-sm text-slate-700 font-medium mt-1 leading-relaxed">
+                                        Apakah Anda sudah membaca dan memahami seluruh Tata Tertib Ujian? Seluruh aktivitas pengerjaan diawasi dan terekam secara otomatis.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <button type="button" 
+                                    wire:click="viewRules({{ $confirmingExam->id }})" 
+                                    class="self-end sm:self-center shrink-0 inline-flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-300 hover:border-blue-600 rounded-xl font-bold text-xs shadow-2xs hover:shadow-sm transition-all duration-150">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                <span>Lihat Tata Tertib</span>
+                            </button>
+                        </div>
+
+                        <!-- Card 2: Perhatian Waktu (Amber Warning Card) -->
+                        <div class="bg-gradient-to-r from-amber-50/90 to-orange-50/70 border border-amber-200/90 rounded-2xl p-4 sm:p-5 shadow-2xs">
+                            <div class="flex items-start gap-3.5">
+                                <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs font-black uppercase tracking-wider text-amber-900">Perhatian Khusus</span>
+                                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                        <span class="text-xs font-bold text-amber-800">Waktu Langsung Berjalan</span>
+                                    </div>
+                                    
+                                    <div class="mt-2 text-xs sm:text-[13px] text-amber-950/90 space-y-2 leading-relaxed">
+                                        <p>
+                                            Waktu ujian (<span class="font-black text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200">{{ $confirmingExam->duration_minutes }} Menit</span>) akan <strong>langsung berjalan otomatis</strong> segera setelah Anda menekan tombol di bawah dan tidak dapat diulang.
+                                        </p>
+                                        <div class="flex flex-wrap items-center gap-y-1.5 gap-x-4 pt-1 text-[11px] font-semibold text-amber-800">
+                                            <span class="inline-flex items-center gap-1.5">
+                                                <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                                                Pastikan koneksi internet stabil
+                                            </span>
+                                            <span class="inline-flex items-center gap-1.5">
+                                                <svg class="w-4 h-4 text-rose-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                                                Dilarang membuka tab / aplikasi lain
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Card 3: Token Input (Jika Diperlukan) -->
                         @if($confirmingExam->token)
-                        <div class="mt-6 bg-blue-50 border border-blue-200 rounded-2xl p-5">
-                            <label for="input_token" class="block text-sm font-bold text-blue-900 mb-2">Token Ujian</label>
-                            <p class="text-xs text-blue-700 mb-3">Ujian ini memerlukan token. Silakan masukkan token yang diberikan oleh pengawas.</p>
-                            <input type="text" id="input_token" wire:model="input_token" class="bg-white border border-blue-300 text-gray-900 text-lg font-mono tracking-widest uppercase rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-colors shadow-sm text-center" placeholder="MASUKKAN TOKEN">
-                            @error('input_token') <span class="text-red-500 text-xs mt-2 block font-medium">{{ $message }}</span> @enderror
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-5 shadow-2xs">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+                                </div>
+                                <label for="input_token" class="text-sm font-black text-blue-950 uppercase tracking-wide">Masukkan Token Ujian</label>
+                            </div>
+                            <p class="text-xs text-blue-700 mb-3">Ujian ini memerlukan token autentikasi resmi yang diberikan oleh pengawas ruangan.</p>
+                            <input type="text" 
+                                   id="input_token" 
+                                   wire:model="input_token" 
+                                   class="bg-white border-2 border-blue-300 text-blue-950 text-xl font-mono tracking-[0.3em] uppercase rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-600 block w-full p-3.5 transition shadow-xs text-center font-black placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400 placeholder:text-sm" 
+                                   placeholder="Ketik token di sini...">
+                            @error('input_token') 
+                                <span class="text-red-600 text-xs mt-2 block font-bold flex items-center gap-1">
+                                    <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                    {{ $message }}
+                                </span> 
+                            @enderror
                         </div>
                         @endif
 
                         @error('general_error')
-                        <div class="mt-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded-xl text-center font-bold flex items-center justify-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                            {{ $message }}
+                        <div class="p-4 bg-red-100 border border-red-300 text-red-800 rounded-2xl text-center font-bold flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            <span>{{ $message }}</span>
                         </div>
                         @enderror
                     </div>
                     
-                    <div class="p-6 border-t border-gray-100 bg-gray-50 flex flex-col-reverse sm:flex-row justify-end sm:space-x-3 shrink-0 gap-3 sm:gap-0">
-                        <button wire:click="cancelStart" type="button" class="w-full sm:w-auto px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 font-bold transition-colors">
-                            Batal
+                    <!-- Footer Actions -->
+                    <div class="px-6 py-4.5 sm:px-8 border-t border-slate-200/90 bg-slate-50/80 flex flex-col-reverse sm:flex-row justify-between items-center gap-3 shrink-0">
+                        <button wire:click="cancelStart" 
+                                type="button" 
+                                class="w-full sm:w-auto px-6 py-3 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 rounded-xl font-bold text-xs sm:text-sm shadow-2xs transition-colors">
+                            Batal &amp; Kembali
                         </button>
-                        <button onclick="requestFullScreen()" wire:loading.attr="disabled" wire:click="startExam({{ $confirmingExam->id }})" type="button" class="w-full sm:w-auto px-6 py-3 bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center">
-                            Saya Mengerti & Mulai
-                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        <button onclick="requestFullScreen()" 
+                                wire:loading.attr="disabled" 
+                                wire:click="startExam({{ $confirmingExam->id }})" 
+                                type="button" 
+                                class="w-full sm:w-auto px-7 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 disabled:opacity-50 text-white rounded-xl font-black text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 group">
+                            <span>Saya Mengerti &amp; Mulai Ujian</span>
+                            <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </button>
                     </div>
                 </div>
