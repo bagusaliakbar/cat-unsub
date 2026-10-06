@@ -147,6 +147,11 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="w-40 font-bold align-top">Sesi</td>
+                    <td class="w-4 text-center align-top">:</td>
+                    <td class="align-top">{{ $exam->wave ? $exam->wave->name : ($attItem['participants'][0]->wave->name ?? '-') }}</td>
+                </tr>
+                <tr>
                     <td class="w-40 font-bold align-top">Tempat</td>
                     <td class="w-4 text-center align-top">:</td>
                     <td class="align-top">{{ $exam->location ?: 'Laboratorium Komputer Universitas Subang' }}</td>
@@ -273,6 +278,11 @@
                         -
                     @endif
                 </td>
+            </tr>
+            <tr>
+                <td class="w-40 font-bold align-top">Sesi</td>
+                <td class="w-4 text-center align-top">:</td>
+                <td class="align-top">{{ $exam->wave ? $exam->wave->name : ($participants->first()?->wave?->name ?? '-') }}</td>
             </tr>
             <tr>
                 <td class="w-40 font-bold align-top">Tempat</td>

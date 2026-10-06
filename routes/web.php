@@ -247,7 +247,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
     })->name('exams.incident-report');
 
     Route::get('/exams/{examId}/attendance', function ($examId, \Illuminate\Http\Request $request) {
-        $exam = \App\Models\Exam::with(['participants' => function($q) {
+        $exam = \App\Models\Exam::with(['wave', 'participants' => function($q) {
             $q->orderByRaw('CASE WHEN no_meja IS NULL OR no_meja = "" THEN 1 ELSE 0 END, CAST(no_meja AS UNSIGNED) ASC, no_meja ASC, name ASC');
         }])->findOrFail($examId);
         $report = \App\Models\ExamReport::where('exam_id', $examId)->first();
