@@ -298,13 +298,7 @@
                     <div class="px-6 py-5 sm:px-8 text-white relative shrink-0 border-b border-blue-600/30" style="background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%) !important; color: #ffffff !important;">
                         <div class="flex justify-between items-center gap-4">
                             <div class="flex items-center">
-                                <div style="width: 44px; height: 44px; border-radius: 12px; background-color: rgba(255, 255, 255, 0.18) !important; border: 1px solid rgba(255, 255, 255, 0.28); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 14px;">
-                                    <svg style="width: 24px; height: 24px; color: #ffffff;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                                </div>
                                 <div>
-                                    <span style="background-color: rgba(255, 255, 255, 0.22) !important; color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.35) !important; padding: 4px 10px; border-radius: 9999px; font-size: 10px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; display: inline-block; margin-bottom: 4px;">
-                                        {{ $confirmingExam->is_simulation ? 'Simulasi Ujian CAT' : 'Konfirmasi Ujian CAT' }}
-                                    </span>
                                     <h3 style="color: #ffffff !important; font-size: 20px; font-weight: 900; line-height: 1.25; margin: 0;" class="tracking-tight">
                                         Konfirmasi Memulai Ujian
                                     </h3>
@@ -401,16 +395,6 @@
                                     <p style="margin: 0 0 10px 0;">
                                         Waktu ujian (<strong style="background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; padding: 2px 8px; border-radius: 6px; font-weight: 800;">{{ $confirmingExam->duration_minutes }} Menit</strong>) akan <strong>langsung berjalan otomatis</strong> segera setelah Anda menekan tombol di bawah dan tidak dapat diulang.
                                     </p>
-                                    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding-top: 4px; font-size: 12px; font-weight: 600;">
-                                        <span style="display: inline-flex; align-items: center; color: #166534 !important;">
-                                            <svg style="width: 16px; height: 16px; color: #16a34a; margin-right: 6px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                                            Pastikan koneksi internet stabil
-                                        </span>
-                                        <span style="display: inline-flex; align-items: center; color: #991b1b !important;">
-                                            <svg style="width: 16px; height: 16px; color: #dc2626; margin-right: 6px; flex-shrink: 0;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
-                                            Dilarang membuka tab / aplikasi lain
-                                        </span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
