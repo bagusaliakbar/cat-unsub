@@ -78,19 +78,25 @@
         </div>
 
         <!-- Search & Wave Filter -->
-        <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 w-full md:w-auto">
+        <div class="flex flex-wrap items-center gap-3 sm:gap-3.5 w-full md:w-auto"
+             style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
             <!-- Search Box -->
-            <div class="relative flex-1 md:w-60 lg:w-72">
-                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="relative w-full sm:w-64 lg:w-72" style="position: relative;">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400"
+                     style="position: absolute; left: 14px; top: 0; bottom: 0; display: flex; align-items: center; pointer-events: none;">
+                    <svg class="w-4 h-4 text-slate-400 shrink-0" style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </div>
                 <input type="text" wire:model.live.debounce.300ms="search_exam" placeholder="Cari judul atau lokasi..." 
-                    class="block w-full pl-10 pr-8 py-2 border border-slate-200 rounded-xl leading-5 bg-slate-50/70 hover:bg-white focus:bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs sm:text-sm font-medium shadow-2xs transition">
+                    class="block w-full pl-11 pr-8 py-2.5 border border-slate-200 rounded-xl leading-5 bg-slate-50/70 hover:bg-white focus:bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs sm:text-sm font-medium shadow-2xs transition"
+                    style="padding-left: 42px; padding-right: 32px; padding-top: 9px; padding-bottom: 9px; border-radius: 12px;">
                 @if($search_exam)
-                    <button wire:click="$set('search_exam', '')" type="button" class="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer" title="Hapus pencarian">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    <button wire:click="$set('search_exam', '')" type="button" 
+                        class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer" 
+                        style="position: absolute; right: 10px; top: 0; bottom: 0; display: flex; align-items: center;"
+                        title="Hapus pencarian">
+                        <svg class="w-4 h-4" style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 @endif
             </div>
@@ -99,7 +105,8 @@
             @if(count($waves) > 0)
                 <div class="w-full sm:w-auto">
                     <select wire:model.live="filter_wave_exam" 
-                        class="w-full sm:w-auto min-w-[170px] border border-slate-200 rounded-xl py-2 pl-3.5 pr-10 bg-slate-50/70 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs sm:text-sm shadow-2xs transition text-slate-700 cursor-pointer font-medium">
+                        class="w-full sm:w-auto min-w-[175px] border border-slate-200 rounded-xl py-2.5 pl-4 pr-10 bg-slate-50/70 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs sm:text-sm shadow-2xs transition text-slate-700 cursor-pointer font-medium"
+                        style="min-width: 175px; padding-left: 16px; padding-right: 36px; padding-top: 9px; padding-bottom: 9px; border-radius: 12px;">
                         <option value="">Semua Gelombang</option>
                         @foreach($waves as $wave)
                             <option value="{{ $wave->id }}">{{ $wave->name }}</option>
@@ -110,8 +117,11 @@
 
             <!-- Reset Button -->
             @if($search_exam || $filter_wave_exam)
-                <button wire:click="$set('search_exam', ''); $set('filter_wave_exam', '')" type="button" class="inline-flex items-center px-3 py-2 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200/60 rounded-xl transition cursor-pointer shadow-2xs shrink-0" title="Reset filter">
-                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <button wire:click="$set('search_exam', ''); $set('filter_wave_exam', '')" type="button" 
+                    class="inline-flex items-center px-3.5 py-2.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200/60 rounded-xl transition cursor-pointer shadow-2xs shrink-0" 
+                    style="display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 12px;"
+                    title="Reset filter">
+                    <svg class="w-3.5 h-3.5 mr-1" style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     Reset
                 </button>
             @endif
