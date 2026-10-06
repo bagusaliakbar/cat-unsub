@@ -24,25 +24,25 @@
             </h2>
             <p class="text-blue-100 opacity-90 text-sm">Kelola seluruh soal Anda berdasarkan kategori dan tingkat kesulitan.</p>
         </div>
-        <div class="mt-4 md:mt-0 flex flex-wrap gap-2">
-            <button wire:click="export" class="bg-green-600 hover:bg-green-700 text-white focus:ring-4 focus:ring-green-400 font-medium py-2.5 px-4 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center border border-green-500">
+        <div class="mt-4 md:mt-0 flex flex-wrap items-center gap-3 sm:gap-3.5">
+            <button wire:click="export" class="bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2.5 px-4 rounded-full shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 Export
             </button>
-            <button wire:click="openImportModal" class="bg-yellow-500 hover:bg-yellow-600 text-white focus:ring-4 focus:ring-yellow-400 font-medium py-2.5 px-4 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center border border-yellow-500">
+            <button wire:click="openImportModal" class="bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2.5 px-4 rounded-full shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                 Import
             </button>
-            <button wire:click="openCategoryModal()" class="bg-blue-700 hover:bg-blue-800 text-white focus:ring-4 focus:ring-blue-400 font-medium py-2.5 px-4 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center border border-blue-500">
+            <button wire:click="openCategoryModal()" class="bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2.5 px-4 rounded-full shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
                 Kategori
             </button>
-            <button wire:click="openDeleteAllModal('{{ $filter_category ? 'category' : 'all' }}')" class="bg-red-600 hover:bg-red-700 text-white focus:ring-4 focus:ring-red-400 font-medium py-2.5 px-4 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center border border-red-500" title="{{ $filter_category ? 'Kosongkan soal di kategori yang difilter' : 'Kosongkan seluruh bank soal' }}">
+            <button wire:click="openDeleteAllModal('{{ $filter_category ? 'category' : 'all' }}')" class="bg-blue-500 hover:bg-blue-400 text-white font-semibold py-2.5 px-4 rounded-full shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm" title="{{ $filter_category ? 'Kosongkan soal di kategori yang difilter' : 'Kosongkan seluruh bank soal' }}">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                 {{ $filter_category ? 'Kosongkan Kategori' : 'Kosongkan Bank Soal' }}
             </button>
-            <button wire:click="create()" class="bg-white text-blue-700 hover:bg-blue-50 focus:ring-4 focus:ring-blue-300 font-bold py-2.5 px-5 rounded-full shadow-md transition transform hover:-translate-y-0.5 flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+            <button wire:click="create()" class="bg-white text-blue-700 hover:bg-blue-50 focus:ring-4 focus:ring-blue-300 font-bold py-2.5 px-5 rounded-full shadow-md transition-all transform hover:-translate-y-0.5 flex items-center justify-center text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                 Buat Soal
             </button>
         </div>
