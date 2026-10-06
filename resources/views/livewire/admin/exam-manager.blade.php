@@ -41,50 +41,72 @@
         </div>
     @endif
 
-    <!-- Filter Tabs & Quick Search -->
-    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <!-- Tabs -->
-        <div class="inline-flex items-center p-1.5 bg-gray-100/90 rounded-2xl border border-gray-200/80 shadow-xs max-w-full overflow-x-auto">
-            <button wire:click="setTab('active')" type="button" class="whitespace-nowrap flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $tab === 'active' ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span>
-                <span>Ujian Aktif / Berjalan</span>
-                <span class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold {{ $tab === 'active' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-700' }}">{{ $countActive }}</span>
+    <!-- Filter Tabs & Quick Search Toolbar -->
+    <div class="bg-white p-3 sm:p-4 rounded-2xl shadow-xs border border-slate-200/80 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 transition-all">
+        <!-- Segmented Tab Pills -->
+        <div class="inline-flex items-center p-1 bg-slate-100/90 rounded-xl border border-slate-200/70 shadow-inner max-w-full overflow-x-auto self-start md:self-auto">
+            <button wire:click="setTab('active')" type="button" title="Ujian yang sedang aktif atau berjalan"
+                class="whitespace-nowrap inline-flex items-center px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer {{ $tab === 'active' ? 'bg-white text-blue-700 shadow-sm border border-slate-200/50 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }}">
+                <span class="relative flex h-2 w-2 mr-2 shrink-0">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span>Ujian Aktif</span>
+                <span class="ml-2 px-2 py-0.5 rounded-full text-xs font-bold transition-colors {{ $tab === 'active' ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-700/15' : 'bg-slate-200/80 text-slate-600' }}">{{ $countActive }}</span>
             </button>
 
-            <button wire:click="setTab('archived')" type="button" class="whitespace-nowrap flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $tab === 'archived' ? 'bg-white text-amber-800 shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
-                <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
-                <span>Arsip / Selesai</span>
-                <span class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold {{ $tab === 'archived' ? 'bg-amber-100 text-amber-800' : 'bg-gray-200 text-gray-700' }}">{{ $countArchived }}</span>
+            <button wire:click="setTab('archived')" type="button" title="Ujian yang sudah selesai atau diarsipkan"
+                class="whitespace-nowrap inline-flex items-center px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer {{ $tab === 'archived' ? 'bg-white text-amber-800 shadow-sm border border-slate-200/50 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }}">
+                <svg class="w-3.5 h-3.5 mr-1.5 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                <span>Arsip</span>
+                <span class="ml-2 px-2 py-0.5 rounded-full text-xs font-bold transition-colors {{ $tab === 'archived' ? 'bg-amber-50 text-amber-800 ring-1 ring-amber-700/15' : 'bg-slate-200/80 text-slate-600' }}">{{ $countArchived }}</span>
             </button>
 
-            <button wire:click="setTab('all')" type="button" class="whitespace-nowrap flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer {{ $tab === 'all' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
-                <svg class="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-                <span>Semua Ujian</span>
-                <span class="ml-1.5 px-2 py-0.5 rounded-full text-xs font-bold {{ $tab === 'all' ? 'bg-gray-300 text-gray-900' : 'bg-gray-200 text-gray-700' }}">{{ $countAll }}</span>
+            <button wire:click="setTab('all')" type="button" title="Seluruh riwayat ujian"
+                class="whitespace-nowrap inline-flex items-center px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer {{ $tab === 'all' ? 'bg-white text-slate-900 shadow-sm border border-slate-200/50 font-bold' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }}">
+                <svg class="w-3.5 h-3.5 mr-1.5 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                <span>Semua</span>
+                <span class="ml-2 px-2 py-0.5 rounded-full text-xs font-bold transition-colors {{ $tab === 'all' ? 'bg-slate-100 text-slate-800 ring-1 ring-slate-300' : 'bg-slate-200/80 text-slate-600' }}">{{ $countAll }}</span>
             </button>
         </div>
 
         <!-- Search & Wave Filter -->
-        <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-            <div class="relative w-full sm:w-64 lg:w-72">
-                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+        <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 w-full md:w-auto">
+            <!-- Search Box -->
+            <div class="relative flex-1 md:w-60 lg:w-72">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </div>
                 <input type="text" wire:model.live.debounce.300ms="search_exam" placeholder="Cari judul atau lokasi..." 
-                    class="block w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl leading-5 bg-gray-50/50 hover:bg-white focus:bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm shadow-xs transition">
+                    class="block w-full pl-10 pr-8 py-2 border border-slate-200 rounded-xl leading-5 bg-slate-50/70 hover:bg-white focus:bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs sm:text-sm font-medium shadow-2xs transition">
+                @if($search_exam)
+                    <button wire:click="$set('search_exam', '')" type="button" class="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer" title="Hapus pencarian">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                @endif
             </div>
+
+            <!-- Wave Select -->
             @if(count($waves) > 0)
                 <div class="w-full sm:w-auto">
                     <select wire:model.live="filter_wave_exam" 
-                        class="w-full sm:w-auto min-w-[170px] border border-gray-200 rounded-xl py-2 pl-3.5 pr-10 bg-gray-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs sm:text-sm shadow-xs transition text-gray-700 cursor-pointer font-medium">
+                        class="w-full sm:w-auto min-w-[170px] border border-slate-200 rounded-xl py-2 pl-3.5 pr-10 bg-slate-50/70 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs sm:text-sm shadow-2xs transition text-slate-700 cursor-pointer font-medium">
                         <option value="">Semua Gelombang</option>
                         @foreach($waves as $wave)
                             <option value="{{ $wave->id }}">{{ $wave->name }}</option>
                         @endforeach
                     </select>
                 </div>
+            @endif
+
+            <!-- Reset Button -->
+            @if($search_exam || $filter_wave_exam)
+                <button wire:click="$set('search_exam', ''); $set('filter_wave_exam', '')" type="button" class="inline-flex items-center px-3 py-2 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200/60 rounded-xl transition cursor-pointer shadow-2xs shrink-0" title="Reset filter">
+                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    Reset
+                </button>
             @endif
         </div>
     </div>
