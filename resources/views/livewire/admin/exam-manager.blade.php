@@ -148,53 +148,92 @@
                             $isPast = $exam->end_time && now()->gt($exam->end_time);
                         @endphp
                         <tr wire:key="exam-{{ $exam->id }}" class="{{ $exam->is_archived ? 'bg-gray-50/70 hover:bg-amber-50/30 opacity-90' : 'hover:bg-blue-50/50' }} transition-colors group">
-                            <td class="px-6 py-5">
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <div class="text-sm font-bold {{ $exam->is_archived ? 'text-gray-700' : 'text-gray-900 group-hover:text-blue-700' }} transition-colors">{{ $exam->title }}</div>
-                                    @if($exam->is_archived)
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gray-200 text-gray-700 border border-gray-300 shrink-0">
-                                            Arsip
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col">
+                                    <!-- Baris 1: Judul Ujian & Status Khusus -->
+                                    <div class="flex items-center flex-wrap gap-2 mb-2">
+                                        <span class="text-sm sm:text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                                            {{ $exam->title }}
                                         </span>
-                                    @endif
-                                    @if($exam->wave)
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-200 shrink-0">
-                                            {{ $exam->wave->name }}
-                                        </span>
-                                    @endif
-                                    @if($exam->location)
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200 shrink-0 flex items-center">
-                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.242-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                            {{ $exam->location }}
-                                        </span>
-                                    @endif
-                                    @if($exam->is_simulation)
-                                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200 shrink-0 flex items-center">
-                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                                            Simulasi
-                                        </span>
-                                    @endif
-
-                                    <!-- Badge Peserta (Interaktif: Klik untuk Kelola/Assign Peserta) -->
-                                    <button type="button" wire:click="manageParticipants({{ $exam->id }})" 
-                                        class="px-2 py-0.5 rounded text-[10px] font-bold transition-all shrink-0 inline-flex items-center gap-1 cursor-pointer shadow-2xs hover:shadow-xs {{ $exam->participants_count > 0 ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 border-dashed' }}" 
-                                        title="Klik untuk kelola peserta ujian ini">
-                                        <svg class="w-3 h-3 {{ $exam->participants_count > 0 ? 'text-emerald-600' : 'text-amber-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                                        </svg>
-                                        @if($exam->participants_count > 0)
-                                            <span>{{ $exam->participants_count }} Peserta</span>
-                                            @if($exam->completed_sessions_count > 0)
-                                                <span class="text-[9px] font-semibold text-emerald-700 bg-white/90 px-1 py-0.2 rounded border border-emerald-200">
-                                                    {{ $exam->completed_sessions_count }} Selesai
-                                                </span>
-                                            @endif
-                                        @else
-                                            <span>0 Peserta</span>
-                                            <span class="text-[9px] font-normal text-amber-600">(Belum di-assign)</span>
+                                        @if($exam->is_archived)
+                                            <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300 shrink-0">
+                                                Arsip
+                                            </span>
                                         @endif
-                                    </button>
+                                        @if($exam->is_simulation)
+                                            <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-200 shrink-0 flex items-center gap-1">
+                                                <svg class="w-3 h-3 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                                                Simulasi
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                    <!-- Baris 2: Metadata Badges (Gelombang, Lokasi, Jumlah Soal, Jumlah Peserta) -->
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <!-- Gelombang / Sesi -->
+                                        @if($exam->wave)
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/80 shadow-2xs">
+                                                <svg class="w-3.5 h-3.5 mr-1 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                </svg>
+                                                {{ $exam->wave->name }}
+                                            </span>
+                                        @endif
+
+                                        <!-- Lokasi -->
+                                        @if($exam->location)
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200/80 shadow-2xs">
+                                                <svg class="w-3.5 h-3.5 mr-1 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.242-4.243a8 8 0 1111.314 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                </svg>
+                                                {{ $exam->location }}
+                                            </span>
+                                        @endif
+
+                                        <!-- Badge Jumlah Soal (Interaktif: Klik untuk Kelola Soal) -->
+                                        <button type="button" wire:click="manageQuestions({{ $exam->id }})" 
+                                            class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs {{ $exam->questions_count > 0 ? 'bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200/90' : 'bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 border-dashed' }}" 
+                                            title="Klik untuk kelola soal ujian ini">
+                                            <svg class="w-3.5 h-3.5 mr-1.5 {{ $exam->questions_count > 0 ? 'text-blue-600' : 'text-rose-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                                            </svg>
+                                            @if($exam->questions_count > 0)
+                                                <span>{{ $exam->questions_count }} Soal</span>
+                                            @else
+                                                <span>0 Soal</span>
+                                                <span class="text-[10px] font-normal ml-1 opacity-80">(Belum diset)</span>
+                                            @endif
+                                        </button>
+
+                                        <!-- Badge Jumlah Peserta (Interaktif: Klik untuk Kelola Peserta) -->
+                                        <button type="button" wire:click="manageParticipants({{ $exam->id }})" 
+                                            class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs {{ $exam->participants_count > 0 ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/90' : 'bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 border-dashed' }}" 
+                                            title="Klik untuk kelola peserta ujian ini">
+                                            <svg class="w-3.5 h-3.5 mr-1.5 {{ $exam->participants_count > 0 ? 'text-emerald-600' : 'text-amber-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                            </svg>
+                                            @if($exam->participants_count > 0)
+                                                <span>{{ $exam->participants_count }} Peserta</span>
+                                                @if($exam->completed_sessions_count > 0)
+                                                    <span class="text-[10px] font-bold text-emerald-700 bg-white/90 px-1.5 py-0.5 rounded ml-1 border border-emerald-200/80">
+                                                        {{ $exam->completed_sessions_count }} Selesai
+                                                    </span>
+                                                @endif
+                                            @else
+                                                <span>0 Peserta</span>
+                                                <span class="text-[10px] font-normal ml-1 opacity-80">(Belum di-assign)</span>
+                                            @endif
+                                        </button>
+                                    </div>
+
+                                    <!-- Baris 3: Deskripsi (Hanya jika diisi) -->
+                                    @if($exam->description)
+                                        <div class="text-xs text-slate-500 line-clamp-2 mt-2 font-normal">
+                                            {{ $exam->description }}
+                                        </div>
+                                    @endif
                                 </div>
-                                <div class="text-sm text-gray-500 mt-1 line-clamp-2">{{ $exam->description ?: 'Tidak ada deskripsi' }}</div>
                             </td>
                             <td class="px-6 py-5 whitespace-nowrap">
                                 <div class="flex items-center text-sm text-gray-700 font-medium">

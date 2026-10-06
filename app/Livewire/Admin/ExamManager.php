@@ -98,6 +98,7 @@ class ExamManager extends Component
 
         $examQuery = Exam::with('wave')
             ->withCount([
+                'questions',
                 'participants',
                 'sessions as completed_sessions_count' => function ($q) {
                     $q->where('status', 'completed')->orWhereNotNull('completed_at');
