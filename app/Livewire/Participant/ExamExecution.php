@@ -273,11 +273,16 @@ class ExamExecution extends Component
 
     public function finishExam()
     {
+        $this->session->refresh();
+        if ($this->session->status === 'completed') {
+            return redirect()->route('participant.exam.result', ['examId' => $this->exam->id]);
+        }
+
         // Auto-Grading Logic
         $score = 0;
         
         $userAnswers = UserAnswer::where('exam_session_id', $this->session->id)->get();
-        $questions = $this->exam->questions->keyBy('id');
+        $questions = $this->exam->questions()->with('options')->get()->keyBy('id');
 
         foreach ($userAnswers as $answer) {
             $question = $questions->get($answer->question_id);

@@ -167,9 +167,13 @@
         
         setInterval(updateTimer, 1000);
         
-        Livewire.hook('message.processed', () => {
-            updateTimer();
-        });
+        if (typeof Livewire !== 'undefined' && Livewire.hook) {
+            try {
+                Livewire.hook('morph.updated', () => {
+                    updateTimer();
+                });
+            } catch (e) {}
+        }
         
         updateTimer();
     }
