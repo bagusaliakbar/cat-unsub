@@ -176,7 +176,7 @@
 
                     <!-- Card Body -->
                     <div class="p-5 flex-grow">
-                        <p class="text-gray-800 font-medium text-sm line-clamp-3 mb-4">
+                        <p wire:click="preview({{ $q->id }})" class="text-gray-800 font-medium text-sm line-clamp-3 mb-4 cursor-pointer hover:text-blue-600 transition-colors" title="Klik untuk preview & kroscek lengkap">
                             {{ Str::limit($q->text, 120) }}
                         </p>
 
@@ -197,11 +197,14 @@
                     </div>
 
                     <!-- Card Footer (Actions) -->
-                    <div class="px-5 py-3 border-t border-gray-100 bg-gray-50/50 flex justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button wire:click="edit({{ $q->id }})" class="p-2 text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors" title="Edit">
+                    <div class="px-5 py-3 border-t border-gray-100 bg-gray-50/50 flex justify-end space-x-2 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300">
+                        <button wire:click="preview({{ $q->id }})" class="p-2 text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 rounded-lg transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center cursor-pointer" title="Preview & Kroscek Soal">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        </button>
+                        <button wire:click="edit({{ $q->id }})" class="p-2 text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center cursor-pointer" title="Edit">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         </button>
-                        <button wire:click="delete({{ $q->id }})" wire:confirm="Yakin ingin menghapus soal ini dari Bank Soal?" class="p-2 text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 rounded-lg transition-colors" title="Hapus">
+                        <button wire:click="delete({{ $q->id }})" wire:confirm="Yakin ingin menghapus soal ini dari Bank Soal?" class="p-2 text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 rounded-lg transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center cursor-pointer" title="Hapus">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </button>
                     </div>
@@ -247,7 +250,7 @@
                                     {{ $q->category ? $q->category->name : 'Tanpa Kategori' }}
                                 </td>
                                 <td class="p-4">
-                                    <div class="text-gray-900 line-clamp-2 max-w-md" title="{{ $q->text }}">{{ Str::limit($q->text, 80) }}</div>
+                                    <div wire:click="preview({{ $q->id }})" class="text-gray-900 line-clamp-2 max-w-md cursor-pointer hover:text-blue-600 transition-colors font-medium" title="Klik untuk preview & kroscek lengkap">{{ Str::limit($q->text, 80) }}</div>
                                     @if($q->type === 'multiple_choice' && $q->options->count() > 0)
                                         <div class="mt-1 flex space-x-2 text-xs text-gray-400">
                                             @foreach($q->options as $opt)
@@ -273,10 +276,13 @@
                                 </td>
                                 <td class="p-4 pr-6 text-right">
                                     <div class="flex justify-end space-x-2">
-                                        <button wire:click="edit({{ $q->id }})" class="p-1.5 text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 rounded-md transition-colors" title="Edit">
+                                        <button wire:click="preview({{ $q->id }})" class="p-1.5 text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 rounded-md transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center cursor-pointer" title="Preview & Kroscek Soal">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                        </button>
+                                        <button wire:click="edit({{ $q->id }})" class="p-1.5 text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 rounded-md transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center cursor-pointer" title="Edit">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         </button>
-                                        <button wire:click="delete({{ $q->id }})" wire:confirm="Yakin ingin menghapus soal ini dari Bank Soal?" class="p-1.5 text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 rounded-md transition-colors" title="Hapus">
+                                        <button wire:click="delete({{ $q->id }})" wire:confirm="Yakin ingin menghapus soal ini dari Bank Soal?" class="p-1.5 text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 rounded-md transition-all shadow-2xs hover:shadow-xs hover:-translate-y-0.5 flex items-center cursor-pointer" title="Hapus">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         </button>
                                     </div>
@@ -597,6 +603,204 @@
                             Ya, Hapus Sekarang
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Modal Preview & Kroscek Soal -->
+    @if($isPreviewModalOpen && $previewQuestion)
+        <div class="fixed z-[100] inset-0 overflow-y-auto" aria-labelledby="modal-preview-title" role="dialog" aria-modal="true" @keydown.window.escape="$wire.closePreviewModal()">
+            <!-- Backdrop with blur -->
+            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" wire:click="closePreviewModal"></div>
+
+            <div class="flex min-h-full items-center justify-center p-3 sm:p-6 text-center">
+                <!-- Modal Panel -->
+                <div class="relative w-full max-w-3xl bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all my-8 border border-slate-100 flex flex-col max-h-[90vh]">
+                    
+                    <!-- Header Modal -->
+                    <div class="bg-gradient-to-r from-slate-50 via-blue-50/40 to-slate-50 px-6 py-4.5 border-b border-slate-100 flex items-center justify-between shrink-0">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/25 shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h3 class="text-base sm:text-lg font-bold text-slate-800" id="modal-preview-title">Preview & Kroscek Soal</h3>
+                                    @if(count($previewQuestionIds) > 0)
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800">
+                                            #{{ $previewQuestionIndex + 1 }} dari {{ count($previewQuestionIds) }} Soal
+                                        </span>
+                                    @endif
+                                </div>
+                                <p class="text-xs text-slate-500 mt-0.5">Audit teks pertanyaan, kelengkapan pilihan opsi, dan kunci jawaban</p>
+                            </div>
+                        </div>
+
+                        <button wire:click="closePreviewModal" type="button" class="text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full p-2 transition cursor-pointer" title="Tutup Modal (Esc)">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+
+                    <!-- Body Modal (Scrollable) -->
+                    <div class="px-6 py-5 overflow-y-auto space-y-5">
+                        
+                        <!-- Metadata Badges -->
+                        <div class="flex flex-wrap items-center gap-2 p-3 bg-slate-50/80 rounded-2xl border border-slate-100">
+                            <!-- Kategori -->
+                            <span class="inline-flex items-center px-3 py-1 rounded-xl text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/80">
+                                <svg class="w-3.5 h-3.5 mr-1.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                                {{ $previewQuestion->category ? $previewQuestion->category->name : 'Tanpa Kategori' }}
+                            </span>
+
+                            <!-- Kesulitan -->
+                            <span class="inline-flex items-center px-3 py-1 rounded-xl text-xs font-semibold {{ $previewQuestion->difficulty === 'easy' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/80' : ($previewQuestion->difficulty === 'hard' ? 'bg-rose-50 text-rose-700 border border-rose-200/80' : 'bg-amber-50 text-amber-700 border border-amber-200/80') }}">
+                                <span class="w-1.5 h-1.5 rounded-full mr-1.5 {{ $previewQuestion->difficulty === 'easy' ? 'bg-emerald-500' : ($previewQuestion->difficulty === 'hard' ? 'bg-rose-500' : 'bg-amber-500') }}"></span>
+                                Tingkat: {{ $previewQuestion->difficulty === 'easy' ? 'Mudah' : ($previewQuestion->difficulty === 'hard' ? 'Sulit' : 'Sedang') }}
+                            </span>
+
+                            <!-- Tipe -->
+                            <span class="inline-flex items-center px-3 py-1 rounded-xl text-xs font-semibold {{ $previewQuestion->type === 'multiple_choice' ? 'bg-blue-50 text-blue-700 border border-blue-200/80' : 'bg-purple-50 text-purple-700 border border-purple-200/80' }}">
+                                {{ $previewQuestion->type === 'multiple_choice' ? 'Pilihan Ganda' : 'Essay / Uraian' }}
+                            </span>
+
+                            <!-- Poin -->
+                            <span class="inline-flex items-center px-3 py-1 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200/80">
+                                Bobot: {{ $previewQuestion->points }} Poin
+                            </span>
+
+                            <!-- Status -->
+                            @if($previewQuestion->is_active)
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-xl text-xs font-bold bg-green-50 text-green-700 border border-green-200/70 sm:ml-auto">
+                                    Aktif
+                                </span>
+                            @else
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-xl text-xs font-bold bg-gray-100 text-gray-500 border border-gray-200 sm:ml-auto">
+                                    Nonaktif
+                                </span>
+                            @endif
+                        </div>
+
+                        <!-- Teks Pertanyaan -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                    Teks Pertanyaan
+                                </label>
+                                <span class="text-xs text-slate-400">ID Soal: #{{ $previewQuestion->id }}</span>
+                            </div>
+                            <div class="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <p class="text-slate-900 text-sm sm:text-base leading-relaxed whitespace-pre-line font-medium select-text">
+                                    {{ $previewQuestion->text }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Bagian Opsi Jawaban -->
+                        <div>
+                            @if($previewQuestion->type === 'multiple_choice')
+                                <div class="flex items-center justify-between mb-2.5">
+                                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                                        Pilihan Jawaban & Kunci ({{ $previewQuestion->options->count() }} Pilihan)
+                                    </label>
+                                    <span class="text-xs text-slate-400">
+                                        Kunci jawaban diberi sorotan hijau
+                                    </span>
+                                </div>
+
+                                <div class="space-y-2.5">
+                                    @php $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G']; @endphp
+                                    @forelse($previewQuestion->options as $idx => $opt)
+                                        @php $letter = $letters[$idx] ?? chr(65 + $idx); @endphp
+                                        <div class="rounded-2xl p-3.5 sm:p-4 transition-all {{ $opt->is_correct ? 'bg-emerald-50/80 border-2 border-emerald-400 shadow-2xs' : 'bg-slate-50/70 border border-slate-200/80 hover:bg-white' }} flex items-start gap-3.5">
+                                            <!-- Huruf Opsi -->
+                                            <div class="w-8 h-8 rounded-xl font-extrabold text-sm flex items-center justify-center shrink-0 {{ $opt->is_correct ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white text-slate-700 border border-slate-200' }}">
+                                                {{ $letter }}
+                                            </div>
+
+                                            <!-- Teks Opsi -->
+                                            <div class="flex-grow pt-1 text-sm leading-relaxed {{ $opt->is_correct ? 'text-emerald-950 font-semibold' : 'text-slate-800 font-medium' }} select-text whitespace-pre-line">
+                                                {{ $opt->text }}
+                                            </div>
+
+                                            <!-- Badge Kunci Jawaban -->
+                                            @if($opt->is_correct)
+                                                <div class="shrink-0 pt-0.5">
+                                                    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-emerald-600 text-white shadow-2xs">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                                        Kunci Jawaban
+                                                    </span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @empty
+                                        <div class="p-6 text-center bg-rose-50 border border-rose-200 rounded-2xl text-rose-700 text-sm">
+                                            ⚠️ Soal ini belum memiliki pilihan jawaban. Silakan klik tombol <strong>Edit Soal Ini</strong> di bawah untuk melengkapinya.
+                                        </div>
+                                    @endforelse
+                                </div>
+                            @else
+                                <div class="p-6 rounded-2xl bg-purple-50/70 border border-purple-200 text-purple-900 text-sm">
+                                    <div class="flex items-start gap-3">
+                                        <svg class="w-5 h-5 text-purple-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <div>
+                                            <p class="font-bold">Soal Tipe Essay / Uraian</p>
+                                            <p class="text-xs text-purple-700 mt-1">Soal ini tidak menggunakan pilihan ganda. Peserta akan mengisi jawaban dalam bentuk teks uraian bebas.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+                    </div>
+
+                    <!-- Footer Modal (Navigation Prev/Next & Actions) -->
+                    <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0 rounded-b-3xl">
+                        <!-- Navigation Prev / Next -->
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
+                            <button wire:click="previousPreviewQuestion" 
+                                type="button" 
+                                @if($previewQuestionIndex <= 0) disabled @endif
+                                class="inline-flex items-center px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition shadow-2xs {{ $previewQuestionIndex <= 0 ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed opacity-60' : 'bg-white text-slate-700 hover:bg-slate-100 border-slate-200 hover:border-slate-300 cursor-pointer' }}">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                                Sebelumnya
+                            </button>
+
+                            <span class="text-xs font-bold text-slate-500 sm:hidden">
+                                {{ $previewQuestionIndex + 1 }} / {{ count($previewQuestionIds) }}
+                            </span>
+
+                            <button wire:click="nextPreviewQuestion" 
+                                type="button" 
+                                @if($previewQuestionIndex >= count($previewQuestionIds) - 1) disabled @endif
+                                class="inline-flex items-center px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition shadow-2xs {{ $previewQuestionIndex >= count($previewQuestionIds) - 1 ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed opacity-60' : 'bg-white text-slate-700 hover:bg-slate-100 border-slate-200 hover:border-slate-300 cursor-pointer' }}">
+                                Selanjutnya
+                                <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+
+                        <!-- Action Buttons: Edit & Tutup -->
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                            <button wire:click="editFromPreview({{ $previewQuestion->id }})" 
+                                type="button" 
+                                class="flex-1 sm:flex-initial inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-amber-500 hover:bg-amber-600 text-white shadow-sm transition transform hover:-translate-y-0.5 cursor-pointer">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                Edit Soal Ini
+                            </button>
+
+                            <button wire:click="closePreviewModal" 
+                                type="button" 
+                                class="flex-1 sm:flex-initial inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-200 hover:bg-slate-300 text-slate-700 transition cursor-pointer">
+                                Tutup
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -21,6 +21,12 @@ class QuestionManager extends Component
 
     public $isModalOpen = false;
     public $isCategoryModalOpen = false;
+
+    // Preview Modal
+    public $isPreviewModalOpen = false;
+    public $previewQuestionId = null;
+    public $previewQuestionIndex = 0;
+    public $previewQuestionIds = [];
     
     // Filters
     public $filter_category = '';
@@ -92,7 +98,12 @@ class QuestionManager extends Component
             $questions = $query->latest()->paginate($validPerPage);
         }
 
-        return view('livewire.admin.question-manager', compact('questions', 'categories'))
+        $previewQuestion = null;
+        if ($this->isPreviewModalOpen && $this->previewQuestionId) {
+            $previewQuestion = Question::with('options', 'category')->find($this->previewQuestionId);
+        }
+
+        return view('livewire.admin.question-manager', compact('questions', 'categories', 'previewQuestion'))
             ->layout('layouts.app');
     }
 
@@ -111,6 +122,63 @@ class QuestionManager extends Component
     {
         $this->isModalOpen = false;
         $this->resetValidation();
+    }
+
+    public function preview($id)
+    {
+        $this->loadPreviewIds();
+        $this->previewQuestionId = (int)$id;
+        $this->previewQuestionIndex = array_search((int)$id, $this->previewQuestionIds);
+        if ($this->previewQuestionIndex === false) {
+            $this->previewQuestionIndex = 0;
+        }
+
+        $this->isPreviewModalOpen = true;
+    }
+
+    private function loadPreviewIds()
+    {
+        $query = Question::query();
+        if ($this->filter_category) {
+            $query->where('category_id', $this->filter_category);
+        }
+        if ($this->filter_difficulty) {
+            $query->where('difficulty', $this->filter_difficulty);
+        }
+        if ($this->filter_type) {
+            $query->where('type', $this->filter_type);
+        }
+        $this->previewQuestionIds = $query->latest()->pluck('id')->map(fn($id) => (int)$id)->toArray();
+    }
+
+    public function nextPreviewQuestion()
+    {
+        if ($this->previewQuestionIndex !== false && $this->previewQuestionIndex < count($this->previewQuestionIds) - 1) {
+            $this->previewQuestionIndex++;
+            $this->previewQuestionId = $this->previewQuestionIds[$this->previewQuestionIndex];
+        }
+    }
+
+    public function previousPreviewQuestion()
+    {
+        if ($this->previewQuestionIndex !== false && $this->previewQuestionIndex > 0) {
+            $this->previewQuestionIndex--;
+            $this->previewQuestionId = $this->previewQuestionIds[$this->previewQuestionIndex];
+        }
+    }
+
+    public function closePreviewModal()
+    {
+        $this->isPreviewModalOpen = false;
+        $this->previewQuestionId = null;
+        $this->previewQuestionIds = [];
+        $this->previewQuestionIndex = 0;
+    }
+
+    public function editFromPreview($id)
+    {
+        $this->closePreviewModal();
+        $this->edit($id);
     }
     
     public function openCategoryModal()
