@@ -208,7 +208,7 @@
         <div class="flex justify-end">
             <div class="text-center w-72">
                 <p>Subang, {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</p>
-                <p>Pengawas Ruangan</p>
+                <p>Koordinator Pengawas</p>
                 <div class="h-24"></div>
                 <p class="font-bold underline" id="pengawasName">___________________________</p>
             </div>
@@ -231,7 +231,7 @@
             let el = document.getElementById('pengawasName');
             let currentName = el ? el.innerText : '';
             let defaultName = currentName.includes('___') ? '' : currentName;
-            let pengawas = prompt("Masukkan nama Pengawas Ruangan (Opsional):", defaultName);
+            let pengawas = prompt("Masukkan nama Koordinator Pengawas (Opsional):", defaultName);
             if (pengawas !== null) {
                 if (pengawas.trim() !== '') {
                     el.innerText = pengawas.trim();

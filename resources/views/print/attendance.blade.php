@@ -207,7 +207,7 @@
                     </div>
                     <div class="text-center w-1/2">
                         <p>Subang, {{ $exam->start_time ? \Carbon\Carbon::parse($exam->start_time)->locale('id')->translatedFormat('d F Y') : \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</p>
-                        <p>Pengawas Ruangan</p>
+                        <p>Koordinator Pengawas</p>
                         <div class="h-24"></div>
                         <p class="font-bold"><u><span class="nama-pengawas">..................................................</span></u></p>
                     </div>
@@ -340,7 +340,7 @@
                 </div>
                 <div class="text-center w-1/2">
                     <p>Subang, {{ $exam->start_time ? \Carbon\Carbon::parse($exam->start_time)->locale('id')->translatedFormat('d F Y') : \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</p>
-                    <p>Pengawas Ruangan</p>
+                    <p>Koordinator Pengawas</p>
                     <div class="h-24"></div>
                     <p class="font-bold"><u><span class="nama-pengawas">..................................................</span></u></p>
                 </div>
@@ -365,7 +365,7 @@
             let currentName = elements.length > 0 ? elements[0].innerText : '';
             let defaultName = currentName.includes('.....') ? '' : currentName;
             
-            let nama = prompt("Masukkan Nama Pengawas Ruangan (Kosongkan jika ingin berupa titik-titik):", defaultName);
+            let nama = prompt("Masukkan Nama Koordinator Pengawas (Kosongkan jika ingin berupa titik-titik):", defaultName);
             
             if (nama !== null) {
                 let formattedName = nama.trim() !== "" ? nama : "..................................................";

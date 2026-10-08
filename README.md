@@ -40,7 +40,7 @@ Sistem ini dilengkapi dengan kontrol ujian yang sangat presisi:
 **4. Interactive Printables (Dokumen Cetak Cerdas)**
 Sistem dilengkapi modul pembuatan laporan otomatis berstandar birokrasi pemerintahan:
 - **Cetak Kartu Peserta (Participant Cards):** *Generate* nomor ujian dan biodata dalam bentuk kartu identitas yang terstruktur rapi.
-- **Daftar Hadir (Attendance Sheet):** Mencetak daftar hadir yang otomatis disesuaikan dengan ujian. Dilengkapi fitur *Smart Prompt*, di mana Admin dapat mengetik nama Pengawas Ruangan secara *pop-up* tepat sebelum mencetak.
+- **Daftar Hadir (Attendance Sheet):** Mencetak daftar hadir yang otomatis disesuaikan dengan ujian. Dilengkapi fitur *Smart Prompt*, di mana Admin dapat mengetik nama Koordinator Pengawas secara *pop-up* tepat sebelum mencetak.
 - **Berita Acara Ujian (Exam Report):** Pembuatan berita acara resmi secara instan. Menggunakan teknologi *Smart Layouting* (Break-Inside Avoid) yang mencegah terpotongnya area tanda tangan (seperti saksi dan panitia) di antara dua halaman cetak.
 - **Form Kejadian Khusus (Incident Report):** *Content-editable* formulir. Pengawas dapat mengetik langsung rincian kejadian khusus, kronologi, dan keputusan panitia ke dalam form *browser* sebelum mencetak, atau mencetak dalam bentuk format bergaris (Lined Paper UI) untuk diisi manual menggunakan pulpen.
 - **Rincian Jawaban (Answer Breakdown):** Mencetak riwayat pengerjaan per-peserta secara individual lengkap dengan penanda jawaban yang benar, salah, atau dikosongkan.

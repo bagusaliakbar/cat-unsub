@@ -391,7 +391,7 @@
                                 </div>
                                 <label for="input_token" style="font-size: 13px; font-weight: 900; color: #1e3a8a; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">Masukkan Token Ujian</label>
                             </div>
-                            <p style="font-size: 12px; color: #3b82f6; margin: 0 0 12px 0;">Ujian ini memerlukan token autentikasi resmi yang diberikan oleh pengawas ruangan.</p>
+                            <p style="font-size: 12px; color: #3b82f6; margin: 0 0 12px 0;">Ujian ini memerlukan token autentikasi resmi yang diberikan oleh koordinator pengawas.</p>
                             <input type="text" 
                                    id="input_token" 
                                    wire:model="input_token" 
