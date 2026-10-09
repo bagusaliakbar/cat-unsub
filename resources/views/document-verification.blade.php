@@ -23,7 +23,7 @@
                 </svg>
             </div>
             <span class="inline-block px-3 py-1 bg-white/20 text-white rounded-full text-xs font-bold tracking-wider uppercase mb-1">
-                Sistem CAT LPPM Universitas Subang
+                Sistem CAT Universitas Subang
             </span>
             <h1 class="text-2xl font-black tracking-wide">DOKUMEN VALID</h1>
             <p class="text-emerald-100 text-sm mt-1">Terverifikasi Otentik Diterbitkan oleh Sistem</p>
@@ -90,15 +90,14 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <p class="text-xs text-blue-900 leading-relaxed">
-                    Dokumen ini resmi dihasilkan langsung oleh <strong>Server CAT LPPM Universitas Subang</strong>. Segala bentuk perubahan fisik atau ketidakcocokan naskah dengan rekaman sistem ini dinyatakan <strong>TIDAK SAH</strong>.
+                    Dokumen ini resmi dihasilkan langsung oleh <strong>Sistem CAT Universitas Subang</strong>. Segala bentuk perubahan fisik atau ketidakcocokan naskah dengan rekaman sistem ini dinyatakan <strong>TIDAK SAH</strong>.
                 </p>
             </div>
         </div>
 
         <!-- Footer -->
         <div class="bg-gray-50 p-4 border-t border-gray-100 text-center text-xs text-gray-500 space-y-1">
-            <p class="font-semibold text-gray-700">Lembaga Penelitian dan Pengabdian kepada Masyarakat (LPPM)</p>
-            <p>Universitas Subang &copy; {{ date('Y') }}</p>
+            <p class="font-semibold text-gray-700">Universitas Subang &copy; {{ date('Y') }}</p>
         </div>
     </div>
 </body>

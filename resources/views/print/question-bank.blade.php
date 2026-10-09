@@ -238,7 +238,7 @@
     @if($questions->count() > 0)
     <div class="break-inside-avoid mt-8 pt-5 border-t-2 border-black sans-font">
         <p class="text-xs text-gray-800 text-justify mb-6 leading-relaxed">
-            <strong>Keterangan Pengesahan:</strong> Naskah bank soal di atas telah melalui proses telaah, verifikasi, dan diterbitkan secara resmi melalui <em>Sistem Computer Assisted Test (CAT) LPPM Universitas Subang</em> dengan nomor verifikasi otentik <strong>{{ $verification->token }}</strong>. Naskah ini sah digunakan sebagai instrumen seleksi dan dijaga kerahasiaannya sesuai dengan pakta integritas panitia seleksi.
+            <strong>Keterangan Pengesahan:</strong> Naskah bank soal di atas telah melalui proses telaah, verifikasi, dan diterbitkan secara resmi melalui <em>Sistem Computer Assisted Test (CAT) Universitas Subang</em> dengan nomor verifikasi otentik <strong>{{ $verification->token }}</strong>. Naskah ini sah digunakan sebagai instrumen seleksi dan dijaga kerahasiaannya sesuai dengan pakta integritas panitia seleksi.
         </p>
 
         <div class="flex justify-between items-start text-xs text-center mt-6">
