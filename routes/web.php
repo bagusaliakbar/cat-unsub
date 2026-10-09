@@ -24,6 +24,12 @@ Route::get('/verify/{token}', function ($token) {
     return view('verification', compact('participant'));
 })->name('verify');
 
+// Rute Verifikasi QR Code Dokumen Resmi (Bank Soal / Naskah)
+Route::get('/verify-doc/{token}', function ($token) {
+    $verification = \App\Models\DocumentVerification::where('token', $token)->firstOrFail();
+    return view('document-verification', compact('verification'));
+})->name('verify.document');
+
 // Route to bypass symlink issues on shared hosting
 Route::get('/storage-file/{path}', function ($path) {
     $absolutePath = storage_path('app/public/' . $path);
@@ -461,6 +467,71 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
     })->name('exams.attendance');
 
     Route::get('/questions', \App\Livewire\Admin\QuestionManager::class)->name('questions');
+    Route::get('/questions/print', function (\Illuminate\Http\Request $request) {
+        $categoryId = $request->query('category', 'all');
+        $mode = $request->query('mode', 'without_keys');
+        $selectedIds = $request->query('selected');
+        $existingToken = $request->query('token');
+
+        $categories = \App\Models\QuestionCategory::orderBy('name')->get();
+        $currentCategory = ($categoryId && $categoryId !== 'all') ? \App\Models\QuestionCategory::find($categoryId) : null;
+
+        $query = \App\Models\Question::with(['category', 'options'])->where('is_active', true);
+
+        if ($selectedIds) {
+            $ids = array_filter(explode(',', $selectedIds));
+            if (!empty($ids)) {
+                $query->whereIn('id', $ids);
+            }
+        } elseif ($currentCategory) {
+            $query->where('category_id', $currentCategory->id);
+        }
+
+        $questions = $query->orderBy('id', 'asc')->get();
+        $totalQuestions = $questions->count();
+
+        $categoryTitle = $currentCategory ? $currentCategory->name : ($selectedIds ? 'Soal Pilihan' : 'Semua Kategori');
+
+        $printedBy = auth()->user()->name ?? 'Administrator';
+        $checksum = hash('sha256', $questions->pluck('id')->implode(',') . '|' . $mode . '|' . $totalQuestions);
+
+        if ($existingToken) {
+            $verification = \App\Models\DocumentVerification::where('token', $existingToken)->first();
+        }
+        
+        if (empty($verification)) {
+            $token = 'DOC-BS-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -5));
+            $verification = \App\Models\DocumentVerification::create([
+                'token' => $token,
+                'document_type' => 'question_bank',
+                'title' => 'Naskah Bank Soal CAT - ' . $categoryTitle,
+                'category_name' => $categoryTitle,
+                'total_questions' => $totalQuestions,
+                'mode' => $mode,
+                'printed_by' => $printedBy,
+                'checksum' => $checksum,
+                'metadata' => [
+                    'category_id' => $currentCategory?->id,
+                    'is_selected_only' => !empty($selectedIds),
+                    'selected_count' => $selectedIds ? count(explode(',', $selectedIds)) : null,
+                    'printed_at' => now()->toIso8601String(),
+                ],
+            ]);
+            \App\Services\LogService::record('print_question_bank', "Admin mencetak Bank Soal ({$categoryTitle}, Mode: {$mode}, {$totalQuestions} butir soal, Token: {$token}).");
+        }
+
+        return view('print.question-bank', compact(
+            'questions',
+            'categories',
+            'categoryId',
+            'currentCategory',
+            'categoryTitle',
+            'mode',
+            'selectedIds',
+            'verification',
+            'totalQuestions'
+        ));
+    })->name('questions.print');
     Route::get('/categories', \App\Livewire\Admin\CategoryManager::class)->name('categories');
     Route::get('/participants', \App\Livewire\Admin\ParticipantManager::class)->name('participants');
     Route::get('/participants/{participantId}/print', function ($participantId) {
