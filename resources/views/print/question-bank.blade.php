@@ -101,9 +101,6 @@
         <h3 class="text-base font-bold uppercase tracking-wide text-gray-800">
             KATEGORI: {{ strtoupper($categoryTitle) }}
         </h3>
-        <p class="text-xs italic text-gray-600 mt-1">
-            Lembaga Penelitian dan Pengabdian kepada Masyarakat (LPPM) Universitas Subang
-        </p>
     </div>
 
     <!-- Block Info Naskah & QR Code Verifikasi -->
@@ -143,7 +140,7 @@
             </div>
             <span class="text-[10px] font-mono font-extrabold tracking-wider mt-1 text-gray-900">{{ $verification->token }}</span>
             <span class="text-[8px] text-gray-600 text-center leading-tight mt-0.5">
-                Scan QR Code untuk verifikasi<br>keaslian naskah di server CAT
+                Scan QR Code untuk verifikasi<br>keaslian naskah di Sistem CAT
             </span>
         </div>
     </div>
@@ -170,8 +167,16 @@
                                 {{ $q->points }} Poin
                             </span>
                             @if($q->difficulty)
+                                @php
+                                    $diffLabel = match($q->difficulty) {
+                                        'easy' => 'Mudah',
+                                        'medium' => 'Sedang',
+                                        'hard' => 'Sulit',
+                                        default => ucfirst($q->difficulty),
+                                    };
+                                @endphp
                                 <span class="ml-1 inline-flex items-center text-[10px] font-sans font-medium px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 align-middle">
-                                    {{ ucfirst($q->difficulty) }}
+                                    {{ $diffLabel }}
                                 </span>
                             @endif
                             @if($q->category && $categoryId === 'all')
@@ -240,7 +245,6 @@
             <div class="w-2/5">
                 <p>Mengetahui,</p>
                 <p class="font-bold">Penanggung Jawab Ujian CAT</p>
-                <p>LPPM Universitas Subang</p>
                 <div class="h-20"></div>
                 <p class="font-bold underline">Dr. Drs. H. Komir Bastaman, S.H., M.Si.</p>
             </div>
@@ -255,7 +259,7 @@
 
         <!-- Security Footer -->
         <div class="mt-8 pt-2 border-t border-gray-300 flex justify-between items-center text-[9px] text-gray-500 font-mono">
-            <span>SISTEM CAT LPPM UNIVERSITAS SUBANG</span>
+            <span>SISTEM CAT UNIVERSITAS SUBANG</span>
             <span>TOKEN: {{ $verification->token }}</span>
             <span>CHECKSUM: {{ substr($verification->checksum, 0, 16) }}...</span>
         </div>

@@ -171,7 +171,7 @@
                                     <span class="font-medium text-gray-700">{{ $q->category ? $q->category->name : 'Tanpa Kategori' }}</span>
                                     <span>•</span>
                                     <span class="{{ $q->difficulty === 'easy' ? 'text-green-600' : ($q->difficulty === 'hard' ? 'text-red-600' : 'text-yellow-600') }}">
-                                        {{ ucfirst($q->difficulty) }}
+                                        {{ $q->difficulty === 'easy' ? 'Mudah' : ($q->difficulty === 'hard' ? 'Sulit' : 'Sedang') }}
                                     </span>
                                 </div>
                             </div>
@@ -275,7 +275,7 @@
                                             {{ $q->type === 'multiple_choice' ? 'Pilihan Ganda' : 'Essay' }}
                                         </span>
                                         <span class="text-xs {{ $q->difficulty === 'easy' ? 'text-green-600' : ($q->difficulty === 'hard' ? 'text-red-600' : 'text-yellow-600') }}">
-                                            {{ ucfirst($q->difficulty) }}
+                                            {{ $q->difficulty === 'easy' ? 'Mudah' : ($q->difficulty === 'hard' ? 'Sulit' : 'Sedang') }}
                                         </span>
                                     </div>
                                 </td>
