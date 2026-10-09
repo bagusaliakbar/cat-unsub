@@ -56,7 +56,7 @@
                 </button>
             </div>
         </div>
-    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
@@ -92,8 +92,44 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-bold text-gray-900">{{ $session->user->name }}</div>
-                            <div class="text-xs text-gray-500">{{ $session->user->nik ?? $session->user->email }}</div>
+                            <div class="flex items-center space-x-3">
+                                <div class="shrink-0 w-9 h-9">
+                                    @if($session->user->profile_photo_path)
+                                        <img class="w-9 h-9 rounded-xl object-cover ring-2 ring-gray-100 shadow-xs" src="{{ $session->user->profile_photo_url }}" alt="{{ $session->user->name }}">
+                                    @else
+                                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-xs ring-2 ring-blue-50">
+                                            {{ strtoupper(substr($session->user->name ?? 'P', 0, 1)) }}
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-sm font-bold text-gray-900 tracking-tight leading-snug">
+                                        {{ $session->user->name }}
+                                    </div>
+                                    <div class="flex items-center gap-1.5 mt-0.5">
+                                        <span class="inline-flex items-center gap-1 font-mono text-[11px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/80 shadow-2xs" title="ID / No. Peserta">
+                                            <svg class="w-3 h-3 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                                            </svg>
+                                            {{ $session->user->participant_number ?: ($session->user->nik ?: 'ID #' . $session->user->id) }}
+                                        </span>
+                                        @if(!empty($session->user->desa))
+                                            <span class="text-[11px] text-gray-500 font-medium truncate max-w-[130px]" title="{{ $session->user->desa }}">
+                                                • {{ $session->user->desa }}
+                                            </span>
+                                        @elseif(!empty($session->user->institution))
+                                            <span class="text-[11px] text-gray-500 font-medium truncate max-w-[130px]" title="{{ $session->user->institution }}">
+                                                • {{ $session->user->institution }}
+                                            </span>
+                                        @endif
+                                        @if(!empty($session->user->no_meja))
+                                            <span class="inline-flex items-center text-[10px] font-bold font-mono px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200/80" title="Nomor Meja">
+                                                Meja {{ $session->user->no_meja }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             @if($session->status === 'completed')
@@ -236,8 +272,11 @@
                 <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full border border-gray-100">
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b border-gray-100 flex justify-between items-center sticky top-0 z-10">
                         <div>
-                            <h3 class="text-xl leading-6 font-extrabold text-gray-900" id="modal-title">
-                                Detail Hasil Ujian: {{ $selectedSession->user->name }}
+                            <h3 class="text-xl leading-6 font-extrabold text-gray-900 flex items-center gap-2 flex-wrap" id="modal-title">
+                                <span>Detail Hasil Ujian: {{ $selectedSession->user->name }}</span>
+                                <span class="text-xs font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-0.5 rounded-lg">
+                                    {{ $selectedSession->user->participant_number ?: ($selectedSession->user->nik ?: 'ID #' . $selectedSession->user->id) }}
+                                </span>
                             </h3>
                             <p class="text-sm text-gray-500 mt-1">Skor Akhir: <span class="font-bold {{ $selectedSession->score >= $exam->passing_grade ? 'text-green-600' : 'text-red-600' }}">{{ round($selectedSession->score) }}</span></p>
                         </div>
