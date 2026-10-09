@@ -226,7 +226,19 @@
         @php
             $isPerDesa = !empty($targetVillage) && $targetVillage !== 'all' && !str_starts_with(strtolower($targetVillage), 'gabungan');
             $displayVillage = $isPerDesa ? trim(preg_replace('/^desa\s+/i', '', $targetVillage)) : '';
-            $effectiveDistrict = !empty($targetDistrict) ? $targetDistrict : (!empty($report->district) ? $report->district : null);
+            
+            $districtsInList = isset($participants) ? $participants->pluck('kecamatan')->filter()->map(fn($k) => trim($k))->filter()->unique()->values() : collect();
+            if ($isPerDesa) {
+                $effectiveDistrict = !empty($targetDistrict) ? $targetDistrict : ($districtsInList->first() ?: ($report->district ?? null));
+            } else {
+                if ($districtsInList->count() === 1) {
+                    $effectiveDistrict = $districtsInList->first();
+                } elseif ($districtsInList->count() > 1) {
+                    $effectiveDistrict = null;
+                } else {
+                    $effectiveDistrict = !empty($targetDistrict) ? $targetDistrict : null;
+                }
+            }
             $displayDistrict = !empty($effectiveDistrict) ? trim(preg_replace('/^kec(\.|\s+)/i', '', $effectiveDistrict)) : null;
         @endphp
 
@@ -244,8 +256,8 @@
             @else
                 {{-- Cetak Gabungan: Teks Kabupaten Subang dan Sesi ditiadakan dari judul --}}
                 <h3 class="text-lg font-bold uppercase">SELEKSI BAKAL CALON KEPALA DESA</h3>
-                @if(!empty($report->district))
-                    <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($report->district) }}</h3>
+                @if(!empty($displayDistrict))
+                    <h3 class="text-lg font-bold uppercase">KECAMATAN {{ strtoupper($displayDistrict) }}</h3>
                 @endif
             @endif
         </div>

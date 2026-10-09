@@ -146,15 +146,15 @@ $renderExamResults = function ($examId, \Illuminate\Http\Request $request) {
         $targetVillage = $institution;
 
         $firstUser = \App\Models\User::where('desa', $institution)->whereNotNull('kecamatan')->where('kecamatan', '!=', '')->first();
-        $targetDistrict = ($report->district ?? null) ?: ($firstUser ? $firstUser->kecamatan : null);
+        $targetDistrict = ($firstUser && !empty($firstUser->kecamatan)) ? $firstUser->kecamatan : ($report->district ?? null);
 
         return view('print.exam-results', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'targetVillage', 'targetDistrict', 'sort'));
     }
 
     $sessions = $sortCollection($baseSessionsQuery->get());
     $targetVillage = 'all';
-    $allUsersDistricts = $sessions->pluck('user.kecamatan')->filter()->unique();
-    $targetDistrict = ($report->district ?? null) ?: ($allUsersDistricts->count() === 1 ? $allUsersDistricts->first() : null);
+    $allUsersDistricts = $sessions->pluck('user.kecamatan')->filter()->map(fn($k) => trim($k))->filter()->unique()->values();
+    $targetDistrict = $allUsersDistricts->count() === 1 ? $allUsersDistricts->first() : ($allUsersDistricts->isEmpty() ? ($report->district ?? null) : null);
 
     return view('print.exam-results', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'targetVillage', 'targetDistrict', 'sort'));
 };
@@ -336,7 +336,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
             $targetVillage = $institution;
 
             $firstUser = \App\Models\User::where('desa', $institution)->whereNotNull('kecamatan')->where('kecamatan', '!=', '')->first();
-            $targetDistrict = $report->district ?: ($firstUser ? $firstUser->kecamatan : null);
+            $targetDistrict = ($firstUser && !empty($firstUser->kecamatan)) ? $firstUser->kecamatan : ($report->district ?? null);
 
             return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage', 'targetDistrict', 'scope', 'sort', 'isCombinedSession', 'combinedLocations'));
         }
@@ -347,8 +347,8 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         $presentCount = $sessions->count();
         $absentCount = max(0, $totalRegistered - $presentCount);
         $targetVillage = 'all';
-        $allUsersDistricts = $sessions->pluck('user.kecamatan')->filter()->unique();
-        $targetDistrict = ($report->district ?? null) ?: ($allUsersDistricts->count() === 1 ? $allUsersDistricts->first() : null);
+        $allUsersDistricts = $sessions->pluck('user.kecamatan')->filter()->map(fn($k) => trim($k))->filter()->unique()->values();
+        $targetDistrict = $allUsersDistricts->count() === 1 ? $allUsersDistricts->first() : ($allUsersDistricts->isEmpty() ? ($report->district ?? null) : null);
 
         return view('print.exam-report', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'presentCount', 'absentCount', 'targetVillage', 'targetDistrict', 'scope', 'sort', 'isCombinedSession', 'combinedLocations'));
     })->name('exams.report.print');
@@ -401,10 +401,10 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':admin'])->pre
         }
         $participants = $participantsQuery->get();
         $targetVillage = ($institution && $institution !== 'all') ? $institution : 'all';
-        $allPartsDistricts = $participants->pluck('kecamatan')->filter()->unique();
+        $allPartsDistricts = $participants->pluck('kecamatan')->filter()->map(fn($k) => trim($k))->filter()->unique()->values();
         $targetDistrict = ($institution && $institution !== 'all')
             ? ($participants->first(fn($u) => !empty($u->kecamatan))?->kecamatan ?: ($report->district ?? null))
-            : (($report->district ?? null) ?: ($allPartsDistricts->count() === 1 ? $allPartsDistricts->first() : null));
+            : ($allPartsDistricts->count() === 1 ? $allPartsDistricts->first() : ($allPartsDistricts->isEmpty() ? ($report->district ?? null) : null));
 
         return view('print.attendance', compact('exam', 'report', 'participants', 'institution', 'institutions', 'targetVillage', 'targetDistrict'));
     })->name('exams.attendance');
