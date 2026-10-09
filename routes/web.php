@@ -44,27 +44,78 @@ $renderExamResults = function ($examId, \Illuminate\Http\Request $request) {
     $report = \App\Models\ExamReport::where('exam_id', $examId)->first();
     $institution = $request->query('institution', 'all');
     $sort = $request->query('sort', 'score');
+    $scope = $request->query('scope', 'single');
 
-    $institutions = $exam->participants()
-        ->whereNotNull('desa')
-        ->where('desa', '!=', '')
-        ->distinct()
-        ->orderBy('desa')
-        ->pluck('desa')
-        ->toArray();
+    $isCombinedSession = false;
+    $combinedLocations = $exam->location ?? 'Lab Komputer';
+    $targetExamIds = [$exam->id];
+    $hasSiblingExams = false;
 
-    if (empty($institutions)) {
-        $institutions = \App\Models\User::whereHas('examSessions', fn($q) => $q->where('exam_id', $examId))
+    // Detect sibling exams in the same session (by wave_id or start_time + title)
+    $sessionExams = collect([$exam]);
+    if ($exam->wave_id) {
+        $sessionExams = \App\Models\Exam::where('wave_id', $exam->wave_id)->get();
+    } elseif ($exam->start_time) {
+        $sessionExams = \App\Models\Exam::where('start_time', $exam->start_time)
+            ->where('title', $exam->title)
+            ->get();
+    }
+
+    if ($sessionExams->count() > 1) {
+        $hasSiblingExams = true;
+        $combinedLocations = $sessionExams->pluck('location')->filter()->unique()->implode(' & ');
+        if ($scope === 'combined_session') {
+            $isCombinedSession = true;
+            $targetExamIds = $sessionExams->pluck('id')->toArray();
+            if (!$report || empty($report->supervisor_name)) {
+                $siblingReport = \App\Models\ExamReport::whereIn('exam_id', $targetExamIds)->whereNotNull('supervisor_name')->first();
+                if ($siblingReport) {
+                    $report = $siblingReport;
+                }
+            }
+        }
+    }
+
+    if ($isCombinedSession) {
+        $institutions = \App\Models\User::whereHas('exams', fn($q) => $q->whereIn('exams.id', $targetExamIds))
             ->whereNotNull('desa')
             ->where('desa', '!=', '')
             ->distinct()
             ->orderBy('desa')
             ->pluck('desa')
             ->toArray();
+
+        if (empty($institutions)) {
+            $institutions = \App\Models\User::whereHas('examSessions', fn($q) => $q->whereIn('exam_id', $targetExamIds))
+                ->whereNotNull('desa')
+                ->where('desa', '!=', '')
+                ->distinct()
+                ->orderBy('desa')
+                ->pluck('desa')
+                ->toArray();
+        }
+    } else {
+        $institutions = $exam->participants()
+            ->whereNotNull('desa')
+            ->where('desa', '!=', '')
+            ->distinct()
+            ->orderBy('desa')
+            ->pluck('desa')
+            ->toArray();
+
+        if (empty($institutions)) {
+            $institutions = \App\Models\User::whereHas('examSessions', fn($q) => $q->where('exam_id', $examId))
+                ->whereNotNull('desa')
+                ->where('desa', '!=', '')
+                ->distinct()
+                ->orderBy('desa')
+                ->pluck('desa')
+                ->toArray();
+        }
     }
 
     $baseSessionsQuery = \App\Models\ExamSession::with(['user.wave', 'exam'])
-        ->where('exam_id', $examId)
+        ->whereIn('exam_id', $targetExamIds)
         ->whereNotNull('started_at');
 
     $sortCollection = function($collection) use ($sort) {
@@ -134,7 +185,7 @@ $renderExamResults = function ($examId, \Illuminate\Http\Request $request) {
                 'sessions' => $instSessions,
             ];
         }
-        return view('print.exam-results', compact('exam', 'report', 'institutions', 'institution', 'resultsData', 'sort'));
+        return view('print.exam-results', compact('exam', 'report', 'institutions', 'institution', 'resultsData', 'sort', 'scope', 'isCombinedSession', 'combinedLocations', 'hasSiblingExams'));
     }
 
     if ($institution && $institution !== 'all') {
@@ -148,7 +199,7 @@ $renderExamResults = function ($examId, \Illuminate\Http\Request $request) {
         $firstUser = \App\Models\User::where('desa', $institution)->whereNotNull('kecamatan')->where('kecamatan', '!=', '')->first();
         $targetDistrict = ($firstUser && !empty($firstUser->kecamatan)) ? $firstUser->kecamatan : ($report->district ?? null);
 
-        return view('print.exam-results', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'targetVillage', 'targetDistrict', 'sort'));
+        return view('print.exam-results', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'targetVillage', 'targetDistrict', 'sort', 'scope', 'isCombinedSession', 'combinedLocations', 'hasSiblingExams'));
     }
 
     $sessions = $sortCollection($baseSessionsQuery->get());
@@ -156,7 +207,7 @@ $renderExamResults = function ($examId, \Illuminate\Http\Request $request) {
     $allUsersDistricts = $sessions->pluck('user.kecamatan')->filter()->map(fn($k) => trim($k))->filter()->unique()->values();
     $targetDistrict = $allUsersDistricts->count() === 1 ? $allUsersDistricts->first() : ($allUsersDistricts->isEmpty() ? ($report->district ?? null) : null);
 
-    return view('print.exam-results', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'targetVillage', 'targetDistrict', 'sort'));
+    return view('print.exam-results', compact('exam', 'report', 'sessions', 'institution', 'institutions', 'targetVillage', 'targetDistrict', 'sort', 'scope', 'isCombinedSession', 'combinedLocations', 'hasSiblingExams'));
 };
 
 // Admin Routes

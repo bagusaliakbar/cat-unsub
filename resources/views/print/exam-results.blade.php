@@ -86,17 +86,17 @@
         <div class="flex items-center space-x-2">
             <label class="text-xs font-bold text-gray-700">Filter Desa:</label>
             <select onchange="window.location.href = this.value" class="text-xs font-medium border-gray-300 rounded-lg py-1 px-2.5 bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
-                <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => 'all', 'sort' => $sort ?? 'score']) }}" {{ ($institution ?? 'all') === 'all' ? 'selected' : '' }}>
+                <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => 'all', 'scope' => $scope ?? 'single', 'sort' => $sort ?? 'score']) }}" {{ ($institution ?? 'all') === 'all' ? 'selected' : '' }}>
                     Semua Desa (Gabungan)
                 </option>
                 @if(isset($institutions) && count($institutions) > 1)
-                    <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => 'all_separated', 'sort' => $sort ?? 'score']) }}" {{ ($institution ?? '') === 'all_separated' ? 'selected' : '' }}>
+                    <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => 'all_separated', 'scope' => $scope ?? 'single', 'sort' => $sort ?? 'score']) }}" {{ ($institution ?? '') === 'all_separated' ? 'selected' : '' }}>
                         Cetak Semua (Pisah Lembar Per Desa)
                     </option>
                 @endif
                 @if(isset($institutions))
                     @foreach($institutions as $inst)
-                        <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => $inst, 'sort' => $sort ?? 'score']) }}" {{ ($institution ?? '') === $inst ? 'selected' : '' }}>
+                        <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => $inst, 'scope' => $scope ?? 'single', 'sort' => $sort ?? 'score']) }}" {{ ($institution ?? '') === $inst ? 'selected' : '' }}>
                             Desa: {{ $inst }}
                         </option>
                     @endforeach
@@ -107,20 +107,44 @@
         <div class="flex items-center space-x-2">
             <label class="text-xs font-bold text-gray-700">Urutan:</label>
             <select onchange="window.location.href = this.value" class="text-xs font-medium border-gray-300 rounded-lg py-1 px-2.5 bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
-                <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => $institution ?? 'all', 'sort' => 'score']) }}" {{ ($sort ?? 'score') === 'score' ? 'selected' : '' }}>
+                <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => $institution ?? 'all', 'scope' => $scope ?? 'single', 'sort' => 'score']) }}" {{ ($sort ?? 'score') === 'score' ? 'selected' : '' }}>
                     Peringkat Nilai (Ranking)
                 </option>
-                <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => $institution ?? 'all', 'sort' => 'participant_number']) }}" {{ ($sort ?? '') === 'participant_number' ? 'selected' : '' }}>
+                <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => $institution ?? 'all', 'scope' => $scope ?? 'single', 'sort' => 'participant_number']) }}" {{ ($sort ?? '') === 'participant_number' ? 'selected' : '' }}>
                     Nomor Peserta (Standar)
                 </option>
-                <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => $institution ?? 'all', 'sort' => 'desa']) }}" {{ ($sort ?? '') === 'desa' ? 'selected' : '' }}>
+                <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => $institution ?? 'all', 'scope' => $scope ?? 'single', 'sort' => 'desa']) }}" {{ ($sort ?? '') === 'desa' ? 'selected' : '' }}>
                     Desa & No. Peserta
                 </option>
-                <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => $institution ?? 'all', 'sort' => 'no_meja']) }}" {{ ($sort ?? '') === 'no_meja' ? 'selected' : '' }}>
+                <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => $institution ?? 'all', 'scope' => $scope ?? 'single', 'sort' => 'no_meja']) }}" {{ ($sort ?? '') === 'no_meja' ? 'selected' : '' }}>
                     Nomor Meja
                 </option>
             </select>
         </div>
+
+        @if(!empty($hasSiblingExams))
+        <div class="flex items-center space-x-2">
+            <label class="text-xs font-bold text-gray-700">Ruangan:</label>
+            <select onchange="window.location.href = this.value" class="text-xs font-medium border-gray-300 rounded-lg py-1 px-2.5 bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+                <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => $institution ?? 'all', 'scope' => 'single', 'sort' => $sort ?? 'score']) }}" {{ ($scope ?? 'single') === 'single' ? 'selected' : '' }}>
+                    Hanya {{ $exam->location ?: 'Ruang Ini' }}
+                </option>
+                <option value="{{ route($printRoute, ['examId' => $exam->id, 'institution' => $institution ?? 'all', 'scope' => 'combined_session', 'sort' => $sort ?? 'score']) }}" {{ ($scope ?? 'single') === 'combined_session' ? 'selected' : '' }}>
+                    👥 Gabungan Sesi ({{ $combinedLocations }})
+                </option>
+            </select>
+        </div>
+        @endif
+
+        @if(!empty($isCombinedSession))
+            <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-lg border border-emerald-300 flex items-center gap-1 shadow-xs">
+                👥 Pleno Sesi ({{ $combinedLocations }})
+            </span>
+        @elseif(!empty($exam->location))
+            <span class="text-xs bg-gray-100 text-gray-700 font-medium px-2 py-1 rounded-lg border border-gray-200">
+                Ruang: {{ $exam->location }}
+            </span>
+        @endif
 
         <button onclick="window.print()" class="px-4 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-bold text-xs flex items-center shadow-sm">
             <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
@@ -180,7 +204,7 @@
                 <tr>
                     <td class="w-40 font-bold align-top">Tempat</td>
                     <td class="w-4 text-center align-top">:</td>
-                    <td class="align-top">{{ $exam->location ?: 'Laboratorium Komputer Universitas Subang' }}</td>
+                    <td class="align-top">{{ !empty($isCombinedSession) && !empty($combinedLocations) ? $combinedLocations : ($exam->location ?: 'Laboratorium Komputer Universitas Subang') }}</td>
                 </tr>
             </table>
 
@@ -311,7 +335,7 @@
             <tr>
                 <td class="w-40 font-bold align-top">Tempat</td>
                 <td class="w-4 text-center align-top">:</td>
-                <td class="align-top">{{ $exam->location ?: 'Laboratorium Komputer Universitas Subang' }}</td>
+                <td class="align-top">{{ !empty($isCombinedSession) && !empty($combinedLocations) ? $combinedLocations : ($exam->location ?: 'Laboratorium Komputer Universitas Subang') }}</td>
             </tr>
         </table>
 
